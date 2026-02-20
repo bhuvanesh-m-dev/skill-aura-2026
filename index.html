@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKILL AURA 2026 | Kings Engineering College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <style>
+        :root {
+            --neon-violet: #8b5cf6;
+            --deep-violet: #5b21b6;
+            --pure-black: #000000;
+            --off-white: #f3f4f6;
+        }
+        
+        body {
+            font-family: 'Rajdhani', 'Inter', sans-serif;
+            background-color: var(--pure-black);
+            color: var(--off-white);
+            overflow-x: hidden;
+        }
+
+        .font-display {
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #000;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #8b5cf6;
+            border-radius: 4px;
+        }
+
+        /* Animated Background */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(139, 92, 246, 0.1) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(139, 92, 246, 0.1) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.5), 0 0 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .neon-border {
+            position: relative;
+        }
+        .neon-border::after {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #8b5cf6, #000, #8b5cf6);
+            z-index: -1;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .neon-border:hover::after {
+            opacity: 1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        /* Cursor Effect */
+        .cursor-dot,
+        .cursor-outline {
+            position: fixed;
+            top: 0;
+            left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #8b5cf6;
+        }
+        .cursor-outline {
+            width: 40px;
+            height: 40px;
+            border: 2px solid rgba(139, 92, 246, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+
+        /* Typing Effect */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s step-start infinite;
+        }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Floating Animation */
+        .float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        /* Countdown Timer Styles */
+        .countdown-box {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.2), inset 0 0 20px rgba(139, 92, 246, 0.05);
+        }
+        
+        .countdown-number {
+            font-family: 'Orbitron', monospace;
+            background: linear-gradient(to bottom, #fff, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+        }
+
+        .milliseconds {
+            font-family: 'Orbitron', monospace;
+            color: #a78bfa;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.8);
+        }
+
+        .pulse-urgent {
+            animation: pulse-red 2s infinite;
+        }
+
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(239, 68, 68, 0); }
+        }
+
+        /* Logo hover effects */
+        .logo-hover {
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.3));
+        }
+        .logo-hover:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6));
+        }
+
+        /* Venue image styling */
+        .venue-image-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1rem;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.2);
+        }
+        
+        .venue-image-container img {
+            transition: transform 0.5s ease;
+        }
+        
+        .venue-image-container:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Map container */
+        .map-container {
+            position: relative;
+            border-radius: 1rem;
+            overflow: hidden;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.2);
+        }
+
+        .map-container iframe {
+            filter: grayscale(100%) invert(92%) contrast(1.2);
+            opacity: 0.9;
+        }
+
+        /* Coordinator cards */
+        .coordinator-card {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(0, 0, 0, 0.3) 100%);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .coordinator-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(139, 92, 246, 0.5);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-violet-500 selection:text-white">
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center gap-3">
+                    <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/kec-logo.jpg" 
+                         alt="KEC Logo" 
+                         class="h-12 w-12 object-contain rounded-lg logo-hover border border-violet-500/30">
+                    <div class="flex flex-col">
+                        <span class="font-display font-bold text-lg tracking-wider text-white leading-tight">KINGS</span>
+                        <span class="text-violet-400 text-xs tracking-widest uppercase">Engineering College</span>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-8">
+                        <a href="#about" class="hover:text-violet-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">About</a>
+                        <a href="#venue" class="hover:text-violet-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Venue</a>
+                        <a href="#technical" class="hover:text-violet-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Technical</a>
+                        <a href="#nontechnical" class="hover:text-violet-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Non-Technical</a>
+                        <a href="#coordinators" class="hover:text-violet-400 transition-colors px-3 py-2 rounded-md text-sm font-medium">Team</a>
+                        <a href="#register" class="bg-violet-600 hover:bg-violet-700 text-white px-6 py-2 rounded-full text-sm font-bold transition-all transform hover:scale-105 shadow-[0_0_15px_rgba(139,92,246,0.5)]">REGISTER NOW</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 bg-grid z-0"></div>
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-violet-600/20 rounded-full blur-[128px]"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-[128px]"></div>
+
+        <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            
+            <!-- Top Info Bar -->
+            <div class="flex flex-wrap justify-center items-center gap-6 mb-8">
+                <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+                    <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/kec-logo.jpg" 
+                         alt="KEC" class="h-6 w-6 object-contain rounded">
+                    <span class="text-sm text-gray-300">Kings Engineering College</span>
+                </div>
+                <div class="flex items-center gap-2 px-4 py-2 rounded-full bg-violet-500/10 border border-violet-500/30">
+                    <span class="text-violet-400 text-sm font-semibold tracking-widest uppercase">Innovation Hub</span>
+                </div>
+            </div>
+
+            <div class="mb-4 inline-block px-4 py-1 rounded-full border border-violet-500/30 bg-violet-500/10 backdrop-blur-sm">
+                <span class="text-violet-300 text-sm font-semibold tracking-widest uppercase">Department of CSE Presents</span>
+            </div>
+            
+            <h1 class="font-display text-6xl md:text-8xl lg:text-9xl font-black text-white mb-2 tracking-tighter" id="main-title">
+                SKILL AURA
+            </h1>
+            <div class="text-4xl md:text-6xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-600 mb-6">2026</div>
+            
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl mx-auto font-light">
+                <span class="typing-cursor" id="typing-text"></span>
+            </p>
+
+            <!-- Countdown Timer Section -->
+            <div class="mb-12 max-w-5xl mx-auto">
+                <div class="glass-panel rounded-2xl p-6 md:p-8 border border-violet-500/30 bg-black/40">
+                    <div class="flex items-center justify-center gap-2 mb-4">
+                        <span class="text-red-500 animate-pulse">🔥</span>
+                        <span class="text-red-400 font-bold tracking-wider uppercase text-sm md:text-base">Hurry! Event Starts In</span>
+                        <span class="text-red-500 animate-pulse">🔥</span>
+                    </div>
+                    
+                    <div class="grid grid-cols-4 md:grid-cols-5 gap-2 md:gap-4 mb-4">
+                        <div class="countdown-box rounded-xl p-3 md:p-4 text-center">
+                            <div class="countdown-number text-2xl md:text-4xl font-bold" id="days">00</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Days</div>
+                        </div>
+                        <div class="countdown-box rounded-xl p-3 md:p-4 text-center">
+                            <div class="countdown-number text-2xl md:text-4xl font-bold" id="hours">00</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Hours</div>
+                        </div>
+                        <div class="countdown-box rounded-xl p-3 md:p-4 text-center">
+                            <div class="countdown-number text-2xl md:text-4xl font-bold" id="minutes">00</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Minutes</div>
+                        </div>
+                        <div class="countdown-box rounded-xl p-3 md:p-4 text-center">
+                            <div class="countdown-number text-2xl md:text-4xl font-bold" id="seconds">00</div>
+                            <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Seconds</div>
+                        </div>
+                        <div class="countdown-box rounded-xl p-3 md:p-4 text-center hidden md:block bg-violet-600/20 border-violet-500/50">
+                            <div class="milliseconds text-2xl md:text-4xl font-bold" id="milliseconds">000</div>
+                            <div class="text-xs text-violet-300 uppercase tracking-wider mt-1">MS</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Milliseconds -->
+                    <div class="md:hidden flex justify-center mb-4">
+                        <div class="countdown-box rounded-xl px-6 py-2 bg-violet-600/20 border-violet-500/50">
+                            <span class="milliseconds text-2xl font-bold" id="milliseconds-mobile">000</span>
+                            <span class="text-xs text-violet-300 uppercase ml-2">MS</span>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 text-sm text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>28 February 2026 at 9:00 AM IST</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-6 justify-center items-center mb-16">
+                <div class="glass-panel px-8 py-4 rounded-2xl flex items-center gap-4 transform hover:scale-105 transition-transform cursor-pointer" onclick="document.getElementById('venue').scrollIntoView({behavior: 'smooth'})">
+                    <div class="text-violet-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Date</div>
+                        <div class="text-lg font-bold text-white">28 Feb 2026</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel px-8 py-4 rounded-2xl flex items-center gap-4 transform hover:scale-105 transition-transform">
+                    <div class="text-violet-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="text-left">
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Time</div>
+                        <div class="text-lg font-bold text-white">9:00 AM - 2:15 PM</div>
+                    </div>
+                </div>
+
+                <div class="glass-panel px-8 py-4 rounded-2xl flex items-center gap-4 transform hover:scale-105 transition-transform cursor-pointer" onclick="document.getElementById('venue').scrollIntoView({behavior: 'smooth'})">
+                    <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/venue.webp" 
+                         alt="Venue" 
+                         class="h-8 w-8 object-contain rounded">
+                    <div class="text-left">
+                        <div class="text-xs text-gray-400 uppercase tracking-wider">Venue</div>
+                        <div class="text-lg font-bold text-white">Auditorium</div>
+                    </div>
+                </div>
+            </div>
+
+            <a href="https://bhuvanesh-m-dev.github.io/form" target="_blank" class="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white transition-all duration-200 bg-violet-600 font-display rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-600 hover:bg-violet-700 hover:scale-105 shadow-[0_0_20px_rgba(139,92,246,0.5)] pulse-urgent">
+                <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-56 group-hover:h-56 opacity-10"></span>
+                <span class="relative flex items-center gap-2">
+                    REGISTER NOW
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                </span>
+            </a>
+            <div class="mt-4 text-violet-400 font-semibold animate-pulse">⚡ FREE ENTRY • NO REGISTRATION FEE ⚡</div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-24 relative">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-8 reveal-on-scroll">
+                    <div class="flex items-center gap-4 mb-4">
+                        <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/kec-logo.jpg" 
+                             alt="KEC Logo" 
+                             class="h-16 w-16 object-contain rounded-xl border border-violet-500/30 logo-hover">
+                        <div>
+                            <div class="text-violet-400 text-sm uppercase tracking-wider">Organized By</div>
+                            <div class="text-white font-bold text-lg">Kings Engineering College</div>
+                        </div>
+                    </div>
+                    
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-white">
+                        About The <span class="text-violet-500">Event</span>
+                    </h2>
+                    <div class="space-y-6 text-lg text-gray-300 leading-relaxed">
+                        <p>
+                            Skill Aura 2026 is an innovation-driven platform organized by the Department of Computer Science and Engineering under the Innovation Hub of Kings Engineering College.
+                        </p>
+                        <p>
+                            The event focuses on modern technological thinking, creativity, teamwork, and problem-solving abilities. This edition introduces a unique concept — <span class="text-violet-400 font-semibold">Human Prompting Intelligence</span>.
+                        </p>
+                    </div>
+                    
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="glass-panel p-4 rounded-xl border-l-4 border-violet-500">
+                            <div class="text-3xl font-bold text-white mb-1">6</div>
+                            <div class="text-sm text-gray-400">Departments</div>
+                        </div>
+                        <div class="glass-panel p-4 rounded-xl border-l-4 border-violet-500">
+                            <div class="text-3xl font-bold text-white mb-1">3-5</div>
+                            <div class="text-sm text-gray-400">Team Size</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative reveal-on-scroll">
+                    <div class="absolute inset-0 bg-gradient-to-r from-violet-600 to-purple-600 rounded-2xl transform rotate-3 opacity-20"></div>
+                    <div class="glass-panel p-8 rounded-2xl relative">
+                        <div class="flex items-center gap-3 mb-6">
+                            <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/venue.webp" 
+                                 alt="Venue" 
+                                 class="h-10 w-10 object-contain rounded-lg">
+                            <h3 class="font-display text-2xl font-bold text-white">Event Details</h3>
+                        </div>
+                        
+                        <div class="space-y-4 mb-6">
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5 cursor-pointer hover:bg-white/10 transition-colors" onclick="document.getElementById('venue').scrollIntoView({behavior: 'smooth'})">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                </svg>
+                                <span class="font-semibold">Auditorium, KEC</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-3 rounded-lg bg-white/5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                </svg>
+                                <span class="font-semibold">9:00 AM - 2:15 PM</span>
+                            </div>
+                        </div>
+
+                        <h3 class="font-display text-xl font-bold text-white mb-4">Eligible Departments</h3>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-2 rounded-full bg-violet-500"></div>
+                                <span class="font-semibold text-sm">CSE</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-2 rounded-full bg-violet-500"></div>
+                                <span class="font-semibold text-sm">AIDS</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-2 rounded-full bg-violet-500"></div>
+                                <span class="font-semibold text-sm">AIML</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-2 rounded-full bg-violet-500"></div>
+                                <span class="font-semibold text-sm">IT</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-2 rounded-full bg-violet-500"></div>
+                                <span class="font-semibold text-sm">Robotics</span>
+                            </div>
+                            <div class="flex items-center gap-3 p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                                <div class="w-2 h-2 rounded-full bg-violet-500"></div>
+                                <span class="font-semibold text-sm">ECE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Venue Section with Large Image and Map -->
+    <section id="venue" class="py-24 relative bg-gradient-to-b from-black to-violet-950/10">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <div class="inline-block px-4 py-1 mb-4 rounded-full border border-violet-500/30 bg-violet-500/10">
+                    <span class="text-violet-300 text-sm font-semibold tracking-widest uppercase">Event Location</span>
+                </div>
+                <h2 class="font-display text-5xl md:text-6xl font-bold text-white mb-4">Event <span class="text-violet-500">Venue</span></h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Join us at the state-of-the-art Auditorium at Kings Engineering College</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <!-- Large Venue Image -->
+                <div class="reveal-on-scroll">
+                    <div class="venue-image-container h-[400px] md:h-[500px] w-full">
+                        <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/venue.webp" 
+                             alt="KEC Auditorium Venue" 
+                             class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                        <div class="absolute bottom-0 left-0 right-0 p-6">
+                            <div class="flex items-center gap-3 mb-2">
+                                <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/kec-logo.jpg" 
+                                     alt="KEC" 
+                                     class="h-8 w-8 object-contain rounded">
+                                <span class="text-white font-bold text-xl">KEC Auditorium</span>
+                            </div>
+                            <p class="text-gray-300 text-sm">World-class facility equipped with modern audio-visual systems</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-on-scroll">
+    <div class="map-container h-[400px] md:h-[500px] w-full bg-gray-900">
+        <iframe 
+            src="https://www.google.com/maps/place/Kings+College+Main+Block/@12.9997514,79.9813453,141m/data=!3m1!1e3!4m7!3m6!1s0x3a528cc17930ff5f:0x42eeb833e50b55cc!4b1!8m2!3d12.9996826!4d79.9812076!16s%2Fg%2F11tdvfpnr8?hl=en&entry=ttu&g_ep=EgoyMDI2MDIxNy4wIKXMDSoASAFQAw%3D%3D" 
+            width="100%" 
+            height="100%" 
+            style="border:0;" 
+            allowfullscreen="" 
+            loading="lazy" 
+            referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 reveal-on-scroll mt-6">
+    <div class="glass-panel p-6 rounded-xl text-center hover:border-violet-500/50 transition-all cursor-pointer" onclick="window.open('https://www.google.com/maps/place/Kings+College+Main+Block/@12.9997514,79.9813453,141m/data=!3m1!1e3!4m7!3m6!1s0x3a528cc17930ff5f:0x42eeb833e50b55cc!4b1!8m2!3d12.9996826!4d79.9812076!16s%2Fg%2F11tdvfpnr8?hl=en&entry=ttu&g_ep=EgoyMDI2MDIxNy4wIKXMDSoASAFQAw%3D%3D', '_blank')">
+        <div class="w-14 h-14 bg-violet-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+        </div>
+        <h3 class="text-lg font-bold text-white mb-2">Get Directions</h3>
+        <p class="text-sm text-gray-400">Kings College Main Block</p>
+    </div>
+</div>
+
+                <div class="glass-panel p-6 rounded-xl text-center">
+                    <div class="w-14 h-14 bg-violet-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Event Time</h3>
+                    <p class="text-sm text-gray-400">9:00 AM - 2:15 PM</p>
+                </div>
+
+                <div class="glass-panel p-6 rounded-xl text-center">
+                    <div class="w-14 h-14 bg-violet-600/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Seating Capacity</h3>
+                    <p class="text-sm text-gray-400">500+ attendees</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technical Event Section -->
+    <section id="technical" class="py-24 relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-violet-900/20 to-transparent"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <div class="inline-block px-4 py-1 mb-4 rounded-full border border-violet-500/30 bg-violet-500/10">
+                    <span class="text-violet-300 text-sm font-semibold tracking-widest uppercase">Technical Event</span>
+                </div>
+                <h2 class="font-display text-5xl md:text-6xl font-bold text-white mb-4">Human Prompting <span class="text-violet-500">Challenge</span></h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">In the era of Artificial Intelligence, the real power lies in how humans communicate with AI.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                <div class="glass-panel p-8 rounded-2xl reveal-on-scroll hover:border-violet-500/50 transition-colors">
+                    <div class="w-14 h-14 bg-violet-600/20 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-violet-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">The Challenge</h3>
+                    <p class="text-gray-300 mb-6">Participants must craft powerful, structured, and intelligent prompts for Large Language Models. Use any LLM of your choice:</p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm">Gemini</span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm">ChatGPT</span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm">Claude</span>
+                        <span class="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-sm">Grok</span>
+                    </div>
+                </div>
+
+                <div class="glass-panel p-8 rounded-2xl reveal-on-scroll hover:border-violet-500/50 transition-colors border-red-500/30">
+                    <div class="w-14 h-14 bg-red-600/20 rounded-xl flex items-center justify-center mb-6">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-white mb-4">Strict Rules</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li class="flex items-start gap-3">
+                            <span class="text-red-500 font-bold">✕</span>
+                            <span>Prompts must be written purely by humans</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-red-500 font-bold">✕</span>
+                            <span>No AI-generated prompts allowed</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span class="text-green-500 font-bold">✓</span>
+                            <span>Output must come from participant's original prompt</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="glass-panel p-8 rounded-2xl reveal-on-scroll">
+                <h3 class="text-2xl font-bold text-white mb-6 text-center">Judging Criteria</h3>
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div class="text-center p-4 rounded-lg bg-white/5">
+                        <div class="text-violet-400 font-bold text-lg mb-2">01</div>
+                        <div class="text-sm text-gray-300">Prompt Clarity</div>
+                    </div>
+                    <div class="text-center p-4 rounded-lg bg-white/5">
+                        <div class="text-violet-400 font-bold text-lg mb-2">02</div>
+                        <div class="text-sm text-gray-300">Creativity</div>
+                    </div>
+                    <div class="text-center p-4 rounded-lg bg-white/5">
+                        <div class="text-violet-400 font-bold text-lg mb-2">03</div>
+                        <div class="text-sm text-gray-300">Output Accuracy</div>
+                    </div>
+                    <div class="text-center p-4 rounded-lg bg-white/5">
+                        <div class="text-violet-400 font-bold text-lg mb-2">04</div>
+                        <div class="text-sm text-gray-300">Logical Structure</div>
+                    </div>
+                    <div class="text-center p-4 rounded-lg bg-white/5">
+                        <div class="text-violet-400 font-bold text-lg mb-2">05</div>
+                        <div class="text-sm text-gray-300">Innovation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Non-Technical Event Section -->
+    <section id="nontechnical" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="glass-panel p-12 rounded-3xl relative overflow-hidden reveal-on-scroll float">
+                <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-violet-600 via-purple-500 to-violet-600"></div>
+                
+                <div class="inline-block p-4 rounded-full bg-violet-600/20 mb-6">
+                    <span class="text-4xl">🎭</span>
+                </div>
+                
+                <h2 class="font-display text-4xl md:text-5xl font-bold text-white mb-4">Surprise Event</h2>
+                <p class="text-xl text-gray-300 mb-8">
+                    Get ready for an exciting non-technical challenge designed to test creativity, spontaneity, and teamwork.
+                </p>
+                
+                <div class="inline-block px-6 py-3 rounded-full bg-white/5 border border-white/10 border-dashed">
+                    <span class="text-violet-400 font-semibold tracking-wider">DETAILS WILL BE REVEALED ON THE EVENT DAY</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Coordinators Section -->
+    <section id="coordinators" class="py-24 bg-gradient-to-b from-black to-violet-950/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-on-scroll">
+                <div class="inline-block px-4 py-1 mb-4 rounded-full border border-violet-500/30 bg-violet-500/10">
+                    <span class="text-violet-300 text-sm font-semibold tracking-widest uppercase">Meet The Team</span>
+                </div>
+                <h2 class="font-display text-5xl md:text-6xl font-bold text-white mb-4">Student <span class="text-violet-500">Coordinators</span></h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">The brilliant minds behind Skill Aura 2026</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Coordinator 1 -->
+                <div class="coordinator-card p-6 rounded-2xl text-center reveal-on-scroll">
+                    <div class="w-20 h-20 bg-gradient-to-br from-violet-600 to-purple-800 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-white">
+                        S
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Sudarmani</h3>
+                    <p class="text-violet-400 text-sm mb-3">Student Coordinator</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-violet-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coordinator 2 -->
+                <div class="coordinator-card p-6 rounded-2xl text-center reveal-on-scroll" style="transition-delay: 100ms;">
+                    <div class="w-20 h-20 bg-gradient-to-br from-violet-600 to-purple-800 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-white">
+                        A
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Aslin Brima</h3>
+                    <p class="text-violet-400 text-sm mb-3">Student Coordinator</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-violet-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coordinator 3 -->
+                <div class="coordinator-card p-6 rounded-2xl text-center reveal-on-scroll" style="transition-delay: 200ms;">
+                    <div class="w-20 h-20 bg-gradient-to-br from-violet-600 to-purple-800 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-white">
+                        B
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Bhuvanesh M</h3>
+                    <p class="text-violet-400 text-sm mb-3">Student Coordinator</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-violet-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Coordinator 4 -->
+                <div class="coordinator-card p-6 rounded-2xl text-center reveal-on-scroll" style="transition-delay: 300ms;">
+                    <div class="w-20 h-20 bg-gradient-to-br from-violet-600 to-purple-800 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-white">
+                        R
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Raashiya Baanu S</h3>
+                    <p class="text-violet-400 text-sm mb-3">Student Coordinator</p>
+                    <div class="flex justify-center gap-3">
+                        <a href="#" class="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center hover:bg-violet-600 transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Participate -->
+    <section class="py-24 bg-gradient-to-b from-black to-violet-950/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="font-display text-4xl font-bold text-center text-white mb-16 reveal-on-scroll">Why <span class="text-violet-500">Participate?</span></h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-panel p-6 rounded-xl reveal-on-scroll hover:transform hover:-translate-y-2 transition-all duration-300">
+                    <div class="text-3xl mb-4">🚀</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Next-Gen AI</h3>
+                    <p class="text-sm text-gray-400">Experience next-generation AI interaction firsthand</p>
+                </div>
+                
+                <div class="glass-panel p-6 rounded-xl reveal-on-scroll hover:transform hover:-translate-y-2 transition-all duration-300" style="transition-delay: 100ms;">
+                    <div class="text-3xl mb-4">🧩</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Problem Solving</h3>
+                    <p class="text-sm text-gray-400">Improve real-world problem-solving skills</p>
+                </div>
+                
+                <div class="glass-panel p-6 rounded-xl reveal-on-scroll hover:transform hover:-translate-y-2 transition-all duration-300" style="transition-delay: 200ms;">
+                    <div class="text-3xl mb-4">💡</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Showcase Innovation</h3>
+                    <p class="text-sm text-gray-400">Showcase your innovation to the world</p>
+                </div>
+                
+                <div class="glass-panel p-6 rounded-xl reveal-on-scroll hover:transform hover:-translate-y-2 transition-all duration-300" style="transition-delay: 300ms;">
+                    <div class="text-3xl mb-4">🤝</div>
+                    <h3 class="text-lg font-bold text-white mb-2">Collaborate</h3>
+                    <p class="text-sm text-gray-400">Compete and collaborate across departments</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section id="register" class="py-32 relative overflow-hidden">
+        <div class="absolute inset-0 bg-violet-600/10"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-violet-600/20 rounded-full blur-[120px]"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="mb-8 flex justify-center">
+                <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/kec-logo.jpg" 
+                     alt="KEC Logo" 
+                     class="h-24 w-24 object-contain rounded-2xl border-2 border-violet-500/50 shadow-[0_0_30px_rgba(139,92,246,0.3)] logo-hover">
+            </div>
+            
+            <h2 class="font-display text-5xl md:text-6xl font-bold text-white mb-8 reveal-on-scroll">
+                Ready to <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-600">Skill Up?</span>
+            </h2>
+            
+            <p class="text-xl text-gray-300 mb-12 reveal-on-scroll">
+                Step into the future of intelligence. Not by asking AI to think — But by learning how to think better for AI.
+            </p>
+            
+            <div class="flex flex-col items-center gap-6 reveal-on-scroll">
+                <a href="https://bhuvanesh-m-dev.github.io/form" target="_blank" class="group relative inline-flex items-center justify-center px-12 py-6 text-xl font-bold text-white transition-all duration-200 bg-violet-600 font-display rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-600 hover:bg-violet-700 hover:scale-105 shadow-[0_0_30px_rgba(139,92,246,0.6)] overflow-hidden pulse-urgent">
+                    <span class="absolute w-0 h-0 transition-all duration-500 ease-out bg-white rounded-full group-hover:w-96 group-hover:h-96 opacity-20"></span>
+                    <span class="relative">REGISTER NOW</span>
+                </a>
+                <div class="text-gray-400 font-medium">Free Registration • Open to CSE, AIDS, AIML, IT, Robotics, ECE</div>
+                
+                <div class="flex items-center gap-2 mt-4 text-sm text-gray-500 cursor-pointer hover:text-violet-400 transition-colors" onclick="document.getElementById('venue').scrollIntoView({behavior: 'smooth'})">
+                    <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/venue.webp" 
+                         alt="Venue" 
+                         class="h-5 w-5 object-contain rounded opacity-60">
+                    <span>Auditorium, Kings Engineering College</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 bg-black py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 items-center">
+                <div class="text-center md:text-left flex items-center gap-3 justify-center md:justify-start">
+                    <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/img/kec-logo.jpg" 
+                         alt="KEC Logo" 
+                         class="h-10 w-10 object-contain rounded-lg border border-violet-500/30">
+                    <div>
+                        <div class="font-display font-bold text-xl text-white">Kings Engineering College</div>
+                        <div class="text-violet-500 font-semibold text-sm">Innovation Hub</div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <div class="text-gray-400 text-sm mb-2">Student Coordinators</div>
+                    <div class="text-white text-xs space-y-1">
+                        <div>Sudarmani • Aslin Brima • Bhuvanesh M • Raashiya Baanu S</div>
+                    </div>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <div class="text-gray-400 text-sm">© 2026 Skill Aura. All rights reserved.</div>
+                    <div class="text-violet-500/60 text-xs mt-2">Designed for the Future</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Register GSAP ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Typing Effect
+        const text = "Explore. Compete. Innovate.";
+        const typingElement = document.getElementById('typing-text');
+        let i = 0;
+        
+        function typeWriter() {
+            if (i < text.length) {
+                typingElement.innerHTML += text.charAt(i);
+                i++;
+                setTimeout(typeWriter, 100);
+            }
+        }
+        
+        setTimeout(typeWriter, 500);
+
+        // Countdown Timer with Milliseconds
+        function updateCountdown() {
+            // Event date: February 28, 2026 at 9:00 AM IST
+            const eventDate = new Date('February 28, 2026 09:00:00').getTime();
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance > 0) {
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                const milliseconds = Math.floor((distance % 1000));
+
+                document.getElementById('days').textContent = String(days).padStart(2, '0');
+                document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+                document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+                document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+                document.getElementById('milliseconds').textContent = String(milliseconds).padStart(3, '0');
+                
+                const mobileMs = document.getElementById('milliseconds-mobile');
+                if (mobileMs) {
+                    mobileMs.textContent = String(milliseconds).padStart(3, '0');
+                }
+
+                // Add urgency styling when less than 24 hours
+                if (distance < (1000 * 60 * 60 * 24)) {
+                    document.querySelector('.countdown-box:last-child').classList.add('pulse-urgent');
+                }
+            } else {
+                document.getElementById('days').textContent = '00';
+                document.getElementById('hours').textContent = '00';
+                document.getElementById('minutes').textContent = '00';
+                document.getElementById('seconds').textContent = '00';
+                document.getElementById('milliseconds').textContent = '000';
+                
+                const mobileMs = document.getElementById('milliseconds-mobile');
+                if (mobileMs) {
+                    mobileMs.textContent = '000';
+                }
+            }
+        }
+
+        // Update every 10ms for smooth milliseconds
+        setInterval(updateCountdown, 10);
+        updateCountdown();
+
+        // Scroll Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+        
+        revealElements.forEach((element, index) => {
+            gsap.fromTo(element, 
+                {
+                    y: 50,
+                    opacity: 0
+                },
+                {
+                    y: 0,
+                    opacity: 1,
+                    duration: 0.8,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: element,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    delay: index % 3 * 0.1
+                }
+            );
+        });
+
+        // Navbar scroll effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
+            } else {
+                navbar.classList.remove('bg-black/80', 'backdrop-blur-md', 'border-b', 'border-white/10');
+            }
+        });
+
+        // Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Add hover effect to interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .glass-panel, .logo-hover, .coordinator-card, .venue-image-container');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.backgroundColor = 'rgba(139, 92, 246, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Glitch Effect on Title
+        const title = document.getElementById('main-title');
+        const originalText = title.textContent;
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*';
+        
+        title.addEventListener('mouseover', () => {
+            let iterations = 0;
+            const interval = setInterval(() => {
+                title.textContent = title.textContent.split('')
+                    .map((letter, index) => {
+                        if(index < iterations) {
+                            return originalText[index];
+                        }
+                        return chars[Math.floor(Math.random() * chars.length)];
+                    })
+                    .join('');
+                
+                if(iterations >= originalText.length) {
+                    clearInterval(interval);
+                }
+                iterations += 1/3;
+            }, 30);
+        });
+    </script>
+</body>
+</html>
