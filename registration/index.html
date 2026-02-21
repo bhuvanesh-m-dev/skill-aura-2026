@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Aura 2026 | PromptX & Non-Technical Events Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0f;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, .brand-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .gradient-text {
+            background: linear-gradient(135deg, #00f5ff 0%, #7c3aed 50%, #ff006e 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-text-tech {
+            background: linear-gradient(135deg, #00f5ff 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .gradient-text-nontech {
+            background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+        
+        .glass-panel-tech {
+            background: rgba(0, 245, 255, 0.05);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+        }
+        
+        .glass-panel-nontech {
+            background: rgba(245, 158, 11, 0.05);
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+        
+        .neon-border {
+            position: relative;
+        }
+        
+        .neon-border::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: linear-gradient(45deg, #00f5ff, #7c3aed, #ff006e, #00f5ff);
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s;
+            filter: blur(8px);
+        }
+        
+        .neon-border:hover::before {
+            opacity: 0.5;
+        }
+        
+        .input-field {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .input-field:focus {
+            border-color: #00f5ff;
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.2);
+            outline: none;
+        }
+        
+        .checkbox-custom {
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .checkbox-custom:checked {
+            background: #00f5ff;
+            border-color: #00f5ff;
+        }
+        
+        .checkbox-custom:checked::after {
+            content: '✓';
+            position: absolute;
+            color: #0a0a0f;
+            font-weight: bold;
+            font-size: 14px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+        
+        .warning-pulse {
+            animation: pulse-warning 2s infinite;
+        }
+        
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .urgency-text {
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .gradient-btn {
+            background: linear-gradient(135deg, #00f5ff 0%, #7c3aed 100%);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        
+        .gradient-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+        
+        .gradient-btn:hover::before {
+            left: 100%;
+        }
+        
+        .gradient-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 245, 255, 0.3);
+        }
+        
+        .google-btn {
+            background: linear-gradient(135deg, #4285f4 0%, #34a853 50%, #fbbc05 100%);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        
+        .google-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(66, 133, 244, 0.3);
+        }
+        
+        .notice-card {
+            border-left: 3px solid;
+            transition: transform 0.3s;
+        }
+        
+        .notice-card:hover {
+            transform: translateX(5px);
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .grid-bg {
+            background-image: 
+                linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+        
+        .heartbeat {
+            animation: heartbeat 2s infinite;
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: scale(1); }
+            10% { transform: scale(1.1); }
+            20% { transform: scale(1); }
+            30% { transform: scale(1.1); }
+            40% { transform: scale(1); }
+        }
+        
+        .typing-effect::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        .event-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .event-card:hover {
+            transform: translateY(-8px);
+        }
+        
+        .tab-active {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .laptop-warning {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.1));
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+    </style>
+</head>
+<body class="grid-bg">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 transition-all duration-300" id="navbar">
+        <div class="glass-panel border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-20">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center">
+                            <span class="text-xl font-bold text-white">SA</span>
+                        </div>
+                        <span class="brand-font text-2xl font-bold tracking-tight">Skill Aura <span class="text-cyan-400">2026</span></span>
+                    </div>
+                    <div class="hidden md:flex items-center space-x-8">
+                        <a href="#events" class="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Events</a>
+                        <a href="#notice" class="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Notice</a>
+                        <a href="#terms" class="text-sm font-medium text-gray-300 hover:text-cyan-400 transition-colors">Terms</a>
+                        <a href="#register" class="px-6 py-2 rounded-full bg-white/10 hover:bg-white/20 border border-white/20 transition-all text-sm font-medium">Register Now</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center pt-20 overflow-hidden">
+        <!-- Animated Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-purple-900/20 to-transparent rounded-full"></div>
+        </div>
+
+        <div class="relative z-10 max-w-6xl mx-auto px-4 text-center">
+            <div class="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-red-500/10 border border-red-500/30 mb-8 warning-pulse">
+                <span class="w-2 h-2 rounded-full bg-red-500 heartbeat"></span>
+                <span class="text-sm text-red-400 font-semibold urgency-text">Limited Slots • Register Now</span>
+            </div>
+            
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight">
+                <span class="block text-white">Skill Aura</span>
+                <span class="gradient-text italic">2026</span>
+            </h1>
+            
+            <p class="text-xl md:text-2xl text-gray-400 max-w-3xl mx-auto mb-8 font-light">
+                Where creativity meets technology. Choose your battlefield – 
+                <span class="gradient-text-tech font-semibold">Technical</span> or 
+                <span class="gradient-text-nontech font-semibold">Non-Technical</span>
+            </p>
+
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <div class="glass-panel-tech px-6 py-3 rounded-full border border-cyan-500/30">
+                    <span class="text-cyan-400 font-bold">PromptX</span>
+                    <span class="text-gray-400 text-sm ml-2">Human Prompting Challenge</span>
+                </div>
+                <div class="glass-panel-nontech px-6 py-3 rounded-full border border-orange-500/30">
+                    <span class="text-orange-400 font-bold">Non-Technical</span>
+                    <span class="text-gray-400 text-sm ml-2">Creative Events</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+                <a href="#register" class="gradient-btn px-8 py-4 rounded-full text-black font-bold text-lg flex items-center space-x-2 group">
+                    <span>Register Your Team</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+                <div class="flex items-center space-x-2 text-orange-400 warning-pulse bg-orange-500/10 px-4 py-2 rounded-full border border-orange-500/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                    </svg>
+                    <span class="font-bold urgency-text">Filling Fast!</span>
+                </div>
+            </div>
+
+            <!-- Event Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto" id="events">
+                <!-- Technical Event Card -->
+                <div class="event-card glass-panel-tech rounded-2xl p-8 text-left relative overflow-hidden group cursor-pointer" onclick="scrollToRegister('technical')">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/20 rounded-full blur-3xl group-hover:bg-cyan-500/30 transition-all"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">PromptX</h3>
+                        <p class="text-cyan-400 font-semibold mb-3">Technical Event</p>
+                        <p class="text-gray-400 text-sm mb-4">Master the art of AI communication in this Human Prompting Challenge. Test your skills against the best prompt engineers.</p>
+                        <div class="flex items-center text-cyan-400 text-sm font-medium">
+                            <span>Register Now</span>
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Non-Technical Event Card -->
+                <div class="event-card glass-panel-nontech rounded-2xl p-8 text-left relative overflow-hidden group cursor-pointer" onclick="scrollToRegister('nontechnical')">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-orange-500/20 rounded-full blur-3xl group-hover:bg-orange-500/30 transition-all"></div>
+                    <div class="relative z-10">
+                        <div class="w-12 h-12 rounded-xl bg-orange-500/20 flex items-center justify-center mb-4">
+                            <svg class="w-6 h-6 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2">Creative Arena</h3>
+                        <p class="text-orange-400 font-semibold mb-3">Non-Technical Events</p>
+                        <p class="text-gray-400 text-sm mb-4">Showcase your creativity, communication, and artistic talents in our diverse range of non-technical competitions.</p>
+                        <div class="flex items-center text-orange-400 text-sm font-medium">
+                            <span>Register Now</span>
+                            <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 scroll-indicator">
+            <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Important Notice Section -->
+    <section id="notice" class="py-24 relative">
+        <div class="max-w-5xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Important <span class="text-cyan-400">Notice</span></h2>
+                <p class="text-gray-400 text-lg">Critical information for all participants</p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- Event Selection Notice -->
+                <div class="glass-panel rounded-2xl p-8 notice-card border-l-purple-400">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2 flex items-center">
+                                Cross-Event Participation
+                                <span class="ml-3 px-3 py-1 rounded-full bg-purple-500/20 text-purple-400 text-xs font-bold">IMPORTANT</span>
+                            </h3>
+                            <div class="bg-purple-500/10 border border-purple-500/20 rounded-lg p-4 mb-4">
+                                <p class="text-purple-300 text-sm font-medium">
+                                    Non-technical participants who wish to participate in <strong class="text-white">PromptX (Technical Event)</strong> must ensure their team has <strong class="text-white">at least one laptop</strong> available for the competition.
+                                </p>
+                            </div>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="text-purple-400 mr-2">•</span>
+                                    Each team must have minimum one (1) laptop for technical events
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-400 mr-2">•</span>
+                                    Laptops must have stable internet connectivity
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-purple-400 mr-2">•</span>
+                                    Organizers will not provide computing devices
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LLM Disclosure -->
+                <div class="glass-panel rounded-2xl p-8 notice-card border-l-cyan-400">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-cyan-500/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2 flex items-center">
+                                PromptX: LLM Platform Disclosure
+                                <span class="ml-3 px-3 py-1 rounded-full bg-cyan-500/20 text-cyan-400 text-xs font-bold">FAIR PLAY</span>
+                            </h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="text-cyan-400 mr-2">•</span>
+                                    The specific Large Language Model (LLM) will be announced <strong class="text-white">only on the day of the event</strong>
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-cyan-400 mr-2">•</span>
+                                    This ensures fairness and prevents familiarity-based advantages
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-cyan-400 mr-2">•</span>
+                                    The selected LLM will be <strong class="text-white">free to use</strong> during the event—no paid subscriptions required
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Data Privacy -->
+                <div class="glass-panel rounded-2xl p-8 notice-card border-l-blue-400">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2 flex items-center">
+                                Data Privacy & Responsibility
+                                <span class="ml-3 px-3 py-1 rounded-full bg-red-500/20 text-red-400 text-xs font-bold">IMPORTANT</span>
+                            </h3>
+                            <div class="bg-red-500/10 border border-red-500/20 rounded-lg p-4 mb-4">
+                                <p class="text-red-300 text-sm font-medium">⚠️ The LLM platform is a third-party web application. Organizers are not responsible for data entered, storage, or processing of submitted prompts.</p>
+                            </div>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start">
+                                    <span class="text-blue-400 mr-2">•</span>
+                                    Do <strong class="text-white">NOT</strong> enter personal, confidential, or sensitive information
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-400 mr-2">•</span>
+                                    Use the platform responsibly and review privacy policies if required
+                                </li>
+                                <li class="flex items-start">
+                                    <span class="text-blue-400 mr-2">•</span>
+                                    Participation is voluntary and at your own discretion
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Limited Slots Warning -->
+                <div class="glass-panel rounded-2xl p-8 notice-card border-l-pink-500 bg-gradient-to-r from-pink-500/10 to-transparent">
+                    <div class="flex items-start space-x-4">
+                        <div class="w-12 h-12 rounded-xl bg-pink-500/20 flex items-center justify-center flex-shrink-0 animate-pulse">
+                            <svg class="w-6 h-6 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-xl font-bold text-white mb-2">Limited Team Slots</h3>
+                            <p class="text-gray-300 mb-3">
+                                Only a limited number of teams will be permitted to participate across all events. Selection is based on <strong class="text-pink-400">early registration</strong> and slot availability.
+                            </p>
+                            <div class="flex items-center space-x-2 text-pink-400 font-bold bg-pink-500/10 p-3 rounded-lg border border-pink-500/20">
+                                <svg class="w-5 h-5 heartbeat" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                </svg>
+                                <span class="urgency-text">Final few spots remaining!</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registration Section -->
+    <section id="register" class="py-24 relative">
+        <div class="max-w-4xl mx-auto px-4">
+            <div class="text-center mb-12">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Ready to <span class="gradient-text">Compete?</span></h2>
+                <p class="text-gray-400 text-lg mb-8">Choose your event category and register your team</p>
+                
+                <!-- Urgency Banner -->
+                <div class="inline-flex items-center space-x-3 px-6 py-3 rounded-full bg-gradient-to-r from-orange-500/20 to-red-500/20 border border-orange-500/30 mb-8 warning-pulse">
+                    <svg class="w-6 h-6 text-orange-400 heartbeat" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                    <span class="text-orange-400 font-bold urgency-text text-lg">Hurry! Slots filling up rapidly</span>
+                </div>
+            </div>
+
+            <!-- Laptop Requirement Warning -->
+            <div class="laptop-warning rounded-2xl p-6 mb-8 flex items-start space-x-4">
+                <div class="w-10 h-10 rounded-full bg-orange-500/20 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-5 h-5 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h4 class="text-orange-400 font-bold mb-1">Laptop Requirement for Cross-Event Participation</h4>
+                    <p class="text-gray-300 text-sm">
+                        If you are registering for <strong class="text-white">Non-Technical events</strong> but plan to participate in <strong class="text-white">PromptX (Technical)</strong>, 
+                        your team <strong class="text-orange-400">must have at least one laptop</strong>. Please confirm this in the Google Form.
+                    </p>
+                </div>
+            </div>
+
+            <div class="glass-panel rounded-3xl p-8 md:p-12 neon-border text-center relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-cyan-500/20 to-purple-500/20 blur-3xl"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-gradient-to-tr from-pink-500/20 to-orange-500/20 blur-3xl"></div>
+                
+                <div class="relative z-10">
+                    <div class="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
+                        <svg class="w-10 h-10 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                        </svg>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-white mb-4">Register via Google Form</h3>
+                    <p class="text-gray-400 mb-8 max-w-lg mx-auto">
+                        Select your event category (Technical or Non-Technical) in the form. 
+                        If choosing both, remember the laptop requirement for technical participation.
+                    </p>
+
+                    <!-- Google Form Button -->
+                    <a href="https://forms.google.com/your-form-link-here" target="_blank" class="google-btn inline-flex items-center space-x-3 px-10 py-5 rounded-full text-white font-bold text-xl shadow-2xl transform transition-all hover:scale-105 group">
+                        <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                        </svg>
+                        <span>Open Registration Form</span>
+                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                        </svg>
+                    </a>
+
+                    <div class="mt-8 flex flex-col items-center space-y-3 text-sm text-gray-500">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                            </svg>
+                            <span>Secure Google Forms</span>
+                        </div>
+                        <p class="max-w-md">By registering, you agree to the Skill Aura 2026 Terms & Conditions for your selected event(s)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Terms Accordion -->
+            <div class="mt-12 glass-panel rounded-2xl p-8" id="terms">
+                <h3 class="text-xl font-bold text-white mb-6 flex items-center">
+                    <svg class="w-6 h-6 text-purple-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Terms & Conditions
+                </h3>
+                
+                <!-- Technical Event Terms -->
+                <div class="mb-6 p-6 rounded-xl glass-panel-tech border border-cyan-500/20">
+                    <h4 class="text-cyan-400 font-bold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+                        </svg>
+                        PromptX (Technical Event) Terms
+                    </h4>
+                    <div class="space-y-3 text-sm text-gray-300">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-cyan-400 mt-1">•</span>
+                            <p>Each team must have <strong class="text-white">at least one laptop</strong> with internet connectivity</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-cyan-400 mt-1">•</span>
+                            <p>LLM platform will be revealed on event day only</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-cyan-400 mt-1">•</span>
+                            <p>Do not enter sensitive personal data into third-party LLM platforms</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-cyan-400 mt-1">•</span>
+                            <p>All committee decisions are final and binding</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Non-Technical Event Terms -->
+                <div class="mb-6 p-6 rounded-xl glass-panel-nontech border border-orange-500/20">
+                    <h4 class="text-orange-400 font-bold mb-4 flex items-center">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                        Non-Technical Event Terms
+                    </h4>
+                    <div class="space-y-3 text-sm text-gray-300">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-orange-400 mt-1">•</span>
+                            <p>Standard event rules and judging criteria apply</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-orange-400 mt-1">•</span>
+                            <p>If participating in Technical events, laptop requirement applies (minimum 1 per team)</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-orange-400 mt-1">•</span>
+                            <p>Team selection based on registration time and slot availability</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-orange-400 mt-1">•</span>
+                            <p>All decisions by organizing committee are final</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- General Terms -->
+                <div class="p-6 rounded-xl bg-white/5 border border-white/10">
+                    <h4 class="text-white font-bold mb-4">General Terms</h4>
+                    <div class="space-y-3 text-sm text-gray-300">
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-400 mt-1">•</span>
+                            <p>Limited slots available – early registration recommended</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-400 mt-1">•</span>
+                            <p>Participants must maintain professional behavior throughout the event</p>
+                        </div>
+                        <div class="flex items-start space-x-2">
+                            <span class="text-purple-400 mt-1">•</span>
+                            <p>Any violation of fair play rules results in immediate disqualification</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Thank You Section -->
+    <section class="py-24 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-900/10 to-transparent"></div>
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+            <div class="glass-panel rounded-3xl p-12 border border-white/10 relative overflow-hidden">
+                <!-- Decorative Elements -->
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 via-purple-500 to-pink-500"></div>
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-cyan-500/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-10 -left-10 w-32 h-32 bg-purple-500/20 rounded-full blur-3xl"></div>
+
+                <div class="relative z-10">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center mx-auto mb-6 animate-pulse">
+                        <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4">
+                        Thank You for Visiting <span class="gradient-text">This Far!</span>
+                    </h2>
+                    
+                    <p class="text-gray-400 text-lg mb-8 max-w-2xl mx-auto">
+                        Whether you're here for <span class="text-cyan-400">PromptX</span> or our <span class="text-orange-400">Non-Technical events</span>, 
+                        we're excited to see your talent shine. Bring your creativity, bring your laptop (if needed), and let's make Skill Aura 2026 unforgettable!
+                    </p>
+
+                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 text-sm text-gray-500 mb-8">
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                            </svg>
+                            <span>Don't forget your laptop for Tech!</span>
+                        </div>
+                        <span class="hidden sm:inline text-gray-600">•</span>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                            </svg>
+                            <span>Join 500+ participants</span>
+                        </div>
+                        <span class="hidden sm:inline text-gray-600">•</span>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                            </svg>
+                            <span>Win Amazing Prizes</span>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-8 border-t border-white/10">
+                        <p class="text-cyan-400 font-medium typing-effect" id="typingText">See you at Skill Aura 2026!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="border-t border-white/10 py-12 mt-12">
+        <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center">
+            <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center">
+                    <span class="text-sm font-bold text-white">SA</span>
+                </div>
+                <span class="brand-font text-xl font-bold">Skill Aura 2026</span>
+            </div>
+            <div class="text-gray-500 text-sm text-center md:text-right">
+                <p>Technical & Non-Technical Events</p>
+                <p class="mt-1">© 2026 Skill Aura Technical Committee. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize GSAP
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-black/50');
+            } else {
+                navbar.classList.remove('bg-black/50');
+            }
+        });
+
+        // Scroll to register with event type
+        function scrollToRegister(type) {
+            const registerSection = document.getElementById('register');
+            registerSection.scrollIntoView({ behavior: 'smooth' });
+            
+            // You could add logic here to pre-select event type in form if needed
+            console.log('Selected event type:', type);
+        }
+
+        // Scroll animations
+        gsap.utils.toArray('.notice-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: 'top 85%',
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                delay: i * 0.2,
+                ease: 'power3.out'
+            });
+        });
+
+        // Typing effect for thank you section
+        const text = "See you at Skill Aura 2026!";
+        const typingElement = document.getElementById('typingText');
+        let index = 0;
+        
+        function typeText() {
+            if (index < text.length) {
+                typingElement.textContent = text.slice(0, index + 1);
+                index++;
+                setTimeout(typeText, 100);
+            }
+        }
+        
+        // Start typing when section is visible
+        ScrollTrigger.create({
+            trigger: "#typingText",
+            start: "top 80%",
+            onEnter: () => typeText(),
+            once: true
+        });
+
+        // Particle effect on mouse move
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.95) {
+                createParticle(e.clientX, e.clientY);
+            }
+        });
+
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'particle w-2 h-2 rounded-full bg-cyan-400/50';
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            document.body.appendChild(particle);
+            
+            gsap.to(particle, {
+                y: y - 100,
+                x: x + (Math.random() - 0.5) * 100,
+                opacity: 0,
+                duration: 1.5,
+                ease: 'power2.out',
+                onComplete: () => particle.remove()
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
