@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Certificate of Participation - PromptForge 2026 | Skill Aura 2026</title>
-    <meta property="og:title" content="PromptForge 2026 - Certificate of Participation">
+    <title>Certificate of Participation - PromptX 2026 | Skill Aura 2026</title>
+    <meta property="og:title" content="PromptX 2026 - Certificate of Participation">
     <meta property="og:description" content="Kings Engineering College - Innovation Hub - Technical Event Participation Certificate">
     <meta property="og:type" content="website">
     <style>
@@ -20,14 +20,8 @@
             --pure-black: #000000;
             --pure-white: #ffffff;
             --gray-100: #f5f5f5;
-            --gray-200: #e5e5e5;
-            --gray-300: #d4d4d4;
-            --gray-400: #a3a3a3;
             --gray-500: #737373;
-            --gray-600: #525252;
             --gray-700: #404040;
-            --gray-800: #262626;
-            --gray-900: #171717;
         }
         
         body {
@@ -51,11 +45,10 @@
             gap: 30px;
         }
         
-        /* Certificate Container - CRT Fit */
+        /* Certificate Container */
         .certificate-wrapper {
             width: 100%;
             background: white;
-            border-radius: 0;
             border: 2px solid var(--pure-white);
             overflow: hidden;
             position: relative;
@@ -67,7 +60,7 @@
             display: block;
         }
         
-        /* Action Buttons Container - Pure Black & White */
+        /* Action Buttons Container */
         .actions-container {
             display: flex;
             flex-wrap: wrap;
@@ -105,11 +98,6 @@
             transform: translateY(-2px);
         }
         
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        /* Primary Button - Inverted */
         .btn-primary {
             background: var(--pure-white);
             color: var(--pure-black);
@@ -121,13 +109,12 @@
             color: var(--pure-white);
         }
         
-        /* Copy Button */
         .btn-copy.copied {
             background: var(--pure-white);
             color: var(--pure-black);
         }
         
-        /* Header Badge - Black & White */
+        /* Event Badge */
         .event-badge {
             display: inline-flex;
             align-items: center;
@@ -142,7 +129,7 @@
             text-transform: uppercase;
         }
         
-        /* Toast Notification - Black & White */
+        /* Toast Notification */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -164,6 +151,86 @@
         .toast.show {
             transform: translateX(-50%) translateY(0);
             opacity: 1;
+        }
+        
+        /* Verification Note */
+        .verification-note {
+            width: 100%;
+            padding: 20px;
+            background: var(--pure-black);
+            border: 1px solid var(--gray-700);
+            text-align: center;
+            margin-top: 10px;
+        }
+        
+        .verification-note .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gray-500);
+            margin-bottom: 8px;
+        }
+        
+        .verification-note .domain {
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: var(--pure-white);
+            letter-spacing: 1px;
+        }
+        
+        .verification-note .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--pure-white);
+            border: 1px solid var(--pure-white);
+            padding: 6px 16px;
+        }
+        
+        .verification-note .status::before {
+            content: '✓';
+            color: var(--pure-white);
+            font-weight: 700;
+        }
+        
+        /* Event Description Section */
+        .event-description {
+            width: 100%;
+            padding: 40px;
+            background: var(--pure-black);
+            border: 1px solid var(--gray-700);
+            margin-top: 20px;
+        }
+        
+        .event-description h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            color: var(--pure-white);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+        
+        .event-description .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 16px;
+            font-style: italic;
+            color: var(--gray-500);
+            margin-bottom: 30px;
+            display: block;
+        }
+        
+        .event-description p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--gray-100);
+            margin-bottom: 16px;
+            text-align: justify;
+        }
+        
+        .event-description p:last-child {
+            margin-bottom: 0;
         }
         
         /* Footer Info */
@@ -191,6 +258,14 @@
                 width: 100%;
                 justify-content: center;
             }
+            
+            .event-description {
+                padding: 25px;
+            }
+            
+            .event-description h2 {
+                font-size: 20px;
+            }
         }
         
         /* Print Styles */
@@ -202,7 +277,9 @@
             
             .actions-container,
             .event-badge,
-            .footer-info {
+            .footer-info,
+            .verification-note,
+            .event-description {
                 display: none;
             }
             
@@ -320,9 +397,9 @@
                         has successfully participated in the Technical Event
                     </text>
                     
-                    <!-- Event Name -->
+                    <!-- Event Name - PromptX -->
                     <text x="0" y="145" text-anchor="middle" font-family="'Cinzel', serif" font-size="20" font-weight="700" fill="#dc2626">
-                        "PromptForge 2026"
+                        "PromptX"
                     </text>
                     
                     <!-- Context -->
@@ -360,23 +437,25 @@
                     </text>
                 </g>
                 
-                <!-- Footer -->
-                <g transform="translate(0, 630)">
-                    <!-- Coordinators -->
+                <!-- Footer - Adjusted Upwards -->
+                <g transform="translate(0, 610)">
+                    <!-- Student Coordinators - Moved Up -->
                     <g transform="translate(180, 0)">
                         <text x="0" y="0" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10" font-weight="600" fill="#1e40af">
                             Student Coordinators
                         </text>
-                        <line x1="-50" y1="20" x2="50" y2="20" stroke="#334155" stroke-width="1"/>
-                        <text x="0" y="35" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#475569">[Coordinator 1]</text>
-                        <line x1="-50" y1="45" x2="50" y2="45" stroke="#334155" stroke-width="1"/>
-                        <text x="0" y="60" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#475569">[Coordinator 2]</text>
-                        <line x1="-50" y1="70" x2="50" y2="70" stroke="#334155" stroke-width="1"/>
-                        <text x="0" y="85" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#475569">[Coordinator 3]</text>
+                        <line x1="-60" y1="12" x2="60" y2="12" stroke="#334155" stroke-width="1"/>
+                        <text x="0" y="24" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#475569">Sudarmani</text>
+                        <line x1="-60" y1="32" x2="60" y2="32" stroke="#334155" stroke-width="1"/>
+                        <text x="0" y="44" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#475569">Aslin Brima</text>
+                        <line x1="-60" y1="52" x2="60" y2="52" stroke="#334155" stroke-width="1"/>
+                        <text x="0" y="64" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#475569">Bhuvanesh M</text>
+                        <line x1="-60" y1="72" x2="60" y2="72" stroke="#334155" stroke-width="1"/>
+                        <text x="0" y="84" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#475569">Raashiya Baanu S</text>
                     </g>
                     
-                    <!-- Seal -->
-                    <g transform="translate(500, 20)">
+                    <!-- Seal - Moved Up -->
+                    <g transform="translate(500, 30)">
                         <circle cx="0" cy="0" r="35" fill="none" stroke="url(#goldFoil)" stroke-width="2"/>
                         <circle cx="0" cy="0" r="30" fill="none" stroke="#dc2626" stroke-width="1" stroke-dasharray="2,2"/>
                         <text x="0" y="-5" text-anchor="middle" font-family="'Cinzel', serif" font-size="9" fill="#dc2626" font-weight="700">VERIFIED</text>
@@ -384,11 +463,12 @@
                         <text x="0" y="20" text-anchor="middle" font-family="'Inter', sans-serif" font-size="8" fill="#64748b">2026</text>
                     </g>
                     
-                    <!-- Faculty -->
-                    <g transform="translate(820, 30)">
+                    <!-- Faculty - Moved Up -->
+                    <g transform="translate(820, 20)">
                         <line x1="-60" y1="0" x2="60" y2="0" stroke="#1e40af" stroke-width="2"/>
-                        <text x="0" y="18" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1e40af">Faculty In-Charge</text>
-                        <text x="0" y="35" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#64748b">Department of CSE</text>
+                        <text x="0" y="18" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11" font-weight="600" fill="#1e40af">Rajkumar</text>
+                        <text x="0" y="35" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#64748b">Faculty In-Charge</text>
+                        <text x="0" y="50" text-anchor="middle" font-family="'Inter', sans-serif" font-size="9" fill="#64748b">Dept of CSE</text>
                     </g>
                 </g>
                 
@@ -399,7 +479,7 @@
         
         <!-- Action Buttons -->
         <div class="actions-container">
-            <a href="[Project URL]" target="_blank" class="btn btn-primary" id="projectBtn">
+            <a href="https://bhuvanesh-m-dev.github.io/skill-aura-2026" target="_blank" rel="noopener noreferrer" class="btn btn-primary" id="projectBtn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                     <polyline points="15 3 21 3 21 9"></polyline>
@@ -431,6 +511,25 @@
             </a>
         </div>
         
+        <!-- Verification Note -->
+        <div class="verification-note">
+            <div class="label">Original Verified Certificate</div>
+            <div class="domain">https://bhuvanesh-m-dev.github.io/skill-aura-2026</div>
+            <div class="status">Verified & Hosted</div>
+        </div>
+        
+        <!-- Event Description -->
+        <div class="event-description">
+            <h2>PromptX</h2>
+            <span class="subtitle">The Human Intelligence Challenge</span>
+            
+            <p>PromptX is a technical event designed to explore the true power of human intelligence in the age of Artificial Intelligence. This challenge focuses on crafting high-quality, structured prompts to generate meaningful outputs from a specified Large Language Model (LLM).</p>
+            
+            <p>Participants must rely solely on their own creativity and logical thinking to design prompts. The use of AI-generated prompts or automated prompt tools is strictly prohibited. The objective is to demonstrate how effective human communication can shape and control AI responses.</p>
+            
+            <p>With defined rules and evaluation criteria, PromptX aims to highlight clarity, innovation, structure, and the ability to extract the best possible output from an LLM using purely human-crafted instructions.</p>
+        </div>
+        
         <!-- Footer Info -->
         <div class="footer-info">
             Kings Engineering College • Innovation Hub • Department of Computer Science and Engineering
@@ -443,8 +542,8 @@
     <script>
         // Get current URL
         const currentUrl = window.location.href;
-        const certificateTitle = "PromptForge 2026 - Certificate of Participation";
-        const certificateDesc = "Check out my Certificate of Participation from PromptForge 2026 at Kings Engineering College!";
+        const certificateTitle = "PromptX 2026 - Certificate of Participation";
+        const certificateDesc = "Check out my Certificate of Participation from PromptX 2026 at Kings Engineering College!";
         
         // Copy to Clipboard Function
         function copyToClipboard() {
@@ -498,24 +597,10 @@
             }, 3000);
         }
         
-        // Update Project Button URL dynamically
-        function updateProjectUrl(url) {
-            if(url && url !== '[Project URL]') {
-                document.getElementById('projectBtn').href = url;
-            }
-        }
-        
         // Initialize
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Certificate Landing Page Loaded');
             console.log('Current URL:', currentUrl);
-            
-            // You can update the project URL here or pass it as a query parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            const projectUrl = urlParams.get('project');
-            if(projectUrl) {
-                updateProjectUrl(projectUrl);
-            }
         });
         
         // Keyboard shortcuts
