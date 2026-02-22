@@ -19,7 +19,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (teamNameEl) teamNameEl.textContent = data.teamName;
         if (projectBtn) projectBtn.href = data.projectUrl;
         if (svgProjectLink) {
-            svgProjectLink.href = data.projectUrl;
+            svgProjectLink.setAttribute('href', data.projectUrl);
+            svgProjectLink.setAttribute('target', '_blank');
             svgProjectLink.textContent = data.projectUrl;
         }
 
