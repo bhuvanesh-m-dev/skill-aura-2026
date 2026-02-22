@@ -1,7 +1,7 @@
 // Get current URL
 const currentUrl = window.location.href;
 const certificateTitle = "PromptX 2026 - Certificate of Participation";
-const certificateDesc = "I’m excited to share my Participation Certificate from PromptX – The Human Intelligence Challenge, organized under Skill Aura 2026 by the Innovation Hub on February 28, 2026. This challenge focused on structured human prompting and AI interaction strategy. 🔗 Digital Certificate : ";
+const certificateDesc = "Check out my Certificate of Participation from PromptX 2026 at Kings Engineering College!";
 
 // Load Data and Initialize
 document.addEventListener('DOMContentLoaded', async function () {
@@ -11,12 +11,10 @@ document.addEventListener('DOMContentLoaded', async function () {
         // Get URL Parameters
         const urlParams = new URLSearchParams(window.location.search);
         const teamParam = urlParams.get('team');
-        
+
         // Determine Data Path: If ?team=xyz is present, fetch team/xyz/data.json, else fetch local data.json
-        const dataPath = teamParam ? `https://github.com/bhuvanesh-m-dev/skill-aura-2026/tree/main/team/${teamParam}/data.json` : 'data.json';
-        
+        const dataPath = teamParam ? `https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/main/team/${teamParam}/data.json` : 'data.json';
         const response = await fetch(dataPath);
-        if (!response.ok) throw new Error('Data file not found');
         const data = await response.json();
         
         // Update Common Data
@@ -67,8 +65,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     } catch (error) {
         console.error('Error loading certificate data:', error);
-        // Redirect to 404 if data load fails
-        window.location.href = 'https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/404/';
     }
 });
 
@@ -109,8 +105,7 @@ function shareWhatsApp(e) {
 // Share on LinkedIn
 function shareLinkedIn(e) {
     e.preventDefault();
-    const text = encodeURIComponent(`${certificateDesc} ${window.location.href}`);
-    const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
+    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
     window.open(linkedInUrl, '_blank', 'width=600,height=400');
 }
 
