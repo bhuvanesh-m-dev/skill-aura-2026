@@ -18,7 +18,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         if (teamNameEl) teamNameEl.textContent = data.teamName;
         if (projectBtn) projectBtn.href = data.projectUrl;
-        if (svgProjectLink) svgProjectLink.href = data.projectUrl;
+        if (svgProjectLink) {
+            svgProjectLink.href = data.projectUrl;
+            svgProjectLink.textContent = data.projectUrl;
+        }
 
         // Get Participant ID from URL
         const urlParams = new URLSearchParams(window.location.search);
