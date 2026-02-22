@@ -9,289 +9,7 @@
     <meta property="og:description"
         content="Kings Engineering College - Innovation Hub - Technical Event Participation Certificate">
     <meta property="og:type" content="website">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --pure-black: #000000;
-            --pure-white: #ffffff;
-            --gray-100: #f5f5f5;
-            --gray-500: #737373;
-            --gray-700: #404040;
-        }
-
-        body {
-            background: var(--pure-black);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            font-family: 'Inter', sans-serif;
-            color: var(--pure-white);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 1100px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 30px;
-        }
-
-        /* Certificate Container */
-        .certificate-wrapper {
-            width: 100%;
-            background: white;
-            border: 2px solid var(--pure-white);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .certificate-svg {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
-
-        /* Action Buttons Container */
-        .actions-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-            padding: 25px;
-            background: var(--pure-black);
-            border: 1px solid var(--gray-700);
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 14px 28px;
-            border: 1px solid var(--pure-white);
-            border-radius: 0;
-            font-family: 'Inter', sans-serif;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: var(--pure-black);
-            color: var(--pure-white);
-        }
-
-        .btn:hover {
-            background: var(--pure-white);
-            color: var(--pure-black);
-            transform: translateY(-2px);
-        }
-
-        .btn-primary {
-            background: var(--pure-white);
-            color: var(--pure-black);
-            border: 2px solid var(--pure-white);
-        }
-
-        .btn-primary:hover {
-            background: var(--pure-black);
-            color: var(--pure-white);
-        }
-
-        .btn-copy.copied {
-            background: var(--pure-white);
-            color: var(--pure-black);
-        }
-
-        /* Event Badge */
-        .event-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            background: var(--pure-black);
-            border: 1px solid var(--pure-white);
-            padding: 10px 24px;
-            color: var(--pure-white);
-            font-weight: 600;
-            font-size: 12px;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
-            background: var(--pure-white);
-            color: var(--pure-black);
-            padding: 16px 32px;
-            font-weight: 600;
-            opacity: 0;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            border: 2px solid var(--pure-black);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 12px;
-        }
-
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        /* Verification Note */
-        .verification-note {
-            width: 100%;
-            padding: 20px;
-            background: var(--pure-black);
-            border: 1px solid var(--gray-700);
-            text-align: center;
-            margin-top: 10px;
-        }
-
-        .verification-note .label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--gray-500);
-            margin-bottom: 8px;
-        }
-
-        .verification-note .domain {
-            font-family: 'Cinzel', serif;
-            font-size: 14px;
-            color: var(--pure-white);
-            letter-spacing: 1px;
-        }
-
-        .verification-note .status {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 10px;
-            font-size: 12px;
-            color: var(--pure-white);
-            border: 1px solid var(--pure-white);
-            padding: 6px 16px;
-        }
-
-        .verification-note .status::before {
-            content: '✓';
-            color: var(--pure-white);
-            font-weight: 700;
-        }
-
-        /* Event Description Section */
-        .event-description {
-            width: 100%;
-            padding: 40px;
-            background: var(--pure-black);
-            border: 1px solid var(--gray-700);
-            margin-top: 20px;
-        }
-
-        .event-description h2 {
-            font-family: 'Cinzel', serif;
-            font-size: 24px;
-            color: var(--pure-white);
-            margin-bottom: 10px;
-            letter-spacing: 2px;
-        }
-
-        .event-description .subtitle {
-            font-family: 'Playfair Display', serif;
-            font-size: 16px;
-            font-style: italic;
-            color: var(--gray-500);
-            margin-bottom: 30px;
-            display: block;
-        }
-
-        .event-description p {
-            font-size: 14px;
-            line-height: 1.8;
-            color: var(--gray-100);
-            margin-bottom: 16px;
-            text-align: justify;
-        }
-
-        .event-description p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Footer Info */
-        .footer-info {
-            text-align: center;
-            color: var(--gray-500);
-            font-size: 11px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-top: 10px;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .actions-container {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .event-description {
-                padding: 25px;
-            }
-
-            .event-description h2 {
-                font-size: 20px;
-            }
-        }
-
-        /* Print Styles */
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .actions-container,
-            .event-badge,
-            .footer-info,
-            .verification-note,
-            .event-description {
-                display: none;
-            }
-
-            .certificate-wrapper {
-                border: none;
-                width: 100%;
-                max-width: 100%;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -396,7 +114,7 @@
 
                     <!-- Participant Name -->
                     <text x="0" y="40" text-anchor="middle" font-family="'Great Vibes', cursive" font-size="42"
-                        fill="#1e40af" filter="url(#shadow)">
+                        fill="#1e40af" filter="url(#shadow)" id="participant-name">
                         [Participant Name]
                     </text>
                     <line x1="-150" y1="50" x2="150" y2="50" stroke="#d4af37" stroke-width="1" />
@@ -404,7 +122,7 @@
                     <!-- Team Info -->
                     <text x="0" y="80" text-anchor="middle" font-family="'Playfair Display', serif" font-size="13"
                         fill="#475569">
-                        as a member of team <tspan font-weight="700" fill="#1e40af" font-size="15">[Team Name]</tspan>,
+                        as a member of team <tspan font-weight="700" fill="#1e40af" font-size="15" id="team-name">[Team Name]</tspan>,
                     </text>
 
                     <!-- Event -->
@@ -446,28 +164,12 @@
                     </text>
                     <text x="0" y="30" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10"
                         fill="#94a3b8">
-                        Project hosted at: <a href="https://bhuvanesh-m-dev.github.io/cosmotalker/"
+                        Project hosted at: <a href="#" id="svg-project-link"
                             style="display: inline-block; padding: 14px 32px; font-family: system-ui, -apple-system, sans-serif; font-size: 1.1rem; font-weight: 600; color: #e0f7ff; background: linear-gradient(135deg, #1e3a8a, #312e81); border: 1px solid #60a5fa; border-radius: 9999px; text-decoration: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35); animation: gentlePulse 4s ease-in-out infinite;"
                             onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 12px 40px rgba(59, 130, 246, 0.6)'; this.style.background='linear-gradient(135deg, #3b82f6, #1e40af)';"
                             onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.35)'; this.style.background='linear-gradient(135deg, #1e3a8a, #312e81)';">
                             Explore CosmoTalker 🌌
                         </a>
-
-                        <style>
-                            @keyframes gentlePulse {
-
-                                0%,
-                                100% {
-                                    opacity: 0.92;
-                                    transform: scale(1);
-                                }
-
-                                50% {
-                                    opacity: 1.00;
-                                    transform: scale(1.015);
-                                }
-                            }
-                        </style>
                         </tspan>
                     </text>
                 </g>
@@ -539,7 +241,7 @@
 
         <!-- Action Buttons -->
         <div class="actions-container">
-            <a href="https://bhuvanesh-m-dev.github.io/skill-aura-2026" target="_blank" rel="noopener noreferrer"
+            <a href="#" target="_blank" rel="noopener noreferrer"
                 class="btn btn-primary" id="projectBtn">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -609,79 +311,7 @@
     <!-- Toast Notification -->
     <div class="toast" id="toast">Link copied to clipboard</div>
 
-    <script>
-        // Get current URL
-        const currentUrl = window.location.href;
-        const certificateTitle = "PromptX 2026 - Certificate of Participation";
-        const certificateDesc = "Check out my Certificate of Participation from PromptX 2026 at Kings Engineering College!";
-
-        // Copy to Clipboard Function
-        function copyToClipboard() {
-            navigator.clipboard.writeText(currentUrl).then(() => {
-                showToast('Link copied to clipboard');
-                const copyBtn = document.querySelector('.btn-copy');
-                const copyText = document.getElementById('copyText');
-
-                copyBtn.classList.add('copied');
-                copyText.textContent = 'Copied';
-
-                setTimeout(() => {
-                    copyBtn.classList.remove('copied');
-                    copyText.textContent = 'Copy Link';
-                }, 2000);
-            }).catch(err => {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = currentUrl;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                showToast('Link copied to clipboard');
-            });
-        }
-
-        // Share on WhatsApp
-        function shareWhatsApp(e) {
-            e.preventDefault();
-            const text = encodeURIComponent(`${certificateDesc} ${currentUrl}`);
-            const whatsappUrl = `https://api.whatsapp.com/send?text=${text}`;
-            window.open(whatsappUrl, '_blank', 'width=600,height=400');
-        }
-
-        // Share on LinkedIn
-        function shareLinkedIn(e) {
-            e.preventDefault();
-            const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`;
-            window.open(linkedInUrl, '_blank', 'width=600,height=400');
-        }
-
-        // Show Toast Notification
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('Certificate Landing Page Loaded');
-            console.log('Current URL:', currentUrl);
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function (e) {
-            // Ctrl/Cmd + C to copy
-            if ((e.ctrlKey || e.metaKey) && e.key === 'c' && window.getSelection().toString() === '') {
-                e.preventDefault();
-                copyToClipboard();
-            }
-        });
-    </script>
+    <script src="script.js"></script>
     <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
 </body>
-
+</html>
