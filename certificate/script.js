@@ -1,7 +1,7 @@
 // Get current URL
 const currentUrl = window.location.href;
 const certificateTitle = "PromptX 2026 - Certificate of Participation";
-const certificateDesc = "Check out my Certificate of Participation from PromptX 2026 at Kings Engineering College!";
+const certificateDesc = "I’m excited to share my Participation Certificate from PromptX – The Human Intelligence Challenge, organized under Skill Aura 2026 by the Innovation Hub on February 28, 2026. This challenge focused on structured human prompting and AI interaction strategy. 🔗 Digital Certificate : ";
 
 // Load Data and Initialize
 document.addEventListener('DOMContentLoaded', async function () {
@@ -109,7 +109,8 @@ function shareWhatsApp(e) {
 // Share on LinkedIn
 function shareLinkedIn(e) {
     e.preventDefault();
-    const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
+    const text = encodeURIComponent(`${certificateDesc} ${window.location.href}`);
+    const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${text}`;
     window.open(linkedInUrl, '_blank', 'width=600,height=400');
 }
 
