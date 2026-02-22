@@ -30,17 +30,15 @@ document.addEventListener('DOMContentLoaded', async function () {
             participant = data.participants.find(p => p.id === participantId);
         }
 
-        // If no ID or invalid ID, default to first participant (or handle as error)
-        if (!participant && data.participants.length > 0) {
-            participant = data.participants[0];
-            console.log('No valid ID provided, showing default participant.');
+        // If no ID or invalid ID, redirect to 404 page
+        if (!participant) {
+            window.location.href = 'https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/404/';
+            return;
         }
 
-        if (participant) {
-            const nameEl = document.getElementById('participant-name');
-            if (nameEl) nameEl.textContent = participant.name;
-            document.title = `Certificate of Participation - ${participant.name} | PromptX 2026`;
-        }
+        const nameEl = document.getElementById('participant-name');
+        if (nameEl) nameEl.textContent = participant.name;
+        document.title = `Certificate of Participation - ${participant.name} | PromptX 2026`;
 
         // Log Generation URLs for the user
         console.log("--- Certificate Generation URLs ---");
