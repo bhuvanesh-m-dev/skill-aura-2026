@@ -8,7 +8,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     console.log('Certificate Landing Page Loaded');
     
     try {
-        const response = await fetch('data.json');
+        // Get URL Parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const teamParam = urlParams.get('team');
+        
+        // Determine Data Path: If ?team=xyz is present, fetch team/xyz/data.json, else fetch local data.json
+        const dataPath = teamParam ? `team/${teamParam}/data.json` : 'data.json';
+        
+        const response = await fetch(dataPath);
+        if (!response.ok) throw new Error('Data file not found');
         const data = await response.json();
         
         // Update Common Data
@@ -25,7 +33,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
 
         // Get Participant ID from URL
-        const urlParams = new URLSearchParams(window.location.search);
         const participantId = urlParams.get('id');
         
         // Find and Update Participant
@@ -48,7 +55,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         console.log("--- Certificate Generation URLs ---");
         const baseUrl = window.location.origin + window.location.pathname;
         data.participants.forEach(p => {
-            console.log(`${p.name}: ${baseUrl}?id=${p.id}`);
+            const teamQuery = teamParam ? `?team=${teamParam}&` : '?';
+            console.log(`${p.name}: ${baseUrl}${teamQuery}id=${p.id}`);
         });
         console.log("-----------------------------------");
 
@@ -59,6 +67,8 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     } catch (error) {
         console.error('Error loading certificate data:', error);
+        // Redirect to 404 if data load fails
+        window.location.href = 'https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/404/';
     }
 });
 
