@@ -6,17 +6,23 @@ const certificateDesc = "Check out my Certificate of Participation from PromptX 
 // Load Data and Initialize
 document.addEventListener('DOMContentLoaded', async function () {
     console.log('Certificate Landing Page Loaded');
-    
+
     try {
         // Get URL Parameters
         const urlParams = new URLSearchParams(window.location.search);
         const teamParam = urlParams.get('team');
 
-        // Determine Data Path: If ?team=xyz is present, fetch team/xyz/data.json, else fetch local data.json
-        const dataPath = teamParam ? `https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/main/team/${teamParam}/data.json` : 'data.json';
+        // Determine Data Path
+        // Corrected: no whitespace after /team/
+        const dataPath = teamParam 
+            ? `https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/main/team/${teamParam}/data.json`
+            : 'data.json';
+
         const response = await fetch(dataPath);
-        const data = await response.json();
+        if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
         
+        const data = await response.json();
+
         // Update Common Data
         const teamNameEl = document.getElementById('team-name');
         const projectBtn = document.getElementById('projectBtn');
@@ -32,14 +38,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // Get Participant ID from URL
         const participantId = urlParams.get('id');
-        
+
         // Find and Update Participant
         let participant = null;
         if (participantId) {
             participant = data.participants.find(p => p.id === participantId);
         }
 
-        // If no ID or invalid ID, redirect to 404 page
+        // If no ID or invalid ID, redirect to 404 page (trailing space removed)
         if (!participant) {
             window.location.href = 'https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/404/';
             return;
@@ -49,40 +55,40 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (nameEl) nameEl.textContent = participant.name;
         document.title = `Certificate of Participation - ${participant.name} | PromptX 2026`;
 
-        // Log Generation URLs for the user
+        // Log Generation URLs for the user (consistent query string handling)
         console.log("--- Certificate Generation URLs ---");
         const baseUrl = window.location.origin + window.location.pathname;
+        const teamQuery = teamParam ? `?team=${teamParam}&` : '?';
+        
         data.participants.forEach(p => {
-            const teamQuery = teamParam ? `?team=${teamParam}&` : '?';
             console.log(`${p.name}: ${baseUrl}${teamQuery}id=${p.id}`);
         });
         console.log("-----------------------------------");
 
         // Admin Mode: Show links on screen if ?mode=admin is present
         if (urlParams.get('mode') === 'admin') {
-            showAdminPanel(data.participants, baseUrl);
+            showAdminPanel(data.participants, baseUrl, teamParam);
         }
-
     } catch (error) {
         console.error('Error loading certificate data:', error);
+        // Optional: redirect to 404 on fetch failure as well
+        // window.location.href = 'https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/404/';
     }
 });
 
-// Copy to Clipboard Function
+// Copy to Clipboard Function (unchanged - works correctly)
 function copyToClipboard() {
     navigator.clipboard.writeText(window.location.href).then(() => {
         showToast('Link copied to clipboard');
         const copyBtn = document.querySelector('.btn-copy');
         const copyText = document.getElementById('copyText');
-
         copyBtn.classList.add('copied');
         copyText.textContent = 'Copied';
-
         setTimeout(() => {
             copyBtn.classList.remove('copied');
             copyText.textContent = 'Copy Link';
         }, 2000);
-    }).catch(err => {
+    }).catch(() => {
         // Fallback for older browsers
         const textArea = document.createElement('textarea');
         textArea.value = window.location.href;
@@ -94,7 +100,7 @@ function copyToClipboard() {
     });
 }
 
-// Share on WhatsApp
+// Share on WhatsApp (space removed)
 function shareWhatsApp(e) {
     e.preventDefault();
     const text = encodeURIComponent(`${certificateDesc} ${window.location.href}`);
@@ -102,14 +108,14 @@ function shareWhatsApp(e) {
     window.open(whatsappUrl, '_blank', 'width=600,height=400');
 }
 
-// Share on LinkedIn
+// Share on LinkedIn (space removed)
 function shareLinkedIn(e) {
     e.preventDefault();
     const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
     window.open(linkedInUrl, '_blank', 'width=600,height=400');
 }
 
-// Show Toast Notification
+// Show Toast Notification (unchanged)
 function showToast(message) {
     const toast = document.getElementById('toast');
     toast.textContent = message;
@@ -117,8 +123,8 @@ function showToast(message) {
     setTimeout(() => toast.classList.remove('show'), 3000);
 }
 
-// Admin Panel Helper
-function showAdminPanel(participants, baseUrl) {
+// Admin Panel Helper - now preserves ?team= parameter
+function showAdminPanel(participants, baseUrl, teamParam) {
     const container = document.createElement('div');
     container.style.cssText = `
         position: fixed;
@@ -149,9 +155,11 @@ function showAdminPanel(participants, baseUrl) {
     list.style.flexDirection = 'column';
     list.style.gap = '10px';
 
+    const queryPrefix = teamParam ? `?team=${teamParam}&` : '?';
+
     participants.forEach(p => {
+        const link = `${baseUrl}${queryPrefix}id=${p.id}`;
         const row = document.createElement('div');
-        const link = `${baseUrl}?id=${p.id}`;
         row.innerHTML = `<strong>${p.name}</strong>: <br><a href="${link}" target="_blank" style="color:blue; word-break: break-all;">${link}</a>`;
         row.style.borderBottom = '1px solid #eee';
         row.style.paddingBottom = '10px';
