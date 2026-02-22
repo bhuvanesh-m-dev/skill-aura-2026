@@ -47,7 +47,7 @@
                 </defs>
 
                 <!-- Background -->
-                <rect width="1000" height="750" fill="#fafaf9" />
+                <rect width="1000" height="750" fill="#ffffff" />
 
                 <!-- Outer Border -->
                 <rect x="15" y="15" width="970" height="720" fill="none" stroke="url(#borderGrad)" stroke-width="3"
@@ -63,6 +63,14 @@
                 <path d="M 950 50 L 910 50 L 910 60 L 940 60 L 940 90 L 950 90 Z" fill="url(#goldFoil)" />
                 <path d="M 50 700 L 90 700 L 90 690 L 60 690 L 60 660 L 50 660 Z" fill="url(#goldFoil)" />
                 <path d="M 950 700 L 910 700 L 910 690 L 940 690 L 940 660 L 950 660 Z" fill="url(#goldFoil)" />
+
+                <!-- Watermark – smaller, better fitted, elegant appearance -->
+                <text x="500" y="400" text-anchor="middle" font-family="'Cinzel', serif" font-size="13" fill="#ffffff"
+                    font-weight="600" transform="rotate(-30, 500, 400)" letter-spacing="1">
+                    <tspan x="500" dy="-10">SKILL AURA 2026 | PROMPTX – THE HUMAN INTELLIGENCE CHALLENGE</tspan>
+                    <tspan x="500" dy="20">This certificate is digitally verifiable at:</tspan>
+                    <tspan x="500" dy="20">https://bhuvanesh-m-dev.github.io/skill-aura-2026</tspan>
+                </text>
 
                 <!-- Header Section -->
                 <g transform="translate(500, 100)">
@@ -164,13 +172,10 @@
                     </text>
                     <text x="0" y="30" text-anchor="middle" font-family="'Inter', sans-serif" font-size="10"
                         fill="#94a3b8">
-                        Project hosted at: <a href="#" id="svg-project-link"
-                            style="display: inline-block; padding: 14px 32px; font-family: system-ui, -apple-system, sans-serif; font-size: 1.1rem; font-weight: 600; color: #e0f7ff; background: linear-gradient(135deg, #1e3a8a, #312e81); border: 1px solid #60a5fa; border-radius: 9999px; text-decoration: none; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 4px 15px rgba(59, 130, 246, 0.35); animation: gentlePulse 4s ease-in-out infinite;"
-                            onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 12px 40px rgba(59, 130, 246, 0.6)'; this.style.background='linear-gradient(135deg, #3b82f6, #1e40af)';"
-                            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(59, 130, 246, 0.35)'; this.style.background='linear-gradient(135deg, #1e3a8a, #312e81)';">
-                            Explore CosmoTalker 🌌
+                        Project hosted at: <a href="#" id="svg-project-link" target="_blank"
+                            style="fill: #2563eb; text-decoration: underline; font-weight: 600; cursor: pointer;">
+                            [Project URL]
                         </a>
-                        </tspan>
                     </text>
                 </g>
 
@@ -232,10 +237,6 @@
                             fill="#64748b">Dept of CSE</text>
                     </g>
                 </g>
-
-                <!-- Watermark -->
-                <text x="500" y="375" text-anchor="middle" font-family="'Cinzel', serif" font-size="100" fill="#f1f5f9"
-                    opacity="0.2" font-weight="25" transform="rotate(-30, 500, 375)">Skill Aura 2026 | PromptX – The Human Intelligence Challenge, This certificate is digitally verifiable at : http://bhuvanesh-m-dev.github.io/skill-aura-2026</text>
             </svg>
         </div>
 
