@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const teamParam = urlParams.get('team');
         
         // Determine Data Path: If ?team=xyz is present, fetch team/xyz/data.json, else fetch local data.json
-        const dataPath = teamParam ? `../team/${teamParam}/data.json` : 'data.json';
+        const dataPath = teamParam ? `https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/${teamParam}/data.json` : 'data.json';
         
         const response = await fetch(dataPath);
         if (!response.ok) throw new Error('Data file not found');
