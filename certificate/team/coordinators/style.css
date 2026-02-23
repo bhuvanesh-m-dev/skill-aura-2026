@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Fira+Code:wght@400;600&family=Great+Vibes&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;500;700;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap');
 
 * {
     margin: 0;
@@ -291,4 +291,81 @@ body {
         opacity: 1.00;
         transform: scale(1.015);
     }
+}
+
+/* --- PromptX Styles --- */
+.promptx-container {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    padding: 20px;
+    box-sizing: border-box;
+    filter: drop-shadow(0 0 40px rgba(99, 102, 241, 0.15));
+    background-color: #05050A;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+@keyframes pulse-glow { 0%, 100% { filter: drop-shadow(0 0 15px rgba(236, 72, 153, 0.6)); } 50% { filter: drop-shadow(0 0 30px rgba(236, 72, 153, 0.9)); } }
+@keyframes scrollCode { 0% { transform: translateY(0); } 100% { transform: translateY(-50px); opacity: 0; } }
+
+/* --- Guess the Groove Styles --- */
+.groove-container {
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: #05050a;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    font-family: 'Arial Black', Impact, system-ui, sans-serif;
+}
+
+.groove-container::before {
+    content: '';
+    position: absolute;
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(circle, rgba(144, 0, 255, 0.15) 0%, rgba(0, 255, 255, 0.05) 40%, transparent 70%);
+    z-index: 0;
+    animation: pulse-ambient 4s infinite alternate ease-in-out;
+    pointer-events: none;
+}
+
+.groove-svg {
+    width: 100%;
+    height: auto;
+    z-index: 1;
+    filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.1));
+}
+
+.scanlines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0,0,0,0.2) 50%,
+        rgba(0,0,0,0.2)
+    );
+    background-size: 100% 4px;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+@keyframes pulse-ambient {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    100% { transform: scale(1.1); opacity: 1; }
 }
