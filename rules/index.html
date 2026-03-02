@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>PromptX Challenge - Official Rules</title>
+   <script src="https://cdn.tailwindcss.com"></script>
+   <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+   <style>
+       :root {
+           --bg-color: #000000;
+           --text-color: #ffffff;
+           --accent-color: #ffffff;
+           --dim-color: #666666;
+           --border-color: #333333;
+       }
+
+       body {
+           background-color: var(--bg-color);
+           color: var(--text-color);
+           font-family: 'Space Mono', monospace;
+           overflow-x: hidden;
+       }
+
+       /* Custom Scrollbar */
+       ::-webkit-scrollbar {
+           width: 8px;
+       }
+       ::-webkit-scrollbar-track {
+           background: #000;
+       }
+       ::-webkit-scrollbar-thumb {
+           background: #fff;
+           border-radius: 0;
+       }
+
+       /* Scanline Overlay */
+       .scanlines {
+           position: fixed;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+           background-size: 100% 4px;
+           pointer-events: none;
+           z-index: 50;
+           opacity: 0.6;
+       }
+
+       /* Blinking Cursor */
+       .cursor::after {
+           content: '_';
+           animation: blink 1s step-end infinite;
+       }
+       @keyframes blink { 50% { opacity: 0; } }
+
+       /* Utility */
+       .border-white { border-color: white; }
+       .hover-invert:hover {
+           background-color: white;
+           color: black;
+           transition: all 0.2s ease;
+       }
+       
+       .prose-invert p {
+           margin-bottom: 1.5rem;
+           line-height: 1.7;
+       }
+   </style>
+</head>
+<body class="min-h-screen flex flex-col relative selection:bg-white selection:text-black">
+
+   <!-- Scanline Overlay -->
+   <div class="scanlines"></div>
+
+   <!-- Header -->
+   <header class="w-full border-b border-white p-6 flex justify-between items-center z-10 bg-black">
+       <div class="text-2xl font-bold tracking-tighter">PROMPTX_2026</div>
+       <div class="text-xs md:text-sm border border-white px-3 py-1">
+           OFFICIAL RULES
+       </div>
+   </header>
+
+   <!-- Main Content -->
+   <main class="flex-grow container mx-auto px-4 py-12 md:py-20 z-10 relative max-w-4xl">
+       
+       <!-- Greeting -->
+       <section class="mb-16">
+           <h1 class="text-3xl md:text-5xl font-bold mb-8 leading-tight">
+               Good morning participants,
+           </h1>
+           
+           <div class="prose-invert text-lg md:text-xl text-gray-300 space-y-6">
+               <p>
+                   For today's PromptX challenge, the official LLM platform is <strong class="text-white">Kimi</strong>.
+               </p>
+               
+               <p>
+                   You may search for it using Google, Bing, or any search engine, or directly visit:
+               </p>
+               
+               <div class="my-8 p-6 border-2 border-white bg-black inline-block w-full md:w-auto">
+                   <a href="https://kimi.com" target="_blank" class="text-xl md:text-2xl font-bold text-white hover:bg-white hover:text-black px-2 py-1 transition-colors duration-200 break-all">
+                       https://kimi.com
+                   </a>
+               </div>
+               
+               <p>
+                   Please sign in and ensure you are logged in successfully before starting.
+               </p>
+           </div>
+       </section>
+
+       <!-- Restrictions -->
+       <section class="mb-16 border-l-4 border-white pl-6 md:pl-8">
+           <h2 class="text-2xl font-bold mb-6 text-white">Platform Restrictions</h2>
+           
+           <p class="text-lg text-gray-300 mb-6">
+               Only <strong class="text-white">Kimi</strong> is permitted for this challenge.
+           </p>
+           
+           <p class="text-lg text-gray-300 mb-6">
+               No other AI tools, code generators, or AI-assisted coding platforms are allowed.
+           </p>
+           
+           <div class="bg-gray-900 border border-gray-700 p-6 my-8">
+               <p class="text-sm font-bold text-white mb-4 uppercase tracking-wider">Prohibited Tools Include:</p>
+               <ul class="text-gray-400 space-y-2 text-sm md:text-base">
+                   <li>GitHub Copilot</li>
+                   <li>Gemini Code Assist</li>
+                   <li>DeepSeek Code</li>
+                   <li>ChatGPT (any version)</li>
+                   <li>Claude</li>
+                   <li>Cursor</li>
+                   <li>Google AI coding tools</li>
+                   <li>Codex</li>
+                   <li>Any AI-powered code editor application</li>
+               </ul>
+           </div>
+       </section>
+
+       <!-- Prompt Rules -->
+       <section class="mb-16">
+           <h2 class="text-2xl font-bold mb-6 text-white">Prompt Guidelines</h2>
+           
+           <div class="space-y-6 text-lg text-gray-300">
+               <p>
+                   Your prompts must be written <strong class="text-white">entirely by your team members</strong>.
+               </p>
+               
+               <p>
+                   No AI-generated prompts, pre-saved prompt libraries, or external assistance tools are permitted.
+               </p>
+               
+               <div class="border-2 border-white p-6 my-8 bg-white text-black">
+                   <p class="font-bold text-center uppercase tracking-widest">
+                       Any violation of these rules will result in disqualification.
+                   </p>
+               </div>
+           </div>
+       </section>
+
+       <!-- Closing -->
+       <section class="text-center py-12 border-t border-gray-800">
+           <p class="text-xl md:text-2xl font-bold text-white mb-4">
+               All the best
+           </p>
+           <p class="text-lg text-gray-400">
+               Let human intelligence lead the machine today.
+           </p>
+       </section>
+
+   </main>
+
+   <!-- Footer -->
+   <footer class="border-t border-white p-6 mt-auto z-10 bg-black">
+       <div class="container mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
+           <div class="mb-4 md:mb-0">
+               PROMPTX CHALLENGE 2026
+           </div>
+           <div>
+               OFFICIAL RULES DOCUMENT
+           </div>
+       </div>
+   </footer>
+
+</body>
+</html>
