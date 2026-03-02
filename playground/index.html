@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PromptX Playground</title>
+  <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+
+      body {
+          font-family: "Courier New", Courier, monospace;
+          background-color: #000000;
+          color: #ffffff;
+          line-height: 1.6;
+          font-size: 14px;
+      }
+
+      /* Scanline effect */
+      body::before {
+          content: "";
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: repeating-linear-gradient(
+              0deg,
+              rgba(0, 0, 0, 0.15),
+              rgba(0, 0, 0, 0.15) 1px,
+              transparent 1px,
+              transparent 2px
+          );
+          pointer-events: none;
+          z-index: 9999;
+      }
+
+      /* Header */
+      .header {
+          border-bottom: 2px solid #ffffff;
+          padding: 20px;
+          text-align: center;
+          background: #000000;
+      }
+
+      .header h1 {
+          font-size: 32px;
+          font-weight: bold;
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          margin-bottom: 10px;
+      }
+
+      .header p {
+          font-size: 12px;
+          color: #cccccc;
+      }
+
+      /* Navigation */
+      .nav {
+          background: #000000;
+          border-bottom: 1px solid #ffffff;
+          padding: 10px;
+          text-align: center;
+      }
+
+      .nav a {
+          display: inline-block;
+          color: #ffffff;
+          text-decoration: none;
+          padding: 8px 16px;
+          margin: 0 5px;
+          border: 1px solid #ffffff;
+          font-size: 12px;
+          text-transform: uppercase;
+      }
+
+      .nav a:hover {
+          background: #ffffff;
+          color: #000000;
+      }
+
+      /* Main Container */
+      .container {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 20px;
+      }
+
+      /* Section Headers */
+      .section-title {
+          font-size: 18px;
+          font-weight: bold;
+          margin: 30px 0 15px 0;
+          padding: 10px;
+          background: #ffffff;
+          color: #000000;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+      }
+
+      .section-subtitle {
+          font-size: 11px;
+          color: #cccccc;
+          margin-bottom: 20px;
+          border-left: 2px solid #ffffff;
+          padding-left: 10px;
+      }
+
+      /* Category Boxes */
+      .category-box {
+          border: 1px solid #ffffff;
+          margin-bottom: 20px;
+          background: #000000;
+      }
+
+      .category-header {
+          background: #ffffff;
+          color: #000000;
+          padding: 8px 12px;
+          font-weight: bold;
+          font-size: 13px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+      }
+
+      .category-content {
+          padding: 15px;
+      }
+
+      /* Keyword Lists */
+      .keyword-list {
+          list-style: none;
+      }
+
+      .keyword-list li {
+          display: inline-block;
+          margin: 3px;
+          padding: 4px 8px;
+          border: 1px solid #666666;
+          font-size: 11px;
+          cursor: pointer;
+          transition: all 0.2s;
+      }
+
+      .keyword-list li:hover {
+          background: #ffffff;
+          color: #000000;
+          border-color: #ffffff;
+      }
+
+      /* Advanced Section Styling */
+      .advanced .category-header {
+          background: #000000;
+          color: #ffffff;
+          border-bottom: 2px solid #ffffff;
+      }
+
+      /* Single File Section */
+      .single-file-section {
+          border: 2px solid #ffffff;
+          margin-top: 40px;
+          padding: 20px;
+          background: #000000;
+      }
+
+      .single-file-title {
+          font-size: 16px;
+          font-weight: bold;
+          margin-bottom: 10px;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+      }
+
+      .single-file-desc {
+          font-size: 11px;
+          color: #cccccc;
+          margin-bottom: 15px;
+          line-height: 1.5;
+      }
+
+      .single-file-list {
+          list-style: square;
+          margin-left: 20px;
+          font-size: 12px;
+      }
+
+      .single-file-list li {
+          margin: 5px 0;
+          color: #ffffff;
+      }
+
+      /* Marquee */
+      .marquee {
+          background: #ffffff;
+          color: #000000;
+          padding: 5px;
+          font-size: 11px;
+          font-weight: bold;
+          text-transform: uppercase;
+          margin: 20px 0;
+      }
+
+      /* Footer */
+      .footer {
+          border-top: 2px solid #ffffff;
+          margin-top: 40px;
+          padding: 20px;
+          text-align: center;
+          font-size: 11px;
+          color: #cccccc;
+      }
+
+      .footer a {
+          color: #ffffff;
+          text-decoration: underline;
+      }
+
+      /* Blinking cursor */
+      .cursor {
+          animation: blink 1s infinite;
+      }
+
+      @keyframes blink {
+          0%, 50% { opacity: 1; }
+          51%, 100% { opacity: 0; }
+      }
+
+      /* Horizontal Rule */
+      hr {
+          border: none;
+          border-top: 1px solid #333333;
+          margin: 20px 0;
+      }
+
+      /* Table styling for layout */
+      table {
+          width: 100%;
+          border-collapse: collapse;
+      }
+
+      td {
+          vertical-align: top;
+          padding: 10px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+          .header h1 {
+              font-size: 20px;
+          }
+          
+          .nav a {
+              display: block;
+              margin: 5px;
+          }
+          
+          td {
+              display: block;
+              width: 100%;
+          }
+      }
+
+      /* Copy notification */
+      .copied {
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          background: #ffffff;
+          color: #000000;
+          padding: 10px 20px;
+          border: 2px solid #000000;
+          font-weight: bold;
+          display: none;
+          z-index: 10000;
+      }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+      <h1>PromptX Playground</h1>
+      <p>[ Master AI Prompting Through Structured Keywords ]</p>
+  </div>
+
+  <div class="nav">
+      <a href="#beginner">Beginner</a>
+      <a href="#advanced">Advanced</a>
+      <a href="#singlefile">Single File</a>
+  </div>
+
+  <div class="marquee">
+      *** CLICK ANY KEYWORD TO COPY TO CLIPBOARD *** NO EXTERNAL LIBRARIES REQUIRED *** PURE HTML/CSS/JS ***
+  </div>
+
+  <div class="container">
+
+      <!-- Beginner Section -->
+      <div id="beginner" class="section-title">[ BEGINNER FRIENDLY ]</div>
+      <div class="section-subtitle">
+          Perfect starting points for learning web development and game creation
+      </div>
+
+      <table>
+          <tr>
+              <td>
+                  <div class="category-box">
+                      <div class="category-header">[ GAME DEVELOPMENT ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>snake game basic</li>
+                              <li>flappy bird simple</li>
+                              <li>tic tac toe two player</li>
+                              <li>memory card game</li>
+                              <li>typing speed counter</li>
+                              <li>reaction time test</li>
+                              <li>simple maze game</li>
+                              <li>number guessing game</li>
+                              <li>rock paper scissors</li>
+                              <li>whack a mole</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+              <td>
+                  <div class="category-box">
+                      <div class="category-header">[ WEB DEVELOPMENT ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>simple landing page</li>
+                              <li>responsive hero section</li>
+                              <li>basic navbar</li>
+                              <li>contact form validation</li>
+                              <li>dark mode toggle</li>
+                              <li>countdown timer</li>
+                              <li>modal popup</li>
+                              <li>FAQ accordion</li>
+                              <li>image slider</li>
+                              <li>profile card layout</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <div class="category-box">
+                      <div class="category-header">[ LOGIC & ALGORITHM ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>random number generator</li>
+                              <li>score counter</li>
+                              <li>timer logic</li>
+                              <li>keyboard controls</li>
+                              <li>click event handling</li>
+                              <li>grid layout logic</li>
+                              <li>collision detection basic</li>
+                              <li>restart game function</li>
+                              <li>input validation</li>
+                              <li>win condition check</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+              <td>
+                  <div class="category-box">
+                      <div class="category-header">[ UI / UX ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>hover animation</li>
+                              <li>smooth button transition</li>
+                              <li>flexbox layout</li>
+                              <li>grid layout</li>
+                              <li>progress bar</li>
+                              <li>loading spinner</li>
+                              <li>animated background</li>
+                              <li>simple card UI</li>
+                              <li>responsive design</li>
+                              <li>toggle switch</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+      </table>
+
+      <hr>
+
+      <!-- Advanced Section -->
+      <div id="advanced" class="section-title" style="background: #000000; color: #ffffff; border: 2px solid #ffffff;">[ ADVANCED KEYWORDS ]</div>
+      <div class="section-subtitle">
+          Complex implementations for experienced developers
+      </div>
+
+      <table>
+          <tr>
+              <td>
+                  <div class="category-box advanced">
+                      <div class="category-header">[ GAME DEVELOPMENT ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>snake with increasing speed</li>
+                              <li>flappy bird physics gravity</li>
+                              <li>chess board movement validation</li>
+                              <li>tic tac toe minimax AI</li>
+                              <li>2048 game logic</li>
+                              <li>obstacle dodge arena</li>
+                              <li>pattern memory sequence</li>
+                              <li>multiplayer turn logic</li>
+                              <li>leaderboard local storage</li>
+                              <li>game pause resume</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+              <td>
+                  <div class="category-box advanced">
+                      <div class="category-header">[ WEB DEVELOPMENT ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>glassmorphism landing page</li>
+                              <li>animated navbar scroll effect</li>
+                              <li>dynamic pricing toggle</li>
+                              <li>interactive dashboard UI</li>
+                              <li>portfolio with filtering</li>
+                              <li>admin panel layout</li>
+                              <li>dark light theme switch</li>
+                              <li>dynamic form validation</li>
+                              <li>animated statistics counter</li>
+                              <li>parallax scrolling</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+          <tr>
+              <td>
+                  <div class="category-box advanced">
+                      <div class="category-header">[ LOGIC & ALGORITHM ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>minimax algorithm</li>
+                              <li>state management</li>
+                              <li>collision detection advanced</li>
+                              <li>physics simulation</li>
+                              <li>local storage leaderboard</li>
+                              <li>drag and drop system</li>
+                              <li>grid based game engine</li>
+                              <li>requestAnimationFrame loop</li>
+                              <li>dynamic DOM rendering</li>
+                              <li>real time score update</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+              <td>
+                  <div class="category-box advanced">
+                      <div class="category-header">[ ADVANCED PLAYGROUND ]</div>
+                      <div class="category-content">
+                          <ul class="keyword-list">
+                              <li>canvas animation</li>
+                              <li>particle system</li>
+                              <li>wave animation</li>
+                              <li>music visualizer</li>
+                              <li>drawing board app</li>
+                              <li>code editor UI</li>
+                              <li>mini IDE layout</li>
+                              <li>multiplayer logic simulation</li>
+                              <li>physics based movement</li>
+                              <li>real time typing accuracy</li>
+                          </ul>
+                      </div>
+                  </div>
+              </td>
+          </tr>
+      </table>
+
+      <hr>
+
+      <!-- Single File Section -->
+      <div id="singlefile" class="single-file-section">
+          <div class="single-file-title">[ SINGLE HTML FILE ONLY ]</div>
+          <div class="single-file-desc">
+              Create complete projects using only internal CSS and JavaScript. 
+              No external libraries or CDNs allowed. Self-contained standalone webpages.
+          </div>
+          
+          <ul class="single-file-list">
+              <li>single file html game</li>
+              <li>internal css only</li>
+              <li>internal javascript only</li>
+              <li>no external libraries</li>
+              <li>no CDN</li>
+              <li>pure vanilla javascript</li>
+              <li>embedded style tag</li>
+              <li>embedded script tag</li>
+              <li>standalone webpage</li>
+              <li>self contained html project</li>
+          </ul>
+      </div>
+
+  </div>
+
+  <div class="footer">
+      <p>PromptX Playground - Master the art of AI prompting</p>
+      <p>[ <span class="cursor">_</span> ]</p>
+      <p style="margin-top: 10px;">
+          <a href="#beginner">[ TOP ]</a>
+      </p>
+  </div>
+
+  <div class="copied" id="copiedMsg">[ COPIED TO CLIPBOARD ]</div>
+
+  <script>
+      // Copy to clipboard functionality
+      document.querySelectorAll('.keyword-list li, .single-file-list li').forEach(item => {
+          item.addEventListener('click', function() {
+              const text = this.textContent;
+              navigator.clipboard.writeText(text).then(() => {
+                  const msg = document.getElementById('copiedMsg');
+                  msg.style.display = 'block';
+                  setTimeout(() => {
+                      msg.style.display = 'none';
+                  }, 1500);
+              });
+          });
+      });
+
+      // Smooth scroll for navigation
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function(e) {
+              e.preventDefault();
+              const target = document.querySelector(this.getAttribute('href'));
+              if (target) {
+                  target.scrollIntoView({
+                      behavior: 'smooth',
+                      block: 'start'
+                  });
+              }
+          });
+      });
+  </script>
+<img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>
