@@ -1,4 +1,4 @@
-m// Get current URL
+// Get current URL
 const currentUrl = window.location.href;
 const certificateTitle = "PromptX 2026 - Certificate of Participation";
 const certificateDesc = "Check out my Certificate of Participation from PromptX 2026 at Kings Engineering College!";
