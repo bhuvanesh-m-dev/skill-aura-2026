@@ -1,1 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Maze Escape</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Modern, minimal font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #050816;
+      --bg-alt: #0b1020;
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.2);
+      --danger: #f97373;
+      --success: #4ade80;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, #111827 0, #020617 55%);
+      color: var(--text);
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .shell {
+      position: relative;
+      width: min(900px, 100vw - 32px);
+      max-width: 900px;
+      aspect-ratio: 4 / 3;
+      border-radius: 18px;
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+      box-shadow:
+        0 30px 60px rgba(15, 23, 42, 0.9),
+        0 0 0 1px rgba(148, 163, 184, 0.1);
+      overflow: hidden;
+      padding: 20px 20px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .title-pill {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #38bdf8, #0ea5e9, #0f172a);
+      box-shadow:
+        0 0 0 1px rgba(59, 130, 246, 0.35),
+        0 0 40px rgba(59, 130, 246, 0.6);
+    }
+
+    .metrics {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 12px;
+    }
+
+    .metric-pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.6));
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+    }
+
+    .metric-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+    }
+
+    .metric-value {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .canvas-wrap {
+      position: relative;
+      flex: 1;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.08), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(52, 211, 153, 0.08), transparent 55%),
+        #020617;
+    }
+
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      image-rendering: pixelated;
+    }
+
+    .hud {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .hud-pill {
+      pointer-events: auto;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+    }
+
+    .hud-pill strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .hint {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      background: rgba(15, 23, 42, 0.88);
+      font-size: 11px;
+      color: var(--muted);
+      backdrop-filter: blur(8px);
+      opacity: 1;
+      pointer-events: none;
+      transition: opacity 200ms ease, transform 200ms ease;
+    }
+
+    .hint.hidden {
+      opacity: 0;
+      transform: translateX(-50%) translateY(8px);
+    }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at top, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.98));
+      backdrop-filter: blur(16px);
+      color: var(--text);
+      text-align: center;
+      padding: 24px;
+      gap: 16px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 240ms ease-out;
+    }
+
+    .overlay.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .overlay-title {
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .overlay-sub {
+      font-size: 13px;
+      color: var(--muted);
+      max-width: 420px;
+      margin-inline: auto;
+    }
+
+    .overlay-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 4px;
+      font-size: 12px;
+    }
+
+    .overlay-stat-pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.9);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .overlay-stat-label {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .overlay-stat-value {
+      font-weight: 500;
+    }
+
+    .primary-btn {
+      margin-top: 10px;
+      padding: 10px 22px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #0ea5e9, #22c55e);
+      color: #020617;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.6),
+        0 12px 30px rgba(16, 185, 129, 0.45);
+      transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.05);
+      box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.8),
+        0 16px 40px rgba(16, 185, 129, 0.6);
+    }
+
+    .primary-btn:active {
+      transform: translateY(0);
+      box-shadow:
+        0 0 0 1px rgba(15, 23, 42, 0.8),
+        0 6px 18px rgba(16, 185, 129, 0.7);
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 18px;
+      padding: 2px 4px;
+      border-radius: 4px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      background: rgba(15, 23, 42, 0.95);
+      font-size: 10px;
+      margin: 0 1px;
+    }
+
+    @media (max-width: 640px) {
+      .shell {
+        padding: 14px 14px 18px;
+        gap: 12px;
+      }
+
+      .overlay-title {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="top-bar">
+      <div class="title">
+        <div class="title-pill"></div>
+        <span>AI Maze Escape</span>
+      </div>
+      <div class="metrics">
+        <div class="metric-pill">
+          <span class="metric-label">Status</span>
+          <span class="metric-value" id="statusLabel">Idle</span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-label">AI Level</span>
+          <span class="metric-value" id="aiLevelLabel">1.0x</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="gameCanvas" width="630" height="630"></canvas>
+
+      <div class="hud">
+        <div class="hud-pill">
+          <span>⏱</span>
+          <span>Time: <strong id="timerDisplay">0.0s</strong></span>
+        </div>
+        <div class="hud-pill">
+          <span>📦</span>
+          <span>Level: <strong id="levelDisplay">1</strong></span>
+        </div>
+      </div>
+
+      <div class="hint" id="controlHint">
+        Move with
+        <span class="kbd">W</span><span class="kbd">A</span><span class="kbd">S</span><span class="kbd">D</span>
+        or
+        <span class="kbd">↑</span><span class="kbd">←</span><span class="kbd">↓</span><span class="kbd">→</span>
+        · Reach the glowing exit · Don't let the AI touch you
+      </div>
+
+      <div class="overlay visible" id="overlay">
+        <div class="overlay-title" id="overlayTitle">AI Maze Escape</div>
+        <div class="overlay-sub" id="overlaySubtitle">
+          Navigate the maze, outsmart the pursuing AI, and escape through the exit. Each level makes the AI faster and more relentless.
+        </div>
+        <div class="overlay-stats" id="overlayStats" style="display:none;">
+          <div class="overlay-stat-pill">
+            <span class="overlay-stat-label">Levels Escaped</span>
+            <span class="overlay-stat-value" id="statLevels">0</span>
+          </div>
+          <div class="overlay-stat-pill">
+            <span class="overlay-stat-label">Survival Time</span>
+            <span class="overlay-stat-value" id="statTime">0.0s</span>
+          </div>
+        </div>
+        <button class="primary-btn" id="startButton">
+          <span id="startButtonLabel">Begin Escape</span>
+          <span>↻</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =======================
+    // Core configuration
+    // =======================
+
+    const CELL_SIZE = 30;           // Pixel size of a maze cell
+    const GRID_COLS = 21;           // Must be odd for the maze generator
+    const GRID_ROWS = 21;           // Must be odd for the maze generator
+    const BASE_PLAYER_SPEED = 10;   // Cells per second (player)
+    const BASE_ENEMY_SPEED = 3;     // Cells per second (enemy at level 1)
+    const ENEMY_SPEED_PER_LEVEL = 0.7; // Additional cells/sec per level
+    const ENEMY_REPATH_INTERVAL = 0.18; // Seconds between AI path recomputes
+
+    // Cell types
+    const CELL_WALL = 1;
+    const CELL_PATH = 0;
+
+    // Simple vector helper
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    // =======================
+    // Maze generation (DFS)
+    // =======================
+
+    /**
+     * Generates a random perfect maze using a depth-first search "recursive backtracker".
+     * Grid dimensions must be odd so that walls and paths can alternate.
+     */
+    function generateMaze(cols, rows) {
+      // Initialize full grid of walls.
+      const maze = [];
+      for (let y = 0; y < rows; y++) {
+        const row = [];
+        for (let x = 0; x < cols; x++) {
+          row.push(CELL_WALL);
+        }
+        maze.push(row);
+      }
+
+      const inBounds = (x, y) => x > 0 && x < cols - 1 && y > 0 && y < rows - 1;
+
+      // Start from top-left inner cell (must be odd coordinates).
+      const stack = [];
+      let cx = 1;
+      let cy = 1;
+      maze[cy][cx] = CELL_PATH;
+      stack.push({ x: cx, y: cy });
+
+      const directions = [
+        { dx: 0, dy: -2 },
+        { dx: 2, dy: 0 },
+        { dx: 0, dy: 2 },
+        { dx: -2, dy: 0 }
+      ];
+
+      while (stack.length > 0) {
+        const current = stack[stack.length - 1];
+        cx = current.x;
+        cy = current.y;
+
+        // Collect all unvisited neighbours 2 cells away.
+        const neighbours = [];
+        for (const dir of directions) {
+          const nx = cx + dir.dx;
+          const ny = cy + dir.dy;
+          if (inBounds(nx, ny) && maze[ny][nx] === CELL_WALL) {
+            neighbours.push({ x: nx, y: ny, betweenX: cx + dir.dx / 2, betweenY: cy + dir.dy / 2 });
+          }
+        }
+
+        if (neighbours.length === 0) {
+          // Backtrack if no unvisited neighbours.
+          stack.pop();
+          continue;
+        }
+
+        // Choose a random unvisited neighbour, carve passage.
+        const next = neighbours[Math.floor(Math.random() * neighbours.length)];
+        maze[next.betweenY][next.betweenX] = CELL_PATH; // Remove wall between cells.
+        maze[next.y][next.x] = CELL_PATH;               // Carve next cell.
+        stack.push({ x: next.x, y: next.y });
+      }
+
+      // Ensure start and exit cells are open.
+      maze[1][1] = CELL_PATH;
+      maze[rows - 2][cols - 2] = CELL_PATH;
+
+      return maze;
+    }
+
+    // =======================
+    // Pathfinding (BFS)
+    // =======================
+
+    /**
+     * Breadth-first search on the maze grid from start to goal.
+     * Returns the next cell (x, y) the enemy should move to, or null if not reachable.
+     */
+    function getNextStepTowardsPlayer(maze, start, goal) {
+      const rows = maze.length;
+      const cols = maze[0].length;
+      const inBounds = (x, y) => x >= 0 && x < cols && y >= 0 && y < rows;
+
+      const queue = [];
+      const visited = new Set();
+      const cameFrom = new Map();
+
+      const startKey = `${start.x},${start.y}`;
+      queue.push(start);
+      visited.add(startKey);
+
+      const dirs = [
+        { dx: 1, dy: 0 },
+        { dx: -1, dy: 0 },
+        { dx: 0, dy: 1 },
+        { dx: 0, dy: -1 }
+      ];
+
+      while (queue.length > 0) {
+        const current = queue.shift();
+        if (current.x === goal.x && current.y === goal.y) {
+          // Reconstruct path backwards.
+          let key = `${goal.x},${goal.y}`;
+          const path = [{ x: goal.x, y: goal.y }];
+          while (cameFrom.has(key)) {
+            const prev = cameFrom.get(key);
+            path.push(prev);
+            key = `${prev.x},${prev.y}`;
+          }
+          path.reverse();
+          // path[0] = start, path[1] = next step (if exists).
+          if (path.length > 1) return path[1];
+          return null;
+        }
+
+        for (const dir of dirs) {
+          const nx = current.x + dir.dx;
+          const ny = current.y + dir.dy;
+          const nKey = `${nx},${ny}`;
+          if (!inBounds(nx, ny)) continue;
+          if (maze[ny][nx] === CELL_WALL) continue;
+          if (visited.has(nKey)) continue;
+          visited.add(nKey);
+          cameFrom.set(nKey, current);
+          queue.push({ x: nx, y: ny });
+        }
+      }
+
+      return null;
+    }
+
+    // =======================
+    // Entity model
+    // =======================
+
+    class Entity {
+      constructor(gridX, gridY, color) {
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.x = gridX * CELL_SIZE + CELL_SIZE / 2;
+        this.y = gridY * CELL_SIZE + CELL_SIZE / 2;
+        this.targetX = this.x;
+        this.targetY = this.y;
+        this.moving = false;
+        this.color = color;
+        this.radius = CELL_SIZE * 0.32;
+        this.speedCellsPerSec = 4;
+      }
+
+      /**
+       * Initiates a move to the adjacent cell if possible.
+       */
+      tryMoveTo(gridX, gridY, maze) {
+        const rows = maze.length;
+        const cols = maze[0].length;
+        if (gridX < 0 || gridX >= cols || gridY < 0 || gridY >= rows) return false;
+        if (maze[gridY][gridX] === CELL_WALL) return false;
+
+        this.gridX = gridX;
+        this.gridY = gridY;
+        this.targetX = gridX * CELL_SIZE + CELL_SIZE / 2;
+        this.targetY = gridY * CELL_SIZE + CELL_SIZE / 2;
+        this.moving = true;
+        return true;
+      }
+
+      /**
+       * Smoothly animates towards the target cell center.
+       */
+      update(dt) {
+        if (!this.moving) return;
+
+        const speedPixelsPerSec = this.speedCellsPerSec * CELL_SIZE;
+        const maxDist = speedPixelsPerSec * dt;
+
+        const dx = this.targetX - this.x;
+        const dy = this.targetY - this.y;
+        const dist = Math.hypot(dx, dy);
+
+        if (dist <= maxDist) {
+          this.x = this.targetX;
+          this.y = this.targetY;
+          this.moving = false;
+        } else {
+          const t = maxDist / dist;
+          this.x = lerp(this.x, this.targetX, t);
+          this.y = lerp(this.y, this.targetY, t);
+        }
+      }
+
+      draw(ctx) {
+        ctx.save();
+        const gradient = ctx.createRadialGradient(
+          this.x - this.radius * 0.4, this.y - this.radius * 0.4, this.radius * 0.2,
+          this.x, this.y, this.radius
+        );
+        gradient.addColorStop(0, "white");
+        gradient.addColorStop(0.3, this.color);
+        gradient.addColorStop(1, "rgba(15, 23, 42, 1)");
+
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(15, 23, 42, 0.9)";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    // =======================
+    // Game controller
+    // =======================
+
+    class Game {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d");
+
+        this.level = 1;
+        this.totalTime = 0;
+        this.gameRunning = false;
+        this.gameOver = false;
+
+        this.maze = null;
+        this.player = null;
+        this.enemy = null;
+        this.exitCell = { x: GRID_COLS - 2, y: GRID_ROWS - 2 };
+
+        this.lastTimestamp = 0;
+        this.enemyRepathTimer = 0;
+
+        // Track keys held for continuous movement.
+        this.keysDown = { up: false, down: false, left: false, right: false };
+
+        // DOM references for UI.
+        this.statusLabel = document.getElementById("statusLabel");
+        this.aiLevelLabel = document.getElementById("aiLevelLabel");
+        this.timerDisplay = document.getElementById("timerDisplay");
+        this.levelDisplay = document.getElementById("levelDisplay");
+        this.overlay = document.getElementById("overlay");
+        this.overlayTitle = document.getElementById("overlayTitle");
+        this.overlaySubtitle = document.getElementById("overlaySubtitle");
+        this.overlayStats = document.getElementById("overlayStats");
+        this.statLevels = document.getElementById("statLevels");
+        this.statTime = document.getElementById("statTime");
+        this.startButton = document.getElementById("startButton");
+        this.startButtonLabel = document.getElementById("startButtonLabel");
+        this.hint = document.getElementById("controlHint");
+
+        this.bindInput();
+        this.startButton.addEventListener("click", () => {
+          if (!this.gameRunning) {
+            this.resetGame();
+            this.start();
+          } else {
+            // Restart after game over.
+            this.resetGame();
+          }
+        });
+
+        requestAnimationFrame((ts) => this.gameLoop(ts));
+      }
+
+      bindInput() {
+        window.addEventListener("keydown", (e) => {
+          if (!this.gameRunning || this.gameOver) return;
+
+          const key = e.key.toLowerCase();
+          let used = false;
+
+          if (key === "arrowup" || key === "w") {
+            this.keysDown.up = true;
+            used = true;
+          } else if (key === "arrowdown" || key === "s") {
+            this.keysDown.down = true;
+            used = true;
+          } else if (key === "arrowleft" || key === "a") {
+            this.keysDown.left = true;
+            used = true;
+          } else if (key === "arrowright" || key === "d") {
+            this.keysDown.right = true;
+            used = true;
+          }
+
+          if (!used) return;
+
+          if (this.hint) {
+            this.hint.classList.add("hidden");
+          }
+
+          e.preventDefault();
+        });
+
+        window.addEventListener("keyup", (e) => {
+          const key = e.key.toLowerCase();
+
+          if (key === "arrowup" || key === "w") {
+            this.keysDown.up = false;
+          } else if (key === "arrowdown" || key === "s") {
+            this.keysDown.down = false;
+          } else if (key === "arrowleft" || key === "a") {
+            this.keysDown.left = false;
+          } else if (key === "arrowright" || key === "d") {
+            this.keysDown.right = false;
+          }
+        });
+      }
+
+      /**
+       * Initializes a new level: regenerate maze, reset positions and speeds.
+       */
+      resetLevel() {
+        this.maze = generateMaze(GRID_COLS, GRID_ROWS);
+
+        // Player at fixed start, enemy near exit.
+        this.exitCell = { x: GRID_COLS - 2, y: GRID_ROWS - 2 };
+        const playerStart = { x: 1, y: 1 };
+        const enemyStart = { x: GRID_COLS - 2, y: 1 };
+
+        this.player = new Entity(playerStart.x, playerStart.y, "#38bdf8");
+        this.enemy = new Entity(enemyStart.x, enemyStart.y, "#fb7185");
+
+        this.player.speedCellsPerSec = BASE_PLAYER_SPEED;
+        this.enemy.speedCellsPerSec = BASE_ENEMY_SPEED + (this.level - 1) * ENEMY_SPEED_PER_LEVEL;
+
+        this.enemyRepathTimer = 0;
+        this.keysDown = { up: false, down: false, left: false, right: false };
+
+        this.levelDisplay.textContent = this.level.toString();
+        this.aiLevelLabel.textContent = (this.enemy.speedCellsPerSec / BASE_ENEMY_SPEED).toFixed(1) + "x";
+      }
+
+      /**
+       * Fully resets the game session.
+       */
+      resetGame() {
+        this.level = 1;
+        this.gameOver = false;
+        this.gameRunning = true;
+        this.totalTime = 0;
+        this.keysDown = { up: false, down: false, left: false, right: false };
+
+        if (this.hint) {
+          this.hint.classList.remove("hidden");
+        }
+
+        this.overlay.classList.remove("visible");
+        this.overlayStats.style.display = "none";
+        this.statusLabel.textContent = "Running";
+        this.resetLevel();
+      }
+
+      start() {
+        this.lastTimestamp = performance.now();
+        this.gameRunning = true;
+      }
+
+      winLevel() {
+        this.level += 1;
+        this.statusLabel.textContent = "Level Up";
+        this.resetLevel();
+      }
+
+      loseGame() {
+        this.gameOver = true;
+        this.gameRunning = false;
+
+        this.statusLabel.textContent = "Caught";
+        this.overlayTitle.textContent = "Captured by the AI";
+        this.overlaySubtitle.textContent =
+          "The AI outmaneuvered you in the maze. Study its behavior, adjust your route, and try to escape again.";
+        this.startButtonLabel.textContent = "Run It Back";
+        this.overlayStats.style.display = "flex";
+        this.statLevels.textContent = (this.level - 1).toString();
+        this.statTime.textContent = this.totalTime.toFixed(1) + "s";
+        this.overlay.classList.add("visible");
+      }
+
+      // Main animation loop.
+      gameLoop(timestamp) {
+        const dt = (timestamp - this.lastTimestamp) / 1000 || 0;
+        this.lastTimestamp = timestamp;
+
+        if (this.gameRunning && !this.gameOver) {
+          this.update(dt);
+          this.render();
+        } else {
+          // Still render the current frame so overlays look sharp.
+          this.render();
+        }
+
+        requestAnimationFrame((ts) => this.gameLoop(ts));
+      }
+
+      getDesiredDirection() {
+        // Simple priority: vertical over horizontal if both pressed.
+        if (this.keysDown.up && !this.keysDown.down) return { x: 0, y: -1 };
+        if (this.keysDown.down && !this.keysDown.up) return { x: 0, y: 1 };
+        if (this.keysDown.left && !this.keysDown.right) return { x: -1, y: 0 };
+        if (this.keysDown.right && !this.keysDown.left) return { x: 1, y: 0 };
+        return { x: 0, y: 0 };
+      }
+
+      update(dt) {
+        this.totalTime += dt;
+        this.timerDisplay.textContent = this.totalTime.toFixed(1) + "s";
+
+        // Player movement (continuous while key is held).
+        this.player.update(dt);
+        if (!this.player.moving) {
+          const dir = this.getDesiredDirection();
+          if (dir.x !== 0 || dir.y !== 0) {
+            const nx = this.player.gridX + dir.x;
+            const ny = this.player.gridY + dir.y;
+            this.player.tryMoveTo(nx, ny, this.maze);
+          }
+        }
+
+        // Enemy AI movement and pathfinding.
+        this.enemy.update(dt);
+        this.enemyRepathTimer += dt;
+
+        // Only pick a new step when the enemy has reached its last target.
+        if (!this.enemy.moving && this.enemyRepathTimer >= ENEMY_REPATH_INTERVAL) {
+          const next = getNextStepTowardsPlayer(
+            this.maze,
+            { x: this.enemy.gridX, y: this.enemy.gridY },
+            { x: this.player.gridX, y: this.player.gridY }
+          );
+          if (next) {
+            this.enemy.tryMoveTo(next.x, next.y, this.maze);
+          }
+          this.enemyRepathTimer = 0;
+        }
+
+        // Check for win condition: reaching the exit cell.
+        if (this.player.gridX === this.exitCell.x && this.player.gridY === this.exitCell.y) {
+          this.winLevel();
+        }
+
+        // Check for collision: distance in pixels below threshold.
+        const dist = Math.hypot(this.player.x - this.enemy.x, this.player.y - this.enemy.y);
+        if (dist < CELL_SIZE * 0.45) {
+          this.loseGame();
+        }
+      }
+
+      render() {
+        const ctx = this.ctx;
+        const w = this.canvas.width;
+        const h = this.canvas.height;
+
+        // Clear background.
+        const bgGrad = ctx.createRadialGradient(
+          w * 0.2, h * 0.1, 0,
+          w * 0.5, h * 0.5, Math.max(w, h)
+        );
+        bgGrad.addColorStop(0, "#020617");
+        bgGrad.addColorStop(1, "#020617");
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        if (!this.maze) return;
+
+        // Slight vignette for depth.
+        const vignette = ctx.createRadialGradient(
+          w / 2, h / 2, Math.max(w, h) * 0.2,
+          w / 2, h / 2, Math.max(w, h) * 0.75
+        );
+        vignette.addColorStop(0, "rgba(15, 23, 42, 0.0)");
+        vignette.addColorStop(1, "rgba(15, 23, 42, 0.75)");
+        ctx.fillStyle = vignette;
+        ctx.fillRect(0, 0, w, h);
+
+        this.drawMaze(ctx);
+        this.drawExit(ctx);
+
+        // Draw enemy path aura near the player (subtle direction cue).
+        ctx.save();
+        const auraRadius = CELL_SIZE * 1.8;
+        const auraGrad = ctx.createRadialGradient(
+          this.player.x, this.player.y, 0,
+          this.player.x, this.player.y, auraRadius
+        );
+        auraGrad.addColorStop(0, "rgba(56, 189, 248, 0.25)");
+        auraGrad.addColorStop(1, "rgba(56, 189, 248, 0)");
+        ctx.fillStyle = auraGrad;
+        ctx.globalCompositeOperation = "lighter";
+        ctx.beginPath();
+        ctx.arc(this.player.x, this.player.y, auraRadius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        this.player.draw(ctx);
+        this.enemy.draw(ctx);
+      }
+
+      drawMaze(ctx) {
+        const rows = this.maze.length;
+        const cols = this.maze[0].length;
+
+        for (let y = 0; y < rows; y++) {
+          for (let x = 0; x < cols; x++) {
+            const cell = this.maze[y][x];
+            const px = x * CELL_SIZE;
+            const py = y * CELL_SIZE;
+
+            if (cell === CELL_WALL) {
+              // Walls with subtle beveled / neon edges.
+              const grad = ctx.createLinearGradient(px, py, px + CELL_SIZE, py + CELL_SIZE);
+              grad.addColorStop(0, "#020617");
+              grad.addColorStop(1, "#020617");
+              ctx.fillStyle = grad;
+              ctx.fillRect(px, py, CELL_SIZE, CELL_SIZE);
+
+              ctx.strokeStyle = "rgba(15, 23, 42, 0.9)";
+              ctx.lineWidth = 2;
+              ctx.strokeRect(px + 0.5, py + 0.5, CELL_SIZE - 1, CELL_SIZE - 1);
+
+              ctx.strokeStyle = "rgba(56, 189, 248, 0.2)";
+              ctx.lineWidth = 1;
+              ctx.strokeRect(px + 2, py + 2, CELL_SIZE - 4, CELL_SIZE - 4);
+            } else {
+              // Path tiles with a very subtle pattern.
+              ctx.fillStyle = "rgba(15, 23, 42, 0.95)";
+              ctx.fillRect(px, py, CELL_SIZE, CELL_SIZE);
+
+              ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+              ctx.fillRect(px + 1, py + 1, CELL_SIZE - 2, CELL_SIZE - 2);
+
+              if ((x + y) % 2 === 0) {
+                ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+                ctx.fillRect(px + 2, py + 2, CELL_SIZE - 4, CELL_SIZE - 4);
+              }
+            }
+          }
+        }
+      }
+
+      drawExit(ctx) {
+        const x = this.exitCell.x * CELL_SIZE + CELL_SIZE / 2;
+        const y = this.exitCell.y * CELL_SIZE + CELL_SIZE / 2;
+
+        // Glowing vortex-like exit.
+        const outerR = CELL_SIZE * 0.6;
+        const innerR = CELL_SIZE * 0.25;
+
+        const grad = ctx.createRadialGradient(
+          x, y, innerR * 0.6,
+          x, y, outerR
+        );
+        grad.addColorStop(0, "rgba(52, 211, 153, 0.95)");
+        grad.addColorStop(0.4, "rgba(34, 197, 94, 0.65)");
+        grad.addColorStop(1, "rgba(16, 185, 129, 0.05)");
+
+        ctx.save();
+        ctx.globalCompositeOperation = "lighter";
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(x, y, outerR, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(22, 163, 74, 0.9)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(x, y, innerR, 0, Math.PI * 2);
+        ctx.stroke();
+
+        ctx.restore();
+      }
+    }
+
+    // =======================
+    // Bootstrap game
+    // =======================
+
+    window.addEventListener("load", () => {
+      const canvas = document.getElementById("gameCanvas");
+      const game = new Game(canvas);
+
+      // Prepare initial static maze view so the screen isn't blank.
+      game.resetLevel();
+      game.render();
+    });
+  </script>
+</body>
+</html>
