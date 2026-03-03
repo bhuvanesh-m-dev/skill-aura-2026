@@ -1,0 +1,1293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MemoryVerse - Neon Disco Edition</title>
+    <meta name="description" content="Neon disco memory card game. Train your brain under the lights!">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { 
+            font-family: 'Rajdhani', sans-serif; 
+        }
+        
+        h1, h2, h3, .brand { 
+            font-family: 'Orbitron', sans-serif; 
+        }
+        
+        /* Neon Magenta Disco Theme */
+        :root {
+            --neon-pink: #ff00ff;
+            --neon-cyan: #00ffff;
+            --neon-purple: #bf00ff;
+            --neon-yellow: #ffff00;
+            --dark-bg: #0a0a0f;
+            --disco-bg: linear-gradient(135deg, #1a0a1a 0%, #0f0a1f 50%, #1a0f2e 100%);
+        }
+        
+        body {
+            background: var(--disco-bg);
+            color: #fff;
+            overflow-x: hidden;
+        }
+        
+        /* Animated Grid Background */
+        .disco-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 0, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 0;
+            animation: gridPulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes gridPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.6; }
+        }
+        
+        /* Floating Disco Orbs */
+        .disco-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.4) 0%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.3) 0%, transparent 70%);
+            top: 60%;
+            right: 10%;
+            animation-delay: 2s;
+        }
+        
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(191, 0, 255, 0.35) 0%, transparent 70%);
+            bottom: 20%;
+            left: 50%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+        
+        /* Neon Gradient Backgrounds */
+        .neon-gradient {
+            background: linear-gradient(135deg, #ff00ff 0%, #bf00ff 50%, #00ffff 100%);
+        }
+        
+        .neon-gradient-alt {
+            background: linear-gradient(135deg, #00ffff 0%, #bf00ff 50%, #ff00ff 100%);
+        }
+        
+        /* Neon Button Styles */
+        .btn-neon {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            background: transparent;
+            border: 2px solid var(--neon-pink);
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3), inset 0 0 20px rgba(255, 0, 255, 0.1);
+        }
+        
+        .btn-neon:hover {
+            background: var(--neon-pink);
+            color: #000;
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6), 0 0 80px rgba(255, 0, 255, 0.3);
+            text-shadow: none;
+        }
+        
+        .btn-neon-cyan {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 10px var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 20px rgba(0, 255, 255, 0.1);
+        }
+        
+        .btn-neon-cyan:hover {
+            background: var(--neon-cyan);
+            color: #000;
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6), 0 0 80px rgba(0, 255, 255, 0.3);
+        }
+        
+        .btn-neon-filled {
+            background: linear-gradient(135deg, #ff00ff 0%, #bf00ff 100%);
+            border: none;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.4);
+        }
+        
+        .btn-neon-filled:hover {
+            box-shadow: 0 0 50px rgba(255, 0, 255, 0.7), 0 0 100px rgba(191, 0, 255, 0.4);
+            transform: translateY(-3px) scale(1.02);
+        }
+        
+        /* Pulse Animation */
+        .neon-pulse {
+            animation: neonPulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes neonPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(255, 0, 255, 0.4), 0 0 40px rgba(255, 0, 255, 0.2);
+            }
+            50% { 
+                box-shadow: 0 0 40px rgba(255, 0, 255, 0.7), 0 0 80px rgba(255, 0, 255, 0.4);
+            }
+        }
+        
+        /* Glitch Text Effect */
+        .glitch-text {
+            position: relative;
+            animation: glitch 3s infinite;
+        }
+        
+        @keyframes glitch {
+            0%, 100% { text-shadow: 0 0 10px var(--neon-pink), 0 0 20px var(--neon-pink); }
+            25% { text-shadow: -2px 0 var(--neon-cyan), 2px 0 var(--neon-pink); }
+            50% { text-shadow: 2px 0 var(--neon-cyan), -2px 0 var(--neon-pink); }
+            75% { text-shadow: 0 0 10px var(--neon-cyan), 0 0 20px var(--neon-cyan); }
+        }
+        
+        /* Scanline Effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                to bottom,
+                transparent 50%,
+                rgba(0, 0, 0, 0.1) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.3;
+        }
+        
+        /* Card 3D with Neon */
+        .card-3d {
+            perspective: 1000px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .card-3d:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        
+        .card-3d.flipped .card-inner { 
+            transform: rotateY(180deg); 
+        }
+        
+        .card-3d.matched .card-inner {
+            transform: rotateY(180deg);
+            animation: neonMatchPulse 0.6s ease;
+        }
+        
+        @keyframes neonMatchPulse {
+            0%, 100% { 
+                transform: rotateY(180deg) scale(1); 
+                box-shadow: 0 0 20px var(--neon-pink);
+            }
+            50% { 
+                transform: rotateY(180deg) scale(1.1); 
+                box-shadow: 0 0 40px var(--neon-cyan), 0 0 80px var(--neon-pink);
+            }
+        }
+        
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        
+        .card-front {
+            background: linear-gradient(135deg, #1a0a2e 0%, #0f0a1f 100%);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3), inset 0 0 20px rgba(255, 0, 255, 0.1);
+            color: var(--neon-pink);
+        }
+        
+        .card-front::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 0, 255, 0.03) 10px,
+                rgba(255, 0, 255, 0.03) 20px
+            );
+            border-radius: 10px;
+            pointer-events: none;
+        }
+        
+        .card-back {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a1a 100%);
+            transform: rotateY(180deg);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4), inset 0 0 30px rgba(0, 255, 255, 0.1);
+            color: var(--neon-cyan);
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+        
+        .card-3d:hover .card-front {
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5), inset 0 0 30px rgba(255, 0, 255, 0.2);
+        }
+        
+        .shake { 
+            animation: neonShake 0.5s; 
+        }
+        
+        @keyframes neonShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); box-shadow: 0 0 30px var(--neon-pink); }
+            75% { transform: translateX(10px); box-shadow: 0 0 30px var(--neon-cyan); }
+        }
+        
+        /* Neon Navigation */
+        .nav-neon {
+            backdrop-filter: blur(10px);
+            background: rgba(10, 10, 15, 0.9);
+            border-bottom: 1px solid rgba(255, 0, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.1);
+        }
+        
+        /* Neon Difficulty Buttons */
+        .difficulty-btn {
+            transition: all 0.3s;
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .difficulty-btn:hover {
+            border-color: var(--neon-cyan);
+            color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .difficulty-btn.active {
+            background: linear-gradient(135deg, #ff00ff 0%, #bf00ff 100%);
+            border-color: var(--neon-pink);
+            color: #fff;
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 0, 255, 0.5);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Neon Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            animation: confetti-fall 3s ease-out forwards;
+            z-index: 9999;
+            box-shadow: 0 0 10px currentColor;
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* Neon Toast */
+        .toast { 
+            animation: slideIn 0.3s ease; 
+            background: rgba(10, 10, 15, 0.95) !important;
+            border: 1px solid var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.4);
+            color: var(--neon-pink);
+            text-shadow: 0 0 10px var(--neon-pink);
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* Floating Animation */
+        .floating-neon { 
+            animation: floatNeon 3s ease-in-out infinite; 
+        }
+        
+        @keyframes floatNeon {
+            0%, 100% { 
+                transform: translateY(0px); 
+                text-shadow: 0 0 10px var(--neon-cyan);
+            }
+            50% { 
+                transform: translateY(-10px); 
+                text-shadow: 0 0 20px var(--neon-pink), 0 0 40px var(--neon-cyan);
+            }
+        }
+        
+        /* Page Transitions */
+        .page {
+            opacity: 1;
+            transition: opacity 0.3s ease;
+        }
+        
+        .page.hidden {
+            display: none;
+            opacity: 0;
+        }
+        
+        /* Combo Display Neon */
+        #combo-display {
+            background: linear-gradient(135deg, #ff00ff 0%, #bf00ff 100%);
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            box-shadow: 0 0 40px rgba(255, 0, 255, 0.6);
+        }
+        
+        /* Progress Bar Neon */
+        .progress-neon {
+            background: linear-gradient(90deg, #ff00ff 0%, #00ffff 50%, #ff00ff 100%);
+            background-size: 200% 100%;
+            animation: neonProgress 2s linear infinite;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.5);
+        }
+        
+        @keyframes neonProgress {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        
+        /* Timer Urgent Neon */
+        .timer-urgent {
+            animation: urgentNeon 1s infinite;
+            color: var(--neon-pink) !important;
+            text-shadow: 0 0 20px var(--neon-pink);
+        }
+        
+        @keyframes urgentNeon {
+            0%, 100% { opacity: 1; transform: scale(1); text-shadow: 0 0 10px var(--neon-pink); }
+            50% { opacity: 0.7; transform: scale(1.05); text-shadow: 0 0 30px var(--neon-pink), 0 0 50px var(--neon-cyan); }
+        }
+        
+        /* Card Entrance */
+        @keyframes cardEnterNeon {
+            from { 
+                opacity: 0; 
+                transform: translateY(30px) rotateY(0deg); 
+                box-shadow: 0 0 0 transparent;
+            }
+            to { 
+                opacity: 1; 
+                transform: translateY(0) rotateY(0deg); 
+                box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+            }
+        }
+        
+        .card-enter {
+            animation: cardEnterNeon 0.5s ease backwards;
+        }
+        
+        /* Modal Neon */
+        .modal-neon {
+            background: rgba(10, 10, 15, 0.95) !important;
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 50px rgba(255, 0, 255, 0.4), inset 0 0 50px rgba(255, 0, 255, 0.1);
+        }
+        
+        /* Trophy Bounce Neon */
+        @keyframes trophyNeon {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg); 
+                text-shadow: 0 0 20px var(--neon-yellow);
+            }
+            25% { 
+                transform: translateY(-10px) rotate(-10deg); 
+                text-shadow: 0 0 30px var(--neon-cyan);
+            }
+            75% { 
+                transform: translateY(-10px) rotate(10deg); 
+                text-shadow: 0 0 30px var(--neon-pink);
+            }
+        }
+        
+        /* Neon Input Fields */
+        .input-neon {
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(255, 0, 255, 0.3);
+            color: #fff;
+            transition: all 0.3s;
+        }
+        
+        .input-neon:focus {
+            outline: none;
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.3);
+        }
+        
+        /* Stats Cards Neon */
+        .stat-card-neon {
+            background: rgba(10, 10, 15, 0.8);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .stat-card-neon:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            transform: translateY(-3px);
+        }
+        
+        /* Scrollbar Neon */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(var(--neon-pink), var(--neon-cyan));
+            border-radius: 5px;
+        }
+        
+        /* Selection Neon */
+        ::selection {
+            background: var(--neon-pink);
+            color: #000;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Disco Effects -->
+    <div class="disco-grid"></div>
+    <div class="disco-orb orb-1"></div>
+    <div class="disco-orb orb-2"></div>
+    <div class="disco-orb orb-3"></div>
+    <div class="scanlines"></div>
+
+    <!-- Navigation -->
+    <nav class="nav-neon fixed w-full z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2 cursor-pointer btn-neon rounded-lg px-3 py-2" onclick="showPage('home')">
+                    <div class="w-10 h-10 neon-gradient rounded-lg flex items-center justify-center text-white text-xl neon-pulse">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <span class="brand text-2xl font-bold text-white glitch-text">MemoryVerse</span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <button onclick="showPage('home')" class="btn-neon px-4 py-2 rounded-lg font-medium">Home</button>
+                    <button onclick="showPage('play')" class="btn-neon px-4 py-2 rounded-lg font-medium">Play</button>
+                    <button onclick="showPage('leaderboard')" class="btn-neon px-4 py-2 rounded-lg font-medium">Rankings</button>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleSound()" id="sound-toggle" class="btn-neon-cyan p-3 rounded-lg">
+                        <i class="fas fa-volume-up text-lg"></i>
+                    </button>
+                    <button onclick="startGameFromNav()" class="btn-neon-filled neon-pulse px-6 py-3 rounded-lg font-bold">
+                        Play Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-20 right-4 z-50 space-y-2"></div>
+
+    <!-- HOME PAGE -->
+    <div id="page-home" class="page pt-16 relative z-10">
+        <section class="py-20 px-4 relative">
+            <div class="max-w-7xl mx-auto text-center">
+                <h1 class="text-5xl md:text-7xl font-bold mb-6 glitch-text text-white">Train Your Brain</h1>
+                <p class="text-xl md:text-2xl mb-8 text-cyan-300">Neon Disco Memory Challenge</p>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <button onclick="startPlaying('medium')" class="btn-neon-filled neon-pulse px-8 py-4 rounded-full font-bold text-lg">
+                        <i class="fas fa-play mr-2"></i>Play Now
+                    </button>
+                    <button onclick="showPage('leaderboard')" class="btn-neon-cyan px-8 py-4 rounded-full font-bold text-lg">
+                        <i class="fas fa-trophy mr-2"></i>View Rankings
+                    </button>
+                </div>
+                <div class="mt-12 flex justify-center gap-8 text-sm text-pink-300">
+                    <div class="btn-neon px-4 py-2 rounded-lg cursor-default"><i class="fas fa-users mr-2"></i><span id="online-count">2,847</span> Online</div>
+                    <div class="btn-neon px-4 py-2 rounded-lg cursor-default"><i class="fas fa-gamepad mr-2"></i><span id="games-today">12,493</span> Games Today</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 px-4 max-w-7xl mx-auto relative z-10">
+            <h2 class="text-3xl font-bold text-center mb-12 text-white glitch-text">Choose Your Challenge</h2>
+            <div class="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div onclick="startPlaying('easy')" class="btn-neon p-8 rounded-2xl cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="px-3 py-1 bg-green-900 text-green-300 rounded-full text-sm font-bold border border-green-500">EASY</span>
+                        <i class="fas fa-seedling text-cyan-400 text-3xl floating-neon"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-white">Beginner</h3>
+                    <p class="text-gray-400 text-sm mb-4">12 cards • 6 pairs • 60 seconds</p>
+                    <div class="text-pink-400 font-semibold neon-pulse">Start Playing →</div>
+                </div>
+                
+                <div onclick="startPlaying('medium')" class="btn-neon p-8 rounded-2xl cursor-pointer relative overflow-hidden">
+                    <div class="absolute top-0 right-0 neon-gradient text-white px-3 py-1 text-xs font-bold rounded-bl-lg neon-pulse">POPULAR</div>
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="px-3 py-1 bg-purple-900 text-purple-300 rounded-full text-sm font-bold border border-purple-500">MEDIUM</span>
+                        <i class="fas fa-rocket text-pink-400 text-3xl floating-neon" style="animation-delay: 0.5s"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-white">Standard</h3>
+                    <p class="text-gray-400 text-sm mb-4">16 cards • 8 pairs • 90 seconds</p>
+                    <div class="text-cyan-400 font-semibold neon-pulse">Start Playing →</div>
+                </div>
+                
+                <div onclick="startPlaying('hard')" class="btn-neon-cyan p-8 rounded-2xl cursor-pointer">
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="px-3 py-1 bg-red-900 text-red-300 rounded-full text-sm font-bold border border-red-500">HARD</span>
+                        <i class="fas fa-fire text-yellow-400 text-3xl floating-neon" style="animation-delay: 1s"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-white">Expert</h3>
+                    <p class="text-gray-400 text-sm mb-4">24 cards • 12 pairs • 120 seconds</p>
+                    <div class="text-yellow-400 font-semibold neon-pulse">Start Playing →</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PLAY PAGE -->
+    <div id="page-play" class="page hidden pt-20 pb-12 px-4 min-h-screen relative z-10">
+        <div class="max-w-4xl mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-8 gap-4">
+                <div>
+                    <h1 class="text-3xl font-bold mb-2 text-white glitch-text">Memory Challenge</h1>
+                    <p class="text-cyan-300">Find all matching pairs before time runs out!</p>
+                </div>
+                
+                <div class="flex items-center gap-2 bg-black/30 p-2 rounded-xl border border-pink-500/30">
+                    <button onclick="changeDifficulty('easy')" class="difficulty-btn px-4 py-2 rounded-lg font-medium text-sm" data-diff="easy">Easy</button>
+                    <button onclick="changeDifficulty('medium')" class="difficulty-btn active px-4 py-2 rounded-lg font-medium text-sm" data-diff="medium">Medium</button>
+                    <button onclick="changeDifficulty('hard')" class="difficulty-btn px-4 py-2 rounded-lg font-medium text-sm" data-diff="hard">Hard</button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mb-6 max-w-2xl mx-auto">
+                <div class="stat-card-neon rounded-xl p-4 text-center">
+                    <div class="text-pink-400 text-sm mb-1">Time</div>
+                    <div id="game-timer" class="text-2xl font-bold text-cyan-400 font-mono transition-all">00:00</div>
+                </div>
+                <div class="stat-card-neon rounded-xl p-4 text-center">
+                    <div class="text-pink-400 text-sm mb-1">Moves</div>
+                    <div id="game-moves" class="text-2xl font-bold text-white font-mono">0</div>
+                </div>
+                <div class="stat-card-neon rounded-xl p-4 text-center">
+                    <div class="text-pink-400 text-sm mb-1">Pairs</div>
+                    <div id="game-pairs" class="text-2xl font-bold text-white font-mono">0/8</div>
+                </div>
+            </div>
+
+            <div class="max-w-2xl mx-auto mb-8">
+                <div class="w-full bg-black/50 rounded-full h-2 overflow-hidden border border-pink-500/30">
+                    <div id="game-progress" class="h-2 rounded-full progress-neon transition-all duration-500" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="game-grid" class="grid gap-3 max-w-2xl mx-auto mb-8" style="grid-template-columns: repeat(4, 1fr);"></div>
+
+            <div class="flex justify-center gap-4">
+                <button onclick="resetGame()" class="btn-neon px-6 py-3 rounded-lg font-semibold">
+                    <i class="fas fa-redo mr-2"></i>Restart
+                </button>
+                <button onclick="showPage('home')" class="btn-neon-cyan px-6 py-3 rounded-lg font-semibold">
+                    <i class="fas fa-home mr-2"></i>Menu
+                </button>
+            </div>
+
+            <div id="combo-display" class="fixed bottom-20 left-1/2 transform -translate-x-1/2 px-6 py-3 rounded-full font-bold text-lg opacity-0 transition-all pointer-events-none z-50">
+                <i class="fas fa-bolt mr-2"></i>Combo x<span id="combo-count">2</span>!
+            </div>
+        </div>
+    </div>
+
+    <!-- LEADERBOARD PAGE -->
+    <div id="page-leaderboard" class="page hidden pt-20 pb-12 px-4 min-h-screen relative z-10">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-4xl font-bold text-center mb-8 text-white glitch-text">Global Rankings</h1>
+            
+            <div class="bg-black/50 rounded-2xl shadow-lg overflow-hidden border border-pink-500/30">
+                <div class="grid grid-cols-12 gap-4 p-4 bg-black/70 text-sm font-semibold text-pink-400 border-b border-pink-500/30">
+                    <div class="col-span-1 text-center">#</div>
+                    <div class="col-span-7">Player</div>
+                    <div class="col-span-3 text-center">Score</div>
+                    <div class="col-span-1"></div>
+                </div>
+                <div id="leaderboard-list" class="divide-y divide-pink-500/20"></div>
+            </div>
+            
+            <div class="mt-8 text-center">
+                <button onclick="startPlaying('medium')" class="btn-neon-filled neon-pulse px-8 py-3 rounded-full font-bold">
+                    Play to Enter Rankings
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- VICTORY MODAL -->
+    <div id="victory-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm p-4">
+        <div class="modal-neon rounded-3xl p-8 max-w-md w-full text-center" style="animation: modalPop 0.3s ease">
+            <div class="w-20 h-20 bg-gradient-to-br from-pink-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl neon-pulse" style="animation: trophyNeon 1s infinite">🏆</div>
+            <h2 class="text-3xl font-bold mb-2 text-white glitch-text">Level Complete!</h2>
+            <p class="text-cyan-300 mb-6">Amazing neon skills!</p>
+            
+            <div class="grid grid-cols-3 gap-4 mb-6">
+                <div class="stat-card-neon p-3 rounded-xl">
+                    <div class="text-xs text-pink-400 mb-1">Time</div>
+                    <div id="final-time" class="font-bold text-white">00:00</div>
+                </div>
+                <div class="stat-card-neon p-3 rounded-xl">
+                    <div class="text-xs text-pink-400 mb-1">Moves</div>
+                    <div id="final-moves" class="font-bold text-white">0</div>
+                </div>
+                <div class="stat-card-neon p-3 rounded-xl">
+                    <div class="text-xs text-pink-400 mb-1">Score</div>
+                    <div id="final-score" class="font-bold text-cyan-400">0</div>
+                </div>
+            </div>
+
+            <div class="flex gap-3 mb-4">
+                <button onclick="closeVictory()" class="btn-neon flex-1 py-3 rounded-xl font-semibold">Menu</button>
+                <button onclick="playAgain()" class="btn-neon-filled neon-pulse flex-1 py-3 rounded-xl font-semibold">Play Again</button>
+            </div>
+            
+            <button onclick="shareResult()" class="btn-neon-cyan w-full py-3 rounded-xl font-semibold">
+                <i class="fab fa-twitter mr-2"></i>Share Score
+            </button>
+        </div>
+    </div>
+
+    <style>
+        @keyframes modalPop {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+
+    <script>
+        // Game State
+        let gameState = {
+            cards: [],
+            flipped: [],
+            matched: [],
+            moves: 0,
+            time: 0,
+            timerInterval: null,
+            isPlaying: false,
+            difficulty: 'medium',
+            combo: 0,
+            lastMatchTime: 0,
+            soundEnabled: true,
+            stats: {
+                gamesPlayed: 0,
+                wins: 0,
+                bestTime: null
+            }
+        };
+
+        const difficulties = {
+            easy: { rows: 3, cols: 4, pairs: 6, timeLimit: 60, bonus: 100 },
+            medium: { rows: 4, cols: 4, pairs: 8, timeLimit: 90, bonus: 200 },
+            hard: { rows: 4, cols: 6, pairs: 12, timeLimit: 120, bonus: 300 }
+        };
+
+        const emojiSets = {
+            easy: ['🚀', '🛸', '🤖', '👾', '💻', '⚡'],
+            medium: ['🚀', '🛸', '🤖', '👾', '💻', '⚡', '🌌', '🔮'],
+            hard: ['🚀', '🛸', '🤖', '👾', '💻', '⚡', '🌌', '🔮', '🧬', '🔋', '🕹️', '📡']
+        };
+
+        // Pleasant Audio System with Booyah Victory
+        let synth, matchSynth, errorSynth, winSynth, booyahSynth;
+        let audioInitialized = false;
+
+        async function initAudio() {
+            if (audioInitialized) return;
+            
+            try {
+                await Tone.start();
+                
+                Tone.Destination.volume.value = 0;
+                
+                // Pleasant click
+                synth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.01, decay: 0.3, sustain: 0.1, release: 0.8 }
+                }).toDestination();
+                synth.volume.value = -8;
+                
+                // Pleasant match chimes
+                matchSynth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "triangle" },
+                    envelope: { attack: 0.02, decay: 0.4, sustain: 0.2, release: 1.5 }
+                }).toDestination();
+                matchSynth.volume.value = -5;
+                
+                const matchReverb = new Tone.Reverb({ decay: 2.5, wet: 0.4 }).toDestination();
+                matchSynth.connect(matchReverb);
+                
+                // Pleasant error
+                errorSynth = new Tone.MembraneSynth({
+                    pitchDecay: 0.05,
+                    octaves: 2,
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.001, decay: 0.2, sustain: 0, release: 0.4 }
+                }).toDestination();
+                errorSynth.volume.value = -10;
+                
+                // Booyah victory
+                winSynth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "triangle" },
+                    envelope: { attack: 0.01, decay: 0.1, sustain: 0.3, release: 0.5 }
+                }).toDestination();
+                winSynth.volume.value = -2;
+                
+                booyahSynth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "fmsine", modulationType: "square", modulationIndex: 3 },
+                    envelope: { attack: 0.01, decay: 0.2, sustain: 0.2, release: 0.8 }
+                }).toDestination();
+                booyahSynth.volume.value = 0;
+                
+                const winReverb = new Tone.Reverb({ decay: 3, wet: 0.5 }).toDestination();
+                winSynth.connect(winReverb);
+                booyahSynth.connect(winReverb);
+                
+                const winDelay = new Tone.FeedbackDelay("8n", 0.3).toDestination();
+                winSynth.connect(winDelay);
+                booyahSynth.connect(winDelay);
+                
+                audioInitialized = true;
+            } catch (e) {
+                console.log('Audio init failed:', e);
+            }
+        }
+
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+            const btn = document.getElementById('sound-toggle');
+            btn.innerHTML = gameState.soundEnabled ? 
+                '<i class="fas fa-volume-up text-lg"></i>' : 
+                '<i class="fas fa-volume-mute text-lg"></i>';
+            showToast(gameState.soundEnabled ? '🔊 Sound On' : '🔇 Sound Off');
+        }
+
+        function playClickSound() {
+            if (!gameState.soundEnabled || !synth) return;
+            synth.triggerAttackRelease("C6", "16n");
+        }
+
+        function playFlipSound() {
+            if (!gameState.soundEnabled || !synth) return;
+            synth.triggerAttackRelease("E5", "32n", Tone.now(), 0.3);
+        }
+
+        function playMatchSound(combo) {
+            if (!gameState.soundEnabled || !matchSynth) return;
+            
+            const pleasantNotes = [
+                ["C5", "E5", "G5"],
+                ["D5", "F5", "A5"],
+                ["E5", "G5", "B5"],
+                ["G5", "B5", "D6"],
+                ["A5", "C6", "E6"]
+            ];
+            
+            const chord = pleasantNotes[(combo - 1) % pleasantNotes.length];
+            const now = Tone.now();
+            
+            matchSynth.triggerAttackRelease(chord[0], "8n", now, 0.4);
+            matchSynth.triggerAttackRelease(chord[1], "8n", now + 0.05, 0.4);
+            matchSynth.triggerAttackRelease(chord[2], "8n", now + 0.1, 0.4);
+            
+            if (combo > 1) {
+                setTimeout(() => {
+                    matchSynth.triggerAttackRelease([
+                        chord[0].replace('5', '6'), 
+                        chord[2].replace('5', '6')
+                    ], "8n", undefined, 0.3);
+                }, 150);
+            }
+        }
+
+        function playErrorSound() {
+            if (!gameState.soundEnabled || !errorSynth) return;
+            errorSynth.triggerAttackRelease("G2", "16n");
+        }
+
+        function playWinSound() {
+            if (!gameState.soundEnabled || !winSynth || !booyahSynth) return;
+            
+            const now = Tone.now();
+            
+            winSynth.triggerAttackRelease("C5", "16n", now);
+            winSynth.triggerAttackRelease("E5", "16n", now + 0.08);
+            winSynth.triggerAttackRelease("G5", "16n", now + 0.16);
+            winSynth.triggerAttackRelease("C6", "8n", now + 0.24);
+            
+            winSynth.triggerAttackRelease(["C4", "E4", "G4", "C5"], "8n", now + 0.4);
+            winSynth.triggerAttackRelease(["F3", "A3", "C4", "F4"], "8n", now + 0.6);
+            winSynth.triggerAttackRelease(["G3", "B3", "D4", "G4"], "8n", now + 0.8);
+            
+            setTimeout(() => {
+                booyahSynth.triggerAttackRelease(["C4", "E4"], "16n", Tone.now());
+                booyahSynth.triggerAttackRelease(["E4", "G4"], "16n", Tone.now() + 0.1);
+                
+                setTimeout(() => {
+                    booyahSynth.triggerAttackRelease(["C5", "E5", "G5", "C6"], "2n", undefined, 0.8);
+                    
+                    setTimeout(() => {
+                        winSynth.triggerAttackRelease(["C5", "G5"], "4n", undefined, 0.4);
+                    }, 300);
+                    
+                    setTimeout(() => {
+                        winSynth.triggerAttackRelease(["E6", "G6"], "8n", undefined, 0.3);
+                    }, 600);
+                    
+                }, 200);
+                
+            }, 1000);
+        }
+
+        function showPage(pageName) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            const targetPage = document.getElementById(`page-${pageName}`);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+            }
+            
+            if (pageName === 'play') {
+                initAudio().then(() => {
+                    if (!gameState.isPlaying) {
+                        resetGame();
+                    }
+                });
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        function startPlaying(difficulty) {
+            gameState.difficulty = difficulty;
+            
+            initAudio().then(() => {
+                showPage('play');
+                setTimeout(() => {
+                    resetGame();
+                }, 100);
+            });
+        }
+
+        function startGameFromNav() {
+            startPlaying('medium');
+        }
+
+        function changeDifficulty(diff) {
+            gameState.difficulty = diff;
+            
+            document.querySelectorAll('.difficulty-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.diff === diff);
+            });
+            
+            const activeBtn = document.querySelector(`.difficulty-btn[data-diff="${diff}"]`);
+            if (activeBtn) {
+                activeBtn.style.transform = 'scale(0.95)';
+                setTimeout(() => activeBtn.style.transform = '', 150);
+            }
+            
+            resetGame();
+        }
+
+        function resetGame() {
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+            
+            gameState.cards = [];
+            gameState.flipped = [];
+            gameState.matched = [];
+            gameState.moves = 0;
+            gameState.time = 0;
+            gameState.isPlaying = true;
+            gameState.combo = 0;
+            gameState.lastMatchTime = 0;
+            
+            document.getElementById('game-moves').textContent = '0';
+            document.getElementById('game-timer').textContent = '00:00';
+            document.getElementById('game-timer').classList.remove('timer-urgent');
+            document.getElementById('game-progress').style.width = '0%';
+            
+            const config = difficulties[gameState.difficulty];
+            document.getElementById('game-pairs').textContent = `0/${config.pairs}`;
+            
+            createGrid();
+            startTimer();
+        }
+
+        function createGrid() {
+            const grid = document.getElementById('game-grid');
+            const config = difficulties[gameState.difficulty];
+            
+            grid.style.gridTemplateColumns = `repeat(${config.cols}, 1fr)`;
+            grid.innerHTML = '';
+            
+            const emojis = emojiSets[gameState.difficulty];
+            const cardPairs = [...emojis, ...emojis];
+            
+            for (let i = cardPairs.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cardPairs[i], cardPairs[j]] = [cardPairs[j], cardPairs[i]];
+            }
+            
+            cardPairs.forEach((emoji, index) => {
+                const cardWrapper = document.createElement('div');
+                cardWrapper.className = 'card-3d aspect-square card-enter';
+                cardWrapper.style.animationDelay = `${index * 0.05}s`;
+                
+                const cardInner = document.createElement('div');
+                cardInner.className = 'card-inner';
+                cardInner.onclick = () => handleCardClick(index);
+                
+                const front = document.createElement('div');
+                front.className = 'card-face card-front';
+                front.innerHTML = '<i class="fas fa-question text-3xl"></i>';
+                
+                const back = document.createElement('div');
+                back.className = 'card-face card-back';
+                back.textContent = emoji;
+                
+                cardInner.appendChild(front);
+                cardInner.appendChild(back);
+                cardWrapper.appendChild(cardInner);
+                grid.appendChild(cardWrapper);
+                
+                gameState.cards.push({
+                    id: index,
+                    emoji: emoji,
+                    element: cardWrapper,
+                    matched: false
+                });
+            });
+        }
+
+        function handleCardClick(index) {
+            if (!gameState.isPlaying) return;
+            
+            const card = gameState.cards[index];
+            
+            if (card.matched || gameState.flipped.includes(index) || gameState.flipped.length >= 2) return;
+            
+            playFlipSound();
+            
+            card.element.classList.add('flipped');
+            
+            card.element.style.transform = 'scale(1.05)';
+            setTimeout(() => card.element.style.transform = '', 200);
+            
+            gameState.flipped.push(index);
+            
+            if (gameState.flipped.length === 2) {
+                gameState.moves++;
+                document.getElementById('game-moves').textContent = gameState.moves;
+                checkMatch();
+            }
+        }
+
+        function checkMatch() {
+            const [index1, index2] = gameState.flipped;
+            const card1 = gameState.cards[index1];
+            const card2 = gameState.cards[index2];
+            
+            if (card1.emoji === card2.emoji) {
+                setTimeout(() => {
+                    card1.matched = true;
+                    card2.matched = true;
+                    
+                    card1.element.classList.add('matched');
+                    card2.element.classList.add('matched');
+                    
+                    const now = Date.now();
+                    if (now - gameState.lastMatchTime < 3000) {
+                        gameState.combo++;
+                        showCombo();
+                    } else {
+                        gameState.combo = 1;
+                    }
+                    gameState.lastMatchTime = now;
+                    
+                    playMatchSound(gameState.combo);
+                    
+                    gameState.matched.push(index1, index2);
+                    gameState.flipped = [];
+                    
+                    const config = difficulties[gameState.difficulty];
+                    const pairsFound = gameState.matched.length / 2;
+                    document.getElementById('game-pairs').textContent = `${pairsFound}/${config.pairs}`;
+                    
+                    const progressPercent = (pairsFound / config.pairs) * 100;
+                    document.getElementById('game-progress').style.width = `${progressPercent}%`;
+                    
+                    if (pairsFound === config.pairs) {
+                        setTimeout(() => endGame(true), 500);
+                    }
+                }, 600);
+            } else {
+                setTimeout(() => {
+                    card1.element.classList.add('shake');
+                    card2.element.classList.add('shake');
+                    
+                    playErrorSound();
+                    
+                    gameState.combo = 0;
+                    
+                    setTimeout(() => {
+                        card1.element.classList.remove('flipped', 'shake');
+                        card2.element.classList.remove('flipped', 'shake');
+                        gameState.flipped = [];
+                    }, 800);
+                }, 800);
+            }
+        }
+
+        function showCombo() {
+            const display = document.getElementById('combo-display');
+            const count = document.getElementById('combo-count');
+            
+            count.textContent = gameState.combo;
+            display.style.opacity = '1';
+            display.style.transform = 'translate(-50%, -20px) scale(1.2)';
+            display.classList.add('combo-active');
+            
+            setTimeout(() => {
+                display.style.opacity = '0';
+                display.style.transform = 'translate(-50%, 0) scale(1)';
+                display.classList.remove('combo-active');
+            }, 1500);
+        }
+
+        function startTimer() {
+            gameState.timerInterval = setInterval(() => {
+                gameState.time++;
+                
+                const mins = Math.floor(gameState.time / 60).toString().padStart(2, '0');
+                const secs = (gameState.time % 60).toString().padStart(2, '0');
+                
+                const timerEl = document.getElementById('game-timer');
+                timerEl.textContent = `${mins}:${secs}`;
+                
+                timerEl.style.transform = 'scale(1.1)';
+                setTimeout(() => timerEl.style.transform = 'scale(1)', 200);
+                
+                const config = difficulties[gameState.difficulty];
+                
+                if (gameState.time > config.timeLimit * 0.8) {
+                    timerEl.classList.add('timer-urgent');
+                }
+                
+                if (gameState.time >= config.timeLimit) {
+                    endGame(false);
+                }
+            }, 1000);
+        }
+
+        function endGame(victory) {
+            clearInterval(gameState.timerInterval);
+            gameState.isPlaying = false;
+            gameState.stats.gamesPlayed++;
+            
+            if (victory) {
+                gameState.stats.wins++;
+                playWinSound();
+                
+                const config = difficulties[gameState.difficulty];
+                const timeBonus = Math.max(0, (config.timeLimit - gameState.time) * 10);
+                const moveBonus = Math.max(0, (config.pairs * 2 - gameState.moves) * 50);
+                const totalScore = config.bonus + timeBonus + moveBonus + (gameState.combo * 100);
+                
+                if (!gameState.stats.bestTime || gameState.time < gameState.stats.bestTime) {
+                    gameState.stats.bestTime = gameState.time;
+                }
+                
+                const mins = Math.floor(gameState.time / 60).toString().padStart(2, '0');
+                const secs = (gameState.time % 60).toString().padStart(2, '0');
+                
+                document.getElementById('final-time').textContent = `${mins}:${secs}`;
+                document.getElementById('final-moves').textContent = gameState.moves;
+                document.getElementById('final-score').textContent = totalScore;
+                
+                createConfetti();
+                
+                document.getElementById('victory-modal').classList.remove('hidden');
+            } else {
+                showToast('⏰ Time up! Try again.');
+            }
+        }
+
+        function createConfetti() {
+            const neonColors = ['#ff00ff', '#00ffff', '#bf00ff', '#ffff00', '#ff1493'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.backgroundColor = neonColors[Math.floor(Math.random() * neonColors.length)];
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = confetti.style.width;
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        }
+
+        function closeVictory() {
+            document.getElementById('victory-modal').classList.add('hidden');
+            showPage('home');
+        }
+
+        function playAgain() {
+            document.getElementById('victory-modal').classList.add('hidden');
+            resetGame();
+        }
+
+        function shareResult() {
+            const score = document.getElementById('final-score').textContent;
+            const text = `🏆 I scored ${score} in MemoryVerse Neon Disco! Can you beat me? 🧠✨`;
+            
+            if (navigator.share) {
+                navigator.share({ title: 'MemoryVerse Victory!', text: text, url: window.location.href });
+            } else {
+                navigator.clipboard.writeText(text + ' ' + window.location.href);
+                showToast('📋 Copied to clipboard!');
+            }
+        }
+
+        const topPlayers = [
+            { name: "Sarah K.", score: 3120, avatar: "S", color: "bg-pink-500 text-white" },
+            { name: "Alex M.", score: 2450, avatar: "A", color: "bg-cyan-500 text-black" },
+            { name: "Mike R.", score: 2180, avatar: "M", color: "bg-purple-500 text-white" },
+            { name: "Emma W.", score: 1950, avatar: "E", color: "bg-black border border-pink-500 text-pink-400" },
+            { name: "Chris P.", score: 1840, avatar: "C", color: "bg-black border border-cyan-500 text-cyan-400" },
+            { name: "You", score: 0, avatar: "Y", color: "bg-gradient-to-r from-pink-500 to-cyan-500 text-white", isYou: true }
+        ];
+
+        function renderLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            
+            list.innerHTML = topPlayers.map((player, i) => `
+                <div class="grid grid-cols-12 gap-4 p-4 items-center hover:bg-pink-500/10 transition-all cursor-pointer ${player.isYou ? 'bg-pink-500/20 border-l-4 border-pink-500' : ''}" 
+                     style="animation: slideIn 0.3s ease ${i * 0.1}s both">
+                    <div class="col-span-1 text-center font-bold ${i < 3 ? 'text-yellow-400' : 'text-pink-400'} text-lg">${i + 1}</div>
+                    <div class="col-span-7 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full ${player.color} flex items-center justify-center font-bold text-lg neon-pulse">${player.avatar}</div>
+                        <span class="font-semibold ${player.isYou ? 'text-cyan-400' : 'text-white'}">${player.name} ${player.isYou ? '(You)' : ''}</span>
+                    </div>
+                    <div class="col-span-3 text-center font-bold ${player.isYou ? 'text-pink-400' : 'text-cyan-400'} text-lg">${player.score.toLocaleString()}</div>
+                    <div class="col-span-1 text-center"><i class="fas fa-chevron-right text-pink-400"></i></div>
+                </div>
+            `).join('');
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast px-6 py-4 rounded-xl flex items-center gap-3 text-lg font-medium';
+            toast.innerHTML = message;
+            container.appendChild(toast);
+            
+            if (gameState.soundEnabled && synth) {
+                synth.triggerAttackRelease("A5", "32n");
+            }
+            
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        setInterval(() => {
+            const online = document.getElementById('online-count');
+            const games = document.getElementById('games-today');
+            
+            if (online && games) {
+                online.textContent = (2800 + Math.floor(Math.random() * 200)).toLocaleString();
+                if (Math.random() > 0.7) {
+                    games.textContent = (12400 + Math.floor(Math.random() * 100)).toLocaleString();
+                }
+            }
+        }, 5000);
+
+        renderLeaderboard();
+        
+        document.addEventListener('click', async function initOnFirstClick() {
+            if (!audioInitialized) {
+                await initAudio();
+            }
+            document.removeEventListener('click', initOnFirstClick);
+        }, { once: true });
+    </script>
+</body>
+</html>
