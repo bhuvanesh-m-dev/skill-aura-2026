@@ -1,0 +1,1546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Snake Adventure - Dual Mode</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Russo+One&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #90EE90;
+            font-family: 'Orbitron', sans-serif;
+            overflow: hidden;
+        }
+
+        .game-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .mode-display {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 10px 30px;
+            border-radius: 25px;
+            border: 3px solid;
+            font-family: 'Russo One', sans-serif;
+            font-size: 18px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            animation: modeGlow 2s ease-in-out infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes modeGlow {
+            0%, 100% { box-shadow: 0 0 20px currentColor; text-shadow: 0 0 20px currentColor; }
+            50% { box-shadow: 0 0 40px currentColor; text-shadow: 0 0 40px currentColor; }
+        }
+
+        .mode-display.food-mode {
+            color: #00ff88;
+            border-color: #00ff88;
+        }
+
+        .mode-display.word-mode {
+            color: #ff00ff;
+            border-color: #ff00ff;
+        }
+
+        .switch-btn {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 20px;
+            font-size: 12px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            border: 2px solid;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: transparent;
+            z-index: 30;
+        }
+
+        .switch-btn.food-switch {
+            color: #ff00ff;
+            border-color: #ff00ff;
+        }
+
+        .switch-btn.food-switch:hover {
+            background: #ff00ff;
+            color: #fff;
+            box-shadow: 0 0 20px #ff00ff;
+        }
+
+        .switch-btn.word-switch {
+            color: #00ff88;
+            border-color: #00ff88;
+        }
+
+        .switch-btn.word-switch:hover {
+            background: #00ff88;
+            color: #000;
+            box-shadow: 0 0 20px #00ff88;
+        }
+
+        .hud {
+            display: flex;
+            gap: 15px;
+            color: #fff;
+            font-size: 14px;
+            text-shadow: 0 0 10px currentColor;
+            z-index: 10;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hud-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 8px;
+            border: 2px solid;
+        }
+
+        .lives { color: #ff3366; border-color: #ff3366; }
+        .score { color: #33ff99; border-color: #33ff99; }
+        .level { color: #ffcc00; border-color: #ffcc00; }
+        .time { color: #33ccff; border-color: #33ccff; }
+
+        .canvas-wrapper {
+            position: relative;
+            border: 4px solid;
+            border-radius: 10px;
+            box-shadow: 0 0 30px currentColor;
+            transition: all 0.5s ease;
+        }
+
+        canvas {
+            display: block;
+            background: #000;
+            border-radius: 6px;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95);
+            color: #fff;
+            border-radius: 6px;
+            z-index: 100;
+            padding: 20px;
+        }
+
+        .hidden { display: none !important; }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            text-align: center;
+            background: linear-gradient(45deg, #ff0066, #ffcc00, #33ff99, #33ccff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s ease infinite;
+            filter: drop-shadow(0 0 20px rgba(255, 0, 102, 0.5));
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .btn {
+            padding: 12px 30px;
+            font-size: 16px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 8px;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-food {
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            color: #000;
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.4);
+        }
+
+        .btn-word {
+            background: linear-gradient(45deg, #ff00ff, #cc00cc);
+            color: #fff;
+            box-shadow: 0 5px 20px rgba(255, 0, 255, 0.4);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .stage-indicator {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .stage-dot {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #fff;
+            transition: all 0.3s;
+        }
+
+        .stage-dot.active {
+            background: #33ff99;
+            box-shadow: 0 0 15px #33ff99;
+            animation: pulse 1s infinite;
+        }
+
+        .stage-dot.completed {
+            background: #ffcc00;
+            border-color: #ffcc00;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+
+        .victory-lights {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .light {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: explode 1s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .damage-flash {
+            animation: damage 0.3s ease-in-out;
+        }
+
+        @keyframes damage {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(5); }
+        }
+
+        .timer-bar {
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #33ff99, #ffcc00, #ff3366);
+            border-radius: 3px;
+            transition: width 1s linear;
+        }
+
+        .warning {
+            animation: warningPulse 0.5s infinite;
+        }
+
+        @keyframes warningPulse {
+            0%, 100% { box-shadow: 0 0 20px #ff3366; border-color: #ff3366; }
+            50% { box-shadow: 0 0 40px #ff0000; border-color: #ff0000; }
+        }
+
+        .word-display {
+            position: absolute;
+            top: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            padding: 12px 25px;
+            border-radius: 15px;
+            border: 3px solid;
+            font-family: 'Russo One', sans-serif;
+            font-size: 22px;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            animation: wordGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes wordGlow {
+            0%, 100% { box-shadow: 0 0 20px currentColor; text-shadow: 0 0 20px currentColor; }
+            50% { box-shadow: 0 0 40px currentColor; text-shadow: 0 0 40px currentColor; }
+        }
+
+        .letter-collected {
+            text-shadow: 0 0 30px currentColor, 0 0 60px currentColor;
+            animation: letterBounce 0.5s ease;
+            display: inline-block;
+        }
+
+        .letter-pending {
+            opacity: 0.3;
+        }
+
+        .letter-current {
+            animation: letterPulse 1s infinite;
+        }
+
+        @keyframes letterBounce {
+            0%, 100% { transform: scale(1) translateY(0); }
+            50% { transform: scale(1.3) translateY(-10px); }
+        }
+
+        @keyframes letterPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .word-complete-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 200;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .completed-word-display {
+            font-family: 'Russo One', sans-serif;
+            font-size: 45px;
+            text-transform: uppercase;
+            letter-spacing: 15px;
+            margin-bottom: 20px;
+            animation: wordCompleteAnim 1s ease;
+        }
+
+        @keyframes wordCompleteAnim {
+            0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+            50% { transform: scale(1.2) rotate(10deg); }
+            70% { transform: scale(0.9) rotate(-5deg); }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+
+        .word-letters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .word-letter {
+            font-size: 60px;
+            animation: letterPop 0.5s ease backwards;
+            text-shadow: 0 0 30px currentColor;
+        }
+
+        @keyframes letterPop {
+            0% { transform: scale(0) translateY(50px); opacity: 0; }
+            60% { transform: scale(1.3) translateY(-20px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Updated Mode Selection Layout */
+        .mode-selection-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: stretch;
+            gap: 30px;
+            margin: 20px 0;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .mode-card {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 3px solid;
+            border-radius: 20px;
+            padding: 25px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            min-width: 280px;
+            max-width: 320px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .mode-card.food-card {
+            border-color: #00ff88;
+            color: #00ff88;
+        }
+
+        .mode-card.word-card {
+            border-color: #ff00ff;
+            color: #ff00ff;
+        }
+
+        .mode-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .mode-card:hover::before {
+            opacity: 1;
+        }
+
+        .mode-card:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+
+        .mode-card.food-card:hover {
+            box-shadow: 0 20px 40px rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.1);
+        }
+
+        .mode-card.word-card:hover {
+            box-shadow: 0 20px 40px rgba(255, 0, 255, 0.3);
+            background: rgba(255, 0, 255, 0.1);
+        }
+
+        .mode-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .mode-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-family: 'Russo One', sans-serif;
+        }
+
+        .mode-features {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+            text-align: left;
+            font-size: 13px;
+            color: #ccc;
+        }
+
+        .mode-features li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .mode-features li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: inherit;
+        }
+
+        .food-card .mode-features li::before {
+            color: #00ff88;
+        }
+
+        .word-card .mode-features li::before {
+            color: #ff00ff;
+        }
+
+        .instructions {
+            text-align: center;
+            color: #aaa;
+            margin: 15px;
+            line-height: 1.6;
+            max-width: 600px;
+            font-size: 14px;
+        }
+
+        .or-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .or-line {
+            width: 2px;
+            height: 40px;
+            background: linear-gradient(to bottom, transparent, #666, transparent);
+            margin: 10px 0;
+        }
+
+        @media (max-width: 768px) {
+            .mode-selection-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .or-divider {
+                flex-direction: row;
+                gap: 10px;
+            }
+            
+            .or-line {
+                width: 40px;
+                height: 2px;
+                background: linear-gradient(to right, transparent, #666, transparent);
+            }
+            
+            .switch-btn {
+                position: static;
+                transform: none;
+                margin-top: 10px;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <!-- Top Bar with Mode Display and Switch Button -->
+        <div class="top-bar hidden" id="topBar">
+            <div style="width: 100px;"></div> <!-- Spacer for balance -->
+            <div class="mode-display hidden" id="modeDisplay">FOOD MODE</div>
+            <button class="switch-btn hidden" id="switchModeBtn" onclick="switchMode()">Switch Mode</button>
+        </div>
+
+        <div class="hud">
+            <div class="hud-item lives">
+                <span>❤️ Lives:</span>
+                <span id="lives">3</span>
+            </div>
+            <div class="hud-item score">
+                <span>🎯 Score:</span>
+                <span id="score">0</span>
+            </div>
+            <div class="hud-item level">
+                <span>🏆 Level:</span>
+                <span id="level">1</span>
+            </div>
+            <div class="hud-item time">
+                <span>⏱️ Time:</span>
+                <span id="time">60</span>
+            </div>
+        </div>
+
+        <div class="stage-indicator" id="stageIndicator">
+            <div class="stage-dot active" data-stage="1"></div>
+            <div class="stage-dot" data-stage="2"></div>
+            <div class="stage-dot" data-stage="3"></div>
+        </div>
+
+        <div class="word-display hidden" id="wordDisplay">
+            WORD: <span id="targetWord"></span>
+        </div>
+
+        <div class="canvas-wrapper" id="gameWrapper">
+            <canvas id="gameCanvas" width="600" height="600"></canvas>
+            <div class="timer-bar" id="timerBar"></div>
+            
+            <!-- Word Complete Overlay -->
+            <div class="word-complete-overlay hidden" id="wordCompleteOverlay">
+                <div class="completed-word-display" id="completedWordDisplay"></div>
+                <div class="word-letters" id="wordLetters"></div>
+                <button class="btn btn-word" style="margin-top: 30px;" onclick="nextWord()">CONTINUE</button>
+            </div>
+            
+            <div class="overlay" id="startScreen">
+                <h1>🐍 SNAKE ADVENTURE 🐍</h1>
+                <p class="instructions">Choose your adventure mode. Each mode has 5 unique themed worlds!</p>
+                
+                <div class="mode-selection-container">
+                    <div class="mode-card food-card" onclick="selectAndStart('food')">
+                        <div>
+                            <div class="mode-icon">🍎🍕🍩</div>
+                            <div class="mode-title">FOOD MODE</div>
+                            <ul class="mode-features">
+                                <li>Journey through delicious realms</li>
+                                <li>Collect colorful foods & grow longer</li>
+                                <li>Snake changes color with each food</li>
+                                <li>5 Unique worlds with animated snakes</li>
+                                <li>Relaxed to Extreme speed progression</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="or-divider">
+                        <div class="or-line"></div>
+                        <span>OR</span>
+                        <div class="or-line"></div>
+                    </div>
+                    
+                    <div class="mode-card word-card" onclick="selectAndStart('word')">
+                        <div>
+                            <div class="mode-icon">🔤📚✨</div>
+                            <div class="mode-title">WORD MODE</div>
+                            <ul class="mode-features">
+                                <li>Alphabet adventure awaits</li>
+                                <li>Spell words to progress through realms</li>
+                                <li>Dynamic colors for each level</li>
+                                <li>Magical letter themes & animations</li>
+                                <li>Spectacular word celebrations!</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="overlay hidden" id="gameOverScreen">
+                <h1 style="color: #ff3366;">GAME OVER</h1>
+                <p style="font-size: 24px; margin: 20px;">Final Score: <span id="finalScore">0</span></p>
+                <p id="wordResult" style="font-size: 18px; color: #ffcc00; margin: 10px;"></p>
+                <button class="btn btn-food" onclick="restartGame()">TRY AGAIN</button>
+            </div>
+
+            <div class="overlay hidden" id="levelCompleteScreen">
+                <h1 style="color: #33ff99;">LEVEL COMPLETE!</h1>
+                <div class="victory-lights" id="victoryLights"></div>
+                <p style="font-size: 24px; margin: 20px;">Amazing job!</p>
+                <button class="btn btn-food" onclick="nextLevel()">NEXT LEVEL</button>
+            </div>
+
+            <div class="overlay hidden" id="victoryScreen">
+                <h1 style="color: #ffcc00;">🏆 CHAMPION! 🏆</h1>
+                <div class="victory-lights" id="finalVictoryLights"></div>
+                <p style="font-size: 24px; margin: 20px;">You've conquered all worlds!</p>
+                <button class="btn btn-food" onclick="restartGame()">PLAY AGAIN</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+
+        // Game State
+        let snake = [];
+        let food = {};
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let level = 1;
+        let stage = 1;
+        let lives = 3;
+        let timeLeft = 60;
+        let gameLoop = null;
+        let timerInterval = null;
+        let gameSpeed = 180;
+        let isGameRunning = false;
+        let lastFoodTime = Date.now();
+        let animationFrame = 0;
+        let gameMode = 'food';
+        
+        // Dynamic colors
+        let currentSnakeColor = '#00ff88';
+        let currentSnakeSecondary = '#00cc66';
+        let currentBorderColor = '#00ff88';
+        
+        // Word Mode Variables
+        let currentWord = '';
+        let collectedLetters = [];
+        let wordList = ['SNAKE', 'PYTHON', 'CODING', 'GAMER', 'DRAGON', 'MASTER', 'LEGEND', 'VICTORY'];
+        let currentWordIndex = 0;
+
+        // Food colors for snake color change
+        const foodColorPalette = [
+            '#ff0066', '#00ff88', '#ffcc00', '#00ccff', '#ff00ff', 
+            '#ffff00', '#ff6600', '#00ffcc', '#ff3366', '#66ff33'
+        ];
+
+        // Level border colors (changes per level)
+        const levelBorders = {
+            1: '#00ff88', // Green
+            2: '#ff8800', // Orange
+            3: '#00ccff', // Blue
+            4: '#ff0044', // Red
+            5: '#ff00ff'  // Purple
+        };
+
+        // Food Mode Themes
+        const foodThemes = {
+            1: { name: 'Neon Jungle', bg: '#0a1f0a', pattern: 'neon', foods: ['🍎', '🍇', '🍊', '🍓', '🥝', '🍌'] },
+            2: { name: 'Desert Storm', bg: '#2a1f0a', pattern: 'sand', foods: ['🌵', '🦂', '🌶️', '🍕', '🌮', '🥙'] },
+            3: { name: 'Arctic Ice', bg: '#0a1f2e', pattern: 'ice', foods: ['❄️', '🧊', '🐟', '🦐', '🦀', '🐙'] },
+            4: { name: 'Volcanic Rage', bg: '#2a0a0a', pattern: 'magma', foods: ['🔥', '💎', '🌋', '🥵', '🌶️', '🍖'] },
+            5: { name: 'Cosmic Void', bg: '#0f0a2e', pattern: 'cosmic', foods: ['🌟', '🌙', '🪐', '👽', '🚀', '🛸'] }
+        };
+
+        // Word Mode Themes with dynamic colors
+        const wordThemes = {
+            1: { name: 'Alphabet Forest', bg: '#0a2e1a', pattern: 'leafy', baseColor: '#66ff66' },
+            2: { name: 'Library Ancient', bg: '#2e1f0a', pattern: 'gold', baseColor: '#d4a574' },
+            3: { name: 'Crystal Caves', bg: '#1a0a2e', pattern: 'crystal', baseColor: '#e0b0ff' },
+            4: { name: 'Thunder Storm', bg: '#1a1a2e', pattern: 'electric', baseColor: '#ffff00' },
+            5: { name: 'Rainbow Realm', bg: '#2e0a2e', pattern: 'rainbow', baseColor: '#ff69b4' }
+        };
+
+        // Audio Context
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+
+        function playSound(type) {
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            if (type === 'eat') {
+                oscillator.frequency.setValueAtTime(600, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'die') {
+                oscillator.frequency.setValueAtTime(300, audioCtx.currentTime);
+                oscillator.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.3);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.3);
+            } else if (type === 'win') {
+                oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+                oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.4);
+            } else if (type === 'letter') {
+                oscillator.frequency.setValueAtTime(800, audioCtx.currentTime);
+                oscillator.frequency.setValueAtTime(1200, audioCtx.currentTime + 0.05);
+                gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                oscillator.start(audioCtx.currentTime);
+                oscillator.stop(audioCtx.currentTime + 0.1);
+            }
+        }
+
+        function selectAndStart(mode) {
+            gameMode = mode;
+            setupModeDisplay();
+            document.getElementById('startScreen').classList.add('hidden');
+            initGame();
+            startLevel();
+        }
+
+        function setupModeDisplay() {
+            const modeDisplay = document.getElementById('modeDisplay');
+            const switchBtn = document.getElementById('switchModeBtn');
+            const topBar = document.getElementById('topBar');
+            
+            topBar.classList.remove('hidden');
+            modeDisplay.classList.remove('hidden');
+            switchBtn.classList.remove('hidden');
+            
+            if (gameMode === 'food') {
+                modeDisplay.textContent = '🍎 FOOD MODE';
+                modeDisplay.className = 'mode-display food-mode';
+                switchBtn.textContent = 'Switch to Word';
+                switchBtn.className = 'switch-btn food-switch';
+            } else {
+                modeDisplay.textContent = '🔤 WORD MODE';
+                modeDisplay.className = 'mode-display word-mode';
+                switchBtn.textContent = 'Switch to Food';
+                switchBtn.className = 'switch-btn word-switch';
+            }
+        }
+
+        function switchMode() {
+            // Stop current game
+            isGameRunning = false;
+            clearInterval(gameLoop);
+            clearInterval(timerInterval);
+            
+            // Switch mode
+            gameMode = gameMode === 'food' ? 'word' : 'food';
+            
+            // Reset and start new game
+            setupModeDisplay();
+            initGame();
+            startLevel();
+        }
+
+        function getCurrentTheme() {
+            return gameMode === 'food' ? foodThemes[level] : wordThemes[level];
+        }
+
+        function calculateSpeed() {
+            if (level <= 2) return 180 - ((level - 1) * 20);
+            if (level === 3) return 140;
+            return Math.max(70, 140 - ((level - 3) * 25));
+        }
+
+        function updateDynamicColors() {
+            const theme = getCurrentTheme();
+            currentBorderColor = levelBorders[level];
+            
+            if (gameMode === 'word') {
+                // Word mode: use level-based colors
+                currentSnakeColor = theme.baseColor;
+                currentSnakeSecondary = adjustBrightness(theme.baseColor, -30);
+            }
+            // Food mode: colors set when eating food
+        }
+
+        function adjustBrightness(color, percent) {
+            const num = parseInt(color.replace('#', ''), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return '#' + (0x1000000 + (R < 255 ? R < 1 ? 0 : R : 255) * 0x10000 +
+                (G < 255 ? G < 1 ? 0 : G : 255) * 0x100 +
+                (B < 255 ? B < 1 ? 0 : B : 255))
+                .toString(16).slice(1);
+        }
+
+        function initGame() {
+            snake = [
+                { x: 10, y: 10 },
+                { x: 9, y: 10 },
+                { x: 8, y: 10 }
+            ];
+            dx = 1;
+            dy = 0;
+            score = 0;
+            level = 1;
+            stage = 1;
+            lives = 3;
+            timeLeft = 60;
+            gameSpeed = calculateSpeed();
+            collectedLetters = [];
+            currentWordIndex = 0;
+            
+            // Reset colors
+            if (gameMode === 'food') {
+                currentSnakeColor = '#00ff88';
+                currentSnakeSecondary = '#00cc66';
+            }
+            updateDynamicColors();
+            
+            if (gameMode === 'word') {
+                currentWord = wordList[currentWordIndex];
+                document.getElementById('wordDisplay').classList.remove('hidden');
+                updateWordDisplay();
+            } else {
+                document.getElementById('wordDisplay').classList.add('hidden');
+            }
+            
+            updateHUD();
+            spawnFood();
+            applyTheme();
+        }
+
+        function applyTheme() {
+            const theme = getCurrentTheme();
+            canvas.style.background = theme.bg;
+            document.getElementById('gameWrapper').style.borderColor = currentBorderColor;
+            document.getElementById('gameWrapper').style.boxShadow = `0 0 30px ${currentBorderColor}`;
+            
+            if (gameMode === 'word') {
+                document.getElementById('wordDisplay').style.borderColor = currentSnakeColor;
+                document.getElementById('wordDisplay').style.color = currentSnakeColor;
+                document.getElementById('wordDisplay').style.textShadow = `0 0 20px ${currentSnakeColor}`;
+            }
+        }
+
+        function spawnFood() {
+            const theme = getCurrentTheme();
+            
+            if (gameMode === 'word') {
+                const nextLetter = currentWord[collectedLetters.length];
+                do {
+                    food = {
+                        x: Math.floor(Math.random() * (tileCount - 2)) + 1,
+                        y: Math.floor(Math.random() * (tileCount - 2)) + 1,
+                        letter: nextLetter,
+                        color: currentSnakeColor,
+                        isLetter: true,
+                        pulse: 0
+                    };
+                } while (isSnakeAt(food.x, food.y));
+            } else {
+                // Pick random color for food
+                const randomColor = foodColorPalette[Math.floor(Math.random() * foodColorPalette.length)];
+                do {
+                    food = {
+                        x: Math.floor(Math.random() * (tileCount - 2)) + 1,
+                        y: Math.floor(Math.random() * (tileCount - 2)) + 1,
+                        emoji: theme.foods[Math.floor(Math.random() * theme.foods.length)],
+                        color: randomColor,
+                        isLetter: false,
+                        pulse: 0
+                    };
+                } while (isSnakeAt(food.x, food.y));
+            }
+            
+            lastFoodTime = Date.now();
+        }
+
+        function isSnakeAt(x, y) {
+            return snake.some(segment => segment.x === x && segment.y === y);
+        }
+
+        function drawAnimatedSnake() {
+            const theme = getCurrentTheme();
+            animationFrame++;
+            
+            snake.forEach((segment, index) => {
+                const x = segment.x * gridSize;
+                const y = segment.y * gridSize;
+                const isHead = index === 0;
+                
+                let offsetX = 0, offsetY = 0, scale = 1, rotation = 0;
+                
+                switch(theme.pattern) {
+                    case 'neon':
+                    case 'leafy':
+                        scale = 1 + Math.sin((animationFrame + index * 5) * 0.1) * 0.05;
+                        break;
+                    case 'sand':
+                    case 'gold':
+                        offsetX = Math.sin((animationFrame + index * 3) * 0.15) * 2;
+                        break;
+                    case 'ice':
+                    case 'crystal':
+                        scale = 1 + Math.sin((animationFrame + index * 8) * 0.2) * 0.08;
+                        break;
+                    case 'magma':
+                    case 'electric':
+                        scale = 1 + Math.random() * 0.1;
+                        if (isHead) offsetY = Math.sin(animationFrame * 0.3) * 2;
+                        break;
+                    case 'cosmic':
+                    case 'rainbow':
+                        rotation = Math.sin((animationFrame + index * 10) * 0.05) * 0.1;
+                        break;
+                }
+                
+                ctx.save();
+                ctx.translate(x + gridSize/2 + offsetX, y + gridSize/2 + offsetY);
+                ctx.scale(scale, scale);
+                ctx.rotate(rotation);
+                
+                const segmentSize = gridSize - 2;
+                
+                // Use dynamic colors
+                const primaryColor = currentSnakeColor;
+                const secondaryColor = currentSnakeSecondary;
+                
+                if (theme.pattern === 'neon' || theme.pattern === 'leafy') {
+                    const grad = ctx.createRadialGradient(0, 0, 0, 0, 0, segmentSize/2);
+                    grad.addColorStop(0, '#ffffff');
+                    grad.addColorStop(0.3, primaryColor);
+                    grad.addColorStop(1, secondaryColor);
+                    ctx.fillStyle = grad;
+                    ctx.fillRect(-segmentSize/2, -segmentSize/2, segmentSize, segmentSize);
+                    
+                } else if (theme.pattern === 'sand' || theme.pattern === 'gold') {
+                    ctx.fillStyle = index % 2 === 0 ? primaryColor : secondaryColor;
+                    ctx.fillRect(-segmentSize/2, -segmentSize/2, segmentSize, segmentSize);
+                    ctx.strokeStyle = '#ffffff44';
+                    ctx.lineWidth = 1;
+                    ctx.strokeRect(-segmentSize/2 + 2, -segmentSize/2 + 2, segmentSize - 4, segmentSize - 4);
+                    
+                } else if (theme.pattern === 'ice' || theme.pattern === 'crystal') {
+                    const grad = ctx.createLinearGradient(-segmentSize/2, -segmentSize/2, segmentSize/2, segmentSize/2);
+                    grad.addColorStop(0, '#ffffff');
+                    grad.addColorStop(0.5, primaryColor);
+                    grad.addColorStop(1, secondaryColor);
+                    ctx.fillStyle = grad;
+                    ctx.beginPath();
+                    ctx.moveTo(0, -segmentSize/2);
+                    ctx.lineTo(segmentSize/2, 0);
+                    ctx.lineTo(0, segmentSize/2);
+                    ctx.lineTo(-segmentSize/2, 0);
+                    ctx.closePath();
+                    ctx.fill();
+                    
+                } else if (theme.pattern === 'magma' || theme.pattern === 'electric') {
+                    ctx.fillStyle = isHead ? '#ffffff' : primaryColor;
+                    ctx.fillRect(-segmentSize/2, -segmentSize/2, segmentSize, segmentSize);
+                    
+                    if (isHead || index < 3) {
+                        ctx.fillStyle = secondaryColor;
+                        ctx.globalAlpha = 0.6 + Math.sin(animationFrame * 0.5) * 0.4;
+                        ctx.fillRect(-segmentSize/2 - 2, -segmentSize/2 - 2, segmentSize + 4, segmentSize + 4);
+                        ctx.globalAlpha = 1;
+                    }
+                    
+                } else if (theme.pattern === 'cosmic' || theme.pattern === 'rainbow') {
+                    const hue = (animationFrame + index * 20) % 360;
+                    ctx.fillStyle = theme.pattern === 'rainbow' ? 
+                        `hsl(${hue}, 100%, 60%)` : primaryColor;
+                    ctx.beginPath();
+                    const spikes = 5;
+                    const outerRadius = segmentSize/2;
+                    const innerRadius = segmentSize/4;
+                    for (let i = 0; i < spikes * 2; i++) {
+                        const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                        const angle = (Math.PI * i) / spikes - Math.PI/2;
+                        ctx.lineTo(Math.cos(angle) * radius, Math.sin(angle) * radius);
+                    }
+                    ctx.closePath();
+                    ctx.fill();
+                }
+                
+                ctx.shadowColor = primaryColor;
+                ctx.shadowBlur = isHead ? 25 : 15 - (index * 0.5);
+                ctx.strokeStyle = primaryColor;
+                ctx.lineWidth = isHead ? 2 : 1;
+                ctx.strokeRect(-segmentSize/2, -segmentSize/2, segmentSize, segmentSize);
+                ctx.shadowBlur = 0;
+                
+                if (isHead) drawEyes(dx, dy);
+                
+                ctx.restore();
+            });
+        }
+
+        function drawEyes(directionX, directionY) {
+            ctx.fillStyle = '#000';
+            const eyeSize = 3;
+            const eyeSpacing = 4;
+            
+            let eye1X = -eyeSpacing, eye1Y = -4;
+            let eye2X = eyeSpacing, eye2Y = -4;
+            
+            if (directionX === 1) {
+                eye1X = 4; eye1Y = -eyeSpacing;
+                eye2X = 4; eye2Y = eyeSpacing;
+            } else if (directionX === -1) {
+                eye1X = -6; eye1Y = -eyeSpacing;
+                eye2X = -6; eye2Y = eyeSpacing;
+            } else if (directionY === -1) {
+                eye1X = -eyeSpacing; eye1Y = -6;
+                eye2X = eyeSpacing; eye2Y = -6;
+            } else if (directionY === 1) {
+                eye1X = -eyeSpacing; eye1Y = 4;
+                eye2X = eyeSpacing; eye2Y = 4;
+            }
+            
+            ctx.fillRect(eye1X, eye1Y, eyeSize, eyeSize);
+            ctx.fillRect(eye2X, eye2Y, eyeSize, eyeSize);
+            
+            ctx.fillStyle = '#fff';
+            ctx.fillRect(eye1X + 1, eye1Y + 1, 1, 1);
+            ctx.fillRect(eye2X + 1, eye2Y + 1, 1, 1);
+        }
+
+        function drawFood() {
+            const theme = getCurrentTheme();
+            const x = food.x * gridSize;
+            const y = food.y * gridSize;
+            const centerX = x + gridSize/2;
+            const centerY = y + gridSize/2;
+            
+            food.pulse += 0.1;
+            const pulseScale = 1 + Math.sin(food.pulse) * 0.15;
+            
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.scale(pulseScale, pulseScale);
+            
+            if (gameMode === 'word') {
+                ctx.fillStyle = '#ffffff';
+                ctx.font = 'bold 18px Russo One';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                ctx.shadowColor = currentSnakeColor;
+                ctx.shadowBlur = 20;
+                ctx.fillText(food.letter, 0, 0);
+                ctx.shadowBlur = 0;
+                
+                ctx.strokeStyle = currentSnakeColor;
+                ctx.lineWidth = 3;
+                const boxSize = gridSize - 4;
+                ctx.strokeRect(-boxSize/2, -boxSize/2, boxSize, boxSize);
+                
+                ctx.fillStyle = currentSnakeColor;
+                ctx.fillRect(-boxSize/2 - 2, -boxSize/2 - 2, 6, 6);
+                ctx.fillRect(boxSize/2 - 4, -boxSize/2 - 2, 6, 6);
+                ctx.fillRect(-boxSize/2 - 2, boxSize/2 - 4, 6, 6);
+                ctx.fillRect(boxSize/2 - 4, boxSize/2 - 4, 6, 6);
+                
+            } else {
+                ctx.font = '22px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                
+                ctx.shadowColor = food.color;
+                ctx.shadowBlur = 25;
+                ctx.fillText(food.emoji, 0, 0);
+                ctx.shadowBlur = 0;
+                
+                // Colored orbiting particles
+                for (let i = 0; i < 3; i++) {
+                    const angle = food.pulse + (i * (Math.PI * 2 / 3));
+                    const px = Math.cos(angle) * 18;
+                    const py = Math.sin(angle) * 18;
+                    ctx.fillStyle = food.color;
+                    ctx.globalAlpha = 0.6;
+                    ctx.beginPath();
+                    ctx.arc(px, py, 3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.globalAlpha = 1;
+            }
+            
+            ctx.restore();
+        }
+
+        function update() {
+            if (!isGameRunning) return;
+
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+            if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                loseLife();
+                return;
+            }
+
+            if (isSnakeAt(head.x, head.y)) {
+                loseLife();
+                return;
+            }
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                if (gameMode === 'word') {
+                    playSound('letter');
+                    collectedLetters.push(food.letter);
+                    score += 100;
+                    updateWordDisplay();
+                    
+                    if (collectedLetters.length === currentWord.length) {
+                        showWordComplete();
+                        return;
+                    }
+                } else {
+                    playSound('eat');
+                    score += 10 * level * stage;
+                    
+                    // Change snake color to match food color
+                    currentSnakeColor = food.color;
+                    currentSnakeSecondary = adjustBrightness(food.color, -40);
+                    
+                    if (score % (50 * level) === 0 && score > 0) {
+                        completeStage();
+                        return;
+                    }
+                }
+                
+                spawnFood();
+                updateHUD();
+            } else {
+                snake.pop();
+            }
+
+            if (Date.now() - lastFoodTime > 15000) {
+                loseLife();
+                lastFoodTime = Date.now();
+            }
+
+            draw();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid with current border color
+            ctx.strokeStyle = `${currentBorderColor}15`;
+            ctx.lineWidth = 1;
+            for (let i = 0; i < tileCount; i += 2) {
+                ctx.beginPath();
+                ctx.moveTo(i * gridSize, 0);
+                ctx.lineTo(i * gridSize, canvas.height);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i * gridSize);
+                ctx.lineTo(canvas.width, i * gridSize);
+                ctx.stroke();
+            }
+
+            // Draw border with level color
+            ctx.strokeStyle = currentBorderColor;
+            ctx.lineWidth = 4;
+            ctx.strokeRect(0, 0, canvas.width, canvas.height);
+
+            drawAnimatedSnake();
+            drawFood();
+        }
+
+        function updateWordDisplay() {
+            const display = document.getElementById('targetWord');
+            let html = '';
+            
+            for (let i = 0; i < currentWord.length; i++) {
+                if (i < collectedLetters.length) {
+                    html += `<span class="letter-collected" style="color: ${currentSnakeColor}">${currentWord[i]}</span>`;
+                } else if (i === collectedLetters.length) {
+                    html += `<span class="letter-current" style="color: ${currentSnakeColor}">${currentWord[i]}</span>`;
+                } else {
+                    html += `<span class="letter-pending">${currentWord[i]}</span>`;
+                }
+            }
+            display.innerHTML = html;
+        }
+
+        function showWordComplete() {
+            playSound('win');
+            isGameRunning = false;
+            clearInterval(gameLoop);
+            clearInterval(timerInterval);
+            
+            const overlay = document.getElementById('wordCompleteOverlay');
+            const display = document.getElementById('completedWordDisplay');
+            const lettersContainer = document.getElementById('wordLetters');
+            
+            display.style.color = currentSnakeColor;
+            display.style.textShadow = `0 0 40px ${currentSnakeColor}`;
+            
+            lettersContainer.innerHTML = '';
+            for (let i = 0; i < currentWord.length; i++) {
+                const letterSpan = document.createElement('span');
+                letterSpan.className = 'word-letter';
+                letterSpan.textContent = currentWord[i];
+                letterSpan.style.color = i % 2 === 0 ? currentSnakeColor : currentSnakeSecondary;
+                letterSpan.style.textShadow = `0 0 30px ${currentSnakeColor}`;
+                letterSpan.style.animationDelay = `${i * 0.1}s`;
+                lettersContainer.appendChild(letterSpan);
+            }
+            
+            display.textContent = currentWord;
+            overlay.classList.remove('hidden');
+            
+            createVictoryLights('wordCompleteOverlay');
+        }
+
+        function createVictoryLights(containerId) {
+            const container = document.getElementById(containerId);
+            const colors = [currentSnakeColor, currentSnakeSecondary, '#ffcc00', '#ffffff'];
+            
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const light = document.createElement('div');
+                    light.className = 'light';
+                    light.style.left = '50%';
+                    light.style.top = '50%';
+                    light.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    const angle = (Math.random() * Math.PI * 2);
+                    const distance = 100 + Math.random() * 300;
+                    light.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                    light.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                    container.appendChild(light);
+                    setTimeout(() => light.remove(), 1000);
+                }, i * 15);
+            }
+        }
+
+        function nextWord() {
+            currentWordIndex++;
+            
+            if (currentWordIndex >= wordList.length) {
+                document.getElementById('wordCompleteOverlay').classList.add('hidden');
+                levelComplete();
+            } else {
+                currentWord = wordList[currentWordIndex];
+                collectedLetters = [];
+                timeLeft += 45;
+                
+                document.getElementById('wordCompleteOverlay').classList.add('hidden');
+                updateWordDisplay();
+                spawnFood();
+                updateHUD();
+                
+                isGameRunning = true;
+                gameLoop = setInterval(update, gameSpeed);
+                startTimer();
+            }
+        }
+
+        function loseLife() {
+            playSound('die');
+            lives--;
+            updateHUD();
+            
+            document.getElementById('gameWrapper').classList.add('damage-flash');
+            setTimeout(() => document.getElementById('gameWrapper').classList.remove('damage-flash'), 300);
+
+            if (lives <= 0) {
+                gameOver();
+            } else {
+                snake = [
+                    { x: 10, y: 10 },
+                    { x: 9, y: 10 },
+                    { x: 8, y: 10 }
+                ];
+                dx = 1;
+                dy = 0;
+                spawnFood();
+                lastFoodTime = Date.now();
+            }
+        }
+
+        function completeStage() {
+            playSound('win');
+            
+            if (stage < 3) {
+                stage++;
+                timeLeft += 30;
+                updateStageIndicator();
+                spawnFood();
+                updateHUD();
+                
+                gameSpeed = calculateSpeed();
+                clearInterval(gameLoop);
+                gameLoop = setInterval(update, gameSpeed);
+            } else {
+                levelComplete();
+            }
+        }
+
+        function updateStageIndicator() {
+            const dots = document.querySelectorAll('.stage-dot');
+            dots.forEach((dot, index) => {
+                dot.classList.remove('active', 'completed');
+                if (index < stage - 1) dot.classList.add('completed');
+                else if (index === stage - 1) dot.classList.add('active');
+            });
+        }
+
+        function levelComplete() {
+            isGameRunning = false;
+            clearInterval(gameLoop);
+            clearInterval(timerInterval);
+            
+            if (level >= 5) {
+                document.getElementById('victoryScreen').classList.remove('hidden');
+                createVictoryLights('finalVictoryLights');
+            } else {
+                document.getElementById('levelCompleteScreen').classList.remove('hidden');
+                createVictoryLights('victoryLights');
+            }
+        }
+
+        function nextLevel() {
+            level++;
+            stage = 1;
+            lives = 3;
+            timeLeft = 60 + (level * 10);
+            
+            gameSpeed = calculateSpeed();
+            updateDynamicColors();
+            
+            document.getElementById('levelCompleteScreen').classList.add('hidden');
+            updateStageIndicator();
+            applyTheme();
+            
+            if (gameMode === 'word') {
+                currentWordIndex = Math.min(currentWordIndex, wordList.length - 1);
+                collectedLetters = [];
+                currentWord = wordList[currentWordIndex];
+                updateWordDisplay();
+            } else {
+                // Reset snake color for new level in food mode
+                currentSnakeColor = '#00ff88';
+                currentSnakeSecondary = '#00cc66';
+            }
+            
+            startLevel();
+        }
+
+        function gameOver() {
+            isGameRunning = false;
+            clearInterval(gameLoop);
+            clearInterval(timerInterval);
+            document.getElementById('finalScore').textContent = score;
+            
+            if (gameMode === 'word') {
+                const progress = collectedLetters.join('');
+                document.getElementById('wordResult').textContent = 
+                    progress ? `Word Progress: ${progress} → ${currentWord}` : 'Start collecting letters!';
+            }
+            
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+        }
+
+        function updateHUD() {
+            document.getElementById('lives').textContent = lives;
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+            document.getElementById('time').textContent = timeLeft;
+            
+            const timerBar = document.getElementById('timerBar');
+            const maxTime = 60 + (level * 10);
+            const percentage = (timeLeft / maxTime) * 100;
+            timerBar.style.width = percentage + '%';
+            
+            if (timeLeft < 10) {
+                timerBar.parentElement.classList.add('warning');
+            } else {
+                timerBar.parentElement.classList.remove('warning');
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateHUD();
+                if (timeLeft <= 0) {
+                    loseLife();
+                    timeLeft = 30;
+                }
+            }, 1000);
+        }
+
+        function startLevel() {
+            snake = [
+                { x: 10, y: 10 },
+                { x: 9, y: 10 },
+                { x: 8, y: 10 }
+            ];
+            dx = 1;
+            dy = 0;
+            spawnFood();
+            lastFoodTime = Date.now();
+            isGameRunning = true;
+            gameLoop = setInterval(update, gameSpeed);
+            startTimer();
+            draw();
+        }
+
+        function restartGame() {
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            document.getElementById('victoryScreen').classList.add('hidden');
+            document.getElementById('wordCompleteOverlay').classList.add('hidden');
+            
+            const modeDisplay = document.getElementById('modeDisplay');
+            const switchBtn = document.getElementById('switchModeBtn');
+            const topBar = document.getElementById('topBar');
+            
+            modeDisplay.classList.remove('hidden');
+            switchBtn.classList.remove('hidden');
+            topBar.classList.remove('hidden');
+            
+            initGame();
+            startLevel();
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (!isGameRunning) return;
+            
+            switch(e.key) {
+                case 'ArrowUp':
+                    if (dy === 0) { dx = 0; dy = -1; }
+                    break;
+                case 'ArrowDown':
+                    if (dy === 0) { dx = 0; dy = 1; }
+                    break;
+                case 'ArrowLeft':
+                    if (dx === 0) { dx = -1; dy = 0; }
+                    break;
+                case 'ArrowRight':
+                    if (dx === 0) { dx = 1; dy = 0; }
+                    break;
+            }
+        });
+
+        draw();
+    </script>
+    <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>

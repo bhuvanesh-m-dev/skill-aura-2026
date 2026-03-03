@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Serpent - Ultimate Snake Experience</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #050505;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: white;
+        }
+
+        #gameContainer {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #0a0a1a 0%, #000000 100%);
+        }
+
+        #gameCanvas {
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3), 0 0 100px rgba(255, 0, 255, 0.1);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+        }
+
+        .ui-overlay {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .score-board {
+            display: flex;
+            gap: 40px;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 20px currentColor;
+        }
+
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #00ffff;
+        }
+
+        .score-item span {
+            font-size: 14px;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .high-score {
+            color: #ff00ff;
+        }
+
+        .menu-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.5s;
+        }
+
+        .menu-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-size: 80px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 10px;
+            background: linear-gradient(45deg, #00ffff, #ff00ff, #ffff00, #00ffff);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientShift 3s ease infinite;
+            margin-bottom: 20px;
+            text-shadow: 0 0 50px rgba(0, 255, 255, 0.5);
+            filter: drop-shadow(0 0 20px rgba(255, 0, 255, 0.5));
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #888;
+            margin-bottom: 40px;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .btn {
+            padding: 20px 60px;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 2px solid #00ffff;
+            background: transparent;
+            color: #00ffff;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+            border-radius: 50px;
+        }
+
+        .btn:hover {
+            background: #00ffff;
+            color: #000;
+            box-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff;
+            transform: scale(1.05);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .controls-hint {
+            margin-top: 40px;
+            color: #666;
+            font-size: 16px;
+            letter-spacing: 2px;
+        }
+
+        .controls-hint span {
+            display: inline-block;
+            padding: 5px 15px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            margin: 0 5px;
+            color: #888;
+        }
+
+        .power-up-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .power-up-indicator.active {
+            opacity: 1;
+        }
+
+        .power-up-badge {
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            animation: pulse 1s infinite;
+        }
+
+        .speed-boost {
+            background: linear-gradient(45deg, #ff0066, #ff6600);
+            box-shadow: 0 0 20px #ff0066;
+        }
+
+        .ghost-mode {
+            background: linear-gradient(45deg, #6600ff, #0066ff);
+            box-shadow: 0 0 20px #6600ff;
+        }
+
+        .multiplier {
+            background: linear-gradient(45deg, #00ff66, #66ff00);
+            box-shadow: 0 0 20px #00ff66;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            border-radius: 50%;
+        }
+
+        .combo-text {
+            position: absolute;
+            font-size: 48px;
+            font-weight: bold;
+            color: #ffff00;
+            text-shadow: 0 0 20px #ffff00;
+            pointer-events: none;
+            animation: comboFloat 1s ease-out forwards;
+            z-index: 50;
+        }
+
+        @keyframes comboFloat {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 0;
+            }
+            20% {
+                transform: translateY(-20px) scale(1.2);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="ui-overlay">
+            <div class="score-board">
+                <div class="score-item">
+                    <span>Score</span>
+                    <div id="score">0</div>
+                </div>
+                <div class="score-item high-score">
+                    <span>High Score</span>
+                    <div id="highScore">0</div>
+                </div>
+                <div class="score-item">
+                    <span>Level</span>
+                    <div id="level">1</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="power-up-indicator" id="powerUpIndicator">
+            <div class="power-up-badge speed-boost" id="speedBadge">SPEED BOOST</div>
+            <div class="power-up-badge ghost-mode" id="ghostBadge">GHOST MODE</div>
+            <div class="power-up-badge multiplier" id="multiplierBadge">x2 SCORE</div>
+        </div>
+
+        <div class="menu-overlay" id="menuOverlay">
+            <h1>NEON SERPENT</h1>
+            <div class="subtitle">Hyper-Casual Arcade Experience</div>
+            <button class="btn" onclick="startGame()">Start Game</button>
+            <button class="btn" onclick="toggleSettings()" style="border-color: #ff00ff; color: #ff00ff;">Settings</button>
+            <div class="controls-hint">
+                Use <span>ARROW KEYS</span> or <span>WASD</span> to control • <span>SPACE</span> to pause
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Game configuration
+        const GRID_SIZE = 25;
+        const CELL_SIZE = 25;
+        let CANVAS_WIDTH = 800;
+        let CANVAS_HEIGHT = 600;
+        
+        // Set canvas size
+        function resizeCanvas() {
+            const maxWidth = window.innerWidth - 100;
+            const maxHeight = window.innerHeight - 150;
+            CANVAS_WIDTH = Math.floor(maxWidth / CELL_SIZE) * CELL_SIZE;
+            CANVAS_HEIGHT = Math.floor(maxHeight / CELL_SIZE) * CELL_SIZE;
+            canvas.width = CANVAS_WIDTH;
+            canvas.height = CANVAS_HEIGHT;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Game state
+        let snake = [];
+        let direction = { x: 1, y: 0 };
+        let nextDirection = { x: 1, y: 0 };
+        let food = [];
+        let particles = [];
+        let powerUps = [];
+        let score = 0;
+        let highScore = localStorage.getItem('snakeHighScore') || 0;
+        let level = 1;
+        let gameLoop = null;
+        let gameSpeed = 100;
+        let baseSpeed = 100;
+        let isPaused = false;
+        let isGameOver = false;
+        let combo = 0;
+        let comboTimer = null;
+        
+        // Power-up states
+        let activePowerUps = {
+            speedBoost: 0,
+            ghostMode: 0,
+            multiplier: 0
+        };
+
+        // Visual effects
+        let snakeGlow = 0;
+        let gridOffset = 0;
+        let foodPulse = 0;
+
+        // Initialize
+        document.getElementById('highScore').textContent = highScore;
+
+        function initGame() {
+            const startX = Math.floor(CANVAS_WIDTH / CELL_SIZE / 2);
+            const startY = Math.floor(CANVAS_HEIGHT / CELL_SIZE / 2);
+            
+            snake = [
+                { x: startX, y: startY },
+                { x: startX - 1, y: startY },
+                { x: startX - 2, y: startY }
+            ];
+            
+            direction = { x: 1, y: 0 };
+            nextDirection = { x: 1, y: 0 };
+            score = 0;
+            level = 1;
+            gameSpeed = baseSpeed;
+            combo = 0;
+            activePowerUps = { speedBoost: 0, ghostMode: 0, multiplier: 0 };
+            
+            food = [];
+            powerUps = [];
+            particles = [];
+            
+            spawnFood();
+            updateUI();
+        }
+
+        function startGame() {
+            document.getElementById('menuOverlay').classList.add('hidden');
+            initGame();
+            isGameOver = false;
+            isPaused = false;
+            gameLoop = setInterval(update, gameSpeed);
+            requestAnimationFrame(render);
+        }
+
+        function update() {
+            if (isPaused || isGameOver) return;
+
+            // Update power-up timers
+            Object.keys(activePowerUps).forEach(key => {
+                if (activePowerUps[key] > 0) {
+                    activePowerUps[key]--;
+                    if (activePowerUps[key] === 0) {
+                        updatePowerUpUI();
+                    }
+                }
+            });
+
+            // Move snake
+            direction = { ...nextDirection };
+            const head = { 
+                x: snake[0].x + direction.x, 
+                y: snake[0].y + direction.y 
+            };
+
+            // Ghost mode wall wrapping
+            if (activePowerUps.ghostMode > 0) {
+                if (head.x < 0) head.x = Math.floor(CANVAS_WIDTH / CELL_SIZE) - 1;
+                if (head.x >= Math.floor(CANVAS_WIDTH / CELL_SIZE)) head.x = 0;
+                if (head.y < 0) head.y = Math.floor(CANVAS_HEIGHT / CELL_SIZE) - 1;
+                if (head.y >= Math.floor(CANVAS_HEIGHT / CELL_SIZE)) head.y = 0;
+            } else {
+                // Check wall collision
+                if (head.x < 0 || head.x >= Math.floor(CANVAS_WIDTH / CELL_SIZE) ||
+                    head.y < 0 || head.y >= Math.floor(CANVAS_HEIGHT / CELL_SIZE)) {
+                    gameOver();
+                    return;
+                }
+            }
+
+            // Check self collision
+            if (activePowerUps.ghostMode === 0) {
+                for (let i = 0; i < snake.length; i++) {
+                    if (head.x === snake[i].x && head.y === snake[i].y) {
+                        gameOver();
+                        return;
+                    }
+                }
+            }
+
+            snake.unshift(head);
+
+            // Check food collision
+            let ate = false;
+            for (let i = food.length - 1; i >= 0; i--) {
+                if (head.x === food[i].x && head.y === food[i].y) {
+                    const points = food[i].type === 'golden' ? 50 : 
+                                  food[i].type === 'bonus' ? 20 : 10;
+                    const multiplier = activePowerUps.multiplier > 0 ? 2 : 1;
+                    const totalPoints = points * multiplier;
+                    
+                    score += totalPoints;
+                    
+                    // Combo system
+                    combo++;
+                    if (combo > 1) {
+                        const bonus = combo * 5;
+                        score += bonus;
+                        showComboText(head.x * CELL_SIZE, head.y * CELL_SIZE, `COMBO x${combo}! +${bonus}`);
+                    }
+                    
+                    clearTimeout(comboTimer);
+                    comboTimer = setTimeout(() => combo = 0, 2000);
+                    
+                    createExplosion(head.x * CELL_SIZE + CELL_SIZE/2, head.y * CELL_SIZE + CELL_SIZE/2, food[i].color);
+                    
+                    food.splice(i, 1);
+                    ate = true;
+                    
+                    // Level up every 50 points
+                    const newLevel = Math.floor(score / 50) + 1;
+                    if (newLevel > level) {
+                        level = newLevel;
+                        baseSpeed = Math.max(50, 100 - (level - 1) * 5);
+                        if (activePowerUps.speedBoost === 0) {
+                            gameSpeed = baseSpeed;
+                            clearInterval(gameLoop);
+                            gameLoop = setInterval(update, gameSpeed);
+                        }
+                    }
+                }
+            }
+
+            // Check power-up collision
+            for (let i = powerUps.length - 1; i >= 0; i--) {
+                if (head.x === powerUps[i].x && head.y === powerUps[i].y) {
+                    activatePowerUp(powerUps[i].type);
+                    createExplosion(head.x * CELL_SIZE + CELL_SIZE/2, head.y * CELL_SIZE + CELL_SIZE/2, '#ffffff');
+                    powerUps.splice(i, 1);
+                }
+            }
+
+            if (!ate) {
+                snake.pop();
+            } else {
+                if (food.length === 0) spawnFood();
+                if (Math.random() < 0.3) spawnFood(); // Chance for multiple food
+                if (Math.random() < 0.1) spawnPowerUp(); // 10% chance for power-up
+            }
+
+            // Random power-up spawn
+            if (powerUps.length === 0 && Math.random() < 0.005) {
+                spawnPowerUp();
+            }
+
+            updateUI();
+        }
+
+        function activatePowerUp(type) {
+            const duration = 300; // 5 seconds at 60fps
+            switch(type) {
+                case 'speed':
+                    activePowerUps.speedBoost = duration;
+                    gameSpeed = baseSpeed / 2;
+                    clearInterval(gameLoop);
+                    gameLoop = setInterval(update, gameSpeed);
+                    break;
+                case 'ghost':
+                    activePowerUps.ghostMode = duration;
+                    break;
+                case 'multiplier':
+                    activePowerUps.multiplier = duration;
+                    break;
+            }
+            updatePowerUpUI();
+        }
+
+        function updatePowerUpUI() {
+            const indicator = document.getElementById('powerUpIndicator');
+            const speedBadge = document.getElementById('speedBadge');
+            const ghostBadge = document.getElementById('ghostBadge');
+            const multiplierBadge = document.getElementById('multiplierBadge');
+            
+            const hasActive = Object.values(activePowerUps).some(v => v > 0);
+            indicator.classList.toggle('active', hasActive);
+            
+            speedBadge.style.display = activePowerUps.speedBoost > 0 ? 'block' : 'none';
+            ghostBadge.style.display = activePowerUps.ghostMode > 0 ? 'block' : 'none';
+            multiplierBadge.style.display = activePowerUps.multiplier > 0 ? 'block' : 'none';
+            
+            if (activePowerUps.speedBoost === 0 && gameSpeed !== baseSpeed) {
+                gameSpeed = baseSpeed;
+                clearInterval(gameLoop);
+                gameLoop = setInterval(update, gameSpeed);
+            }
+        }
+
+        function spawnFood() {
+            const types = [
+                { type: 'normal', color: '#00ff88', chance: 0.7 },
+                { type: 'bonus', color: '#ff6600', chance: 0.2 },
+                { type: 'golden', color: '#ffd700', chance: 0.1 }
+            ];
+            
+            const rand = Math.random();
+            let selected = types[0];
+            let cumulative = 0;
+            
+            for (const type of types) {
+                cumulative += type.chance;
+                if (rand <= cumulative) {
+                    selected = type;
+                    break;
+                }
+            }
+            
+            let pos;
+            do {
+                pos = {
+                    x: Math.floor(Math.random() * (CANVAS_WIDTH / CELL_SIZE)),
+                    y: Math.floor(Math.random() * (CANVAS_HEIGHT / CELL_SIZE)),
+                    type: selected.type,
+                    color: selected.color,
+                    pulse: Math.random() * Math.PI
+                };
+            } while (isOccupied(pos.x, pos.y));
+            
+            food.push(pos);
+        }
+
+        function spawnPowerUp() {
+            const types = ['speed', 'ghost', 'multiplier'];
+            const colors = { speed: '#ff0066', ghost: '#6600ff', multiplier: '#00ff66' };
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            let pos;
+            do {
+                pos = {
+                    x: Math.floor(Math.random() * (CANVAS_WIDTH / CELL_SIZE)),
+                    y: Math.floor(Math.random() * (CANVAS_HEIGHT / CELL_SIZE)),
+                    type: type,
+                    color: colors[type]
+                };
+            } while (isOccupied(pos.x, pos.y));
+            
+            powerUps.push(pos);
+        }
+
+        function isOccupied(x, y) {
+            return snake.some(s => s.x === x && s.y === y) ||
+                   food.some(f => f.x === x && f.y === y) ||
+                   powerUps.some(p => p.x === x && p.y === y);
+        }
+
+        function createExplosion(x, y, color) {
+            for (let i = 0; i < 20; i++) {
+                const angle = (Math.PI * 2 * i) / 20;
+                const speed = 2 + Math.random() * 4;
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    life: 1,
+                    color: color,
+                    size: 3 + Math.random() * 4
+                });
+            }
+        }
+
+        function showComboText(x, y, text) {
+            const el = document.createElement('div');
+            el.className = 'combo-text';
+            el.textContent = text;
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.getElementById('gameContainer').appendChild(el);
+            setTimeout(() => el.remove(), 1000);
+        }
+
+        function render() {
+            // Clear with trail effect
+            ctx.fillStyle = 'rgba(5, 5, 10, 0.3)';
+            ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            // Draw grid
+            gridOffset = (gridOffset + 0.5) % CELL_SIZE;
+            ctx.strokeStyle = 'rgba(0, 255, 255, 0.05)';
+            ctx.lineWidth = 1;
+            
+            for (let x = 0; x <= CANVAS_WIDTH; x += CELL_SIZE) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, CANVAS_HEIGHT);
+                ctx.stroke();
+            }
+            for (let y = 0; y <= CANVAS_HEIGHT; y += CELL_SIZE) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(CANVAS_WIDTH, y);
+                ctx.stroke();
+            }
+
+            // Draw food with glow
+            foodPulse += 0.05;
+            food.forEach(f => {
+                const pulse = Math.sin(foodPulse + f.pulse) * 0.3 + 0.7;
+                const x = f.x * CELL_SIZE + CELL_SIZE/2;
+                const y = f.y * CELL_SIZE + CELL_SIZE/2;
+                
+                // Glow
+                const gradient = ctx.createRadialGradient(x, y, 0, x, y, CELL_SIZE * pulse);
+                gradient.addColorStop(0, f.color);
+                gradient.addColorStop(0.5, f.color + '80');
+                gradient.addColorStop(1, 'transparent');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(f.x * CELL_SIZE - CELL_SIZE/2, f.y * CELL_SIZE - CELL_SIZE/2, CELL_SIZE * 2, CELL_SIZE * 2);
+                
+                // Core
+                ctx.fillStyle = f.color;
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = f.color;
+                ctx.fillRect(f.x * CELL_SIZE + 4, f.y * CELL_SIZE + 4, CELL_SIZE - 8, CELL_SIZE - 8);
+                ctx.shadowBlur = 0;
+            });
+
+            // Draw power-ups
+            powerUps.forEach(p => {
+                const x = p.x * CELL_SIZE + CELL_SIZE/2;
+                const y = p.y * CELL_SIZE + CELL_SIZE/2;
+                const time = Date.now() / 200;
+                
+                // Rotating effect
+                ctx.save();
+                ctx.translate(x, y);
+                ctx.rotate(time);
+                
+                ctx.fillStyle = p.color;
+                ctx.shadowBlur = 30;
+                ctx.shadowColor = p.color;
+                
+                // Diamond shape
+                ctx.beginPath();
+                ctx.moveTo(0, -10);
+                ctx.lineTo(10, 0);
+                ctx.lineTo(0, 10);
+                ctx.lineTo(-10, 0);
+                ctx.closePath();
+                ctx.fill();
+                
+                ctx.restore();
+                ctx.shadowBlur = 0;
+            });
+
+            // Draw snake with neon effect
+            snakeGlow = (snakeGlow + 0.1) % (Math.PI * 2);
+            const glowIntensity = Math.sin(snakeGlow) * 10 + 20;
+            
+            snake.forEach((segment, index) => {
+                const x = segment.x * CELL_SIZE;
+                const y = segment.y * CELL_SIZE;
+                const isHead = index === 0;
+                
+                // Ghost mode transparency
+                const alpha = activePowerUps.ghostMode > 0 ? 0.5 : 1;
+                
+                if (isHead) {
+                    // Head glow
+                    const gradient = ctx.createRadialGradient(
+                        x + CELL_SIZE/2, y + CELL_SIZE/2, 0,
+                        x + CELL_SIZE/2, y + CELL_SIZE/2, CELL_SIZE * 1.5
+                    );
+                    const headColor = activePowerUps.ghostMode > 0 ? '#6600ff' : '#00ffff';
+                    gradient.addColorStop(0, headColor + '80');
+                    gradient.addColorStop(1, 'transparent');
+                    ctx.fillStyle = gradient;
+                    ctx.fillRect(x - CELL_SIZE/2, y - CELL_SIZE/2, CELL_SIZE * 2, CELL_SIZE * 2);
+                }
+                
+                // Segment body
+                const hue = (index * 5) % 360;
+                const color = isHead ? 
+                    (activePowerUps.ghostMode > 0 ? '#6600ff' : '#00ffff') : 
+                    `hsl(${hue}, 100%, 50%)`;
+                
+                ctx.fillStyle = color;
+                ctx.globalAlpha = alpha;
+                ctx.shadowBlur = isHead ? glowIntensity : 10;
+                ctx.shadowColor = color;
+                
+                const size = isHead ? CELL_SIZE - 2 : CELL_SIZE - 4;
+                const offset = isHead ? 1 : 2;
+                ctx.fillRect(x + offset, y + offset, size, size);
+                
+                // Eyes for head
+                if (isHead) {
+                    ctx.fillStyle = '#000';
+                    ctx.shadowBlur = 0;
+                    const eyeSize = 3;
+                    const eyeOffset = 6;
+                    
+                    if (direction.x === 1) { // Right
+                        ctx.fillRect(x + 15, y + 6, eyeSize, eyeSize);
+                        ctx.fillRect(x + 15, y + 16, eyeSize, eyeSize);
+                    } else if (direction.x === -1) { // Left
+                        ctx.fillRect(x + 6, y + 6, eyeSize, eyeSize);
+                        ctx.fillRect(x + 6, y + 16, eyeSize, eyeSize);
+                    } else if (direction.y === -1) { // Up
+                        ctx.fillRect(x + 6, y + 6, eyeSize, eyeSize);
+                        ctx.fillRect(x + 16, y + 6, eyeSize, eyeSize);
+                    } else { // Down
+                        ctx.fillRect(x + 6, y + 16, eyeSize, eyeSize);
+                        ctx.fillRect(x + 16, y + 16, eyeSize, eyeSize);
+                    }
+                }
+                
+                ctx.globalAlpha = 1;
+                ctx.shadowBlur = 0;
+            });
+
+            // Update and draw particles
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= 0.02;
+                p.vx *= 0.98;
+                p.vy *= 0.98;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+                
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+
+            requestAnimationFrame(render);
+        }
+
+        function updateUI() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('level').textContent = level;
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(gameLoop);
+            
+            if (score > highScore) {
+                highScore = score;
+                localStorage.setItem('snakeHighScore', highScore);
+                document.getElementById('highScore').textContent = highScore;
+            }
+            
+            // Create explosion at head
+            const head = snake[0];
+            createExplosion(head.x * CELL_SIZE + CELL_SIZE/2, head.y * CELL_SIZE + CELL_SIZE/2, '#ff0000');
+            
+            setTimeout(() => {
+                document.getElementById('menuOverlay').classList.remove('hidden');
+                document.querySelector('.subtitle').textContent = `Game Over! Final Score: ${score}`;
+            }, 1000);
+        }
+
+        function toggleSettings() {
+            alert('Settings: Use arrow keys or WASD to move. Space to pause. Collect power-ups for special abilities!');
+        }
+
+        // Input handling
+        document.addEventListener('keydown', (e) => {
+            if (isGameOver) return;
+            
+            switch(e.key) {
+                case 'ArrowUp':
+                case 'w':
+                case 'W':
+                    if (direction.y === 0) nextDirection = { x: 0, y: -1 };
+                    break;
+                case 'ArrowDown':
+                case 's':
+                case 'S':
+                    if (direction.y === 0) nextDirection = { x: 0, y: 1 };
+                    break;
+                case 'ArrowLeft':
+                case 'a':
+                case 'A':
+                    if (direction.x === 0) nextDirection = { x: -1, y: 0 };
+                    break;
+                case 'ArrowRight':
+                case 'd':
+                case 'D':
+                    if (direction.x === 0) nextDirection = { x: 1, y: 0 };
+                    break;
+                case ' ':
+                    isPaused = !isPaused;
+                    break;
+            }
+        });
+
+        // Touch controls for mobile
+        let touchStartX = 0;
+        let touchStartY = 0;
+        
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+        
+        canvas.addEventListener('touchend', (e) => {
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const dx = touchEndX - touchStartX;
+            const dy = touchEndY - touchStartY;
+            
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0 && direction.x === 0) nextDirection = { x: 1, y: 0 };
+                else if (dx < 0 && direction.x === 0) nextDirection = { x: -1, y: 0 };
+            } else {
+                if (dy > 0 && direction.y === 0) nextDirection = { x: 0, y: 1 };
+                else if (dy < 0 && direction.y === 0) nextDirection = { x: 0, y: -1 };
+            }
+        });
+    </script>
+    <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>

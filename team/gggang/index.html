@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a1628">
+    <title>SkyPort Terminal | Airport Arcade</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --terminal-bg: #0a1628;
+            --terminal-dark: #070d18;
+            --terminal-light: #1a2d4a;
+            --sky-blue: #4a9eff;
+            --sky-light: #7ec8ff;
+            --accent-orange: #ff6b35;
+            --accent-gold: #ffc107;
+            --accent-green: #00c853;
+            --text-primary: #ffffff;
+            --text-secondary: #8b9bb4;
+            --glass: rgba(26, 45, 74, 0.6);
+            --glass-border: rgba(74, 158, 255, 0.2);
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: var(--terminal-bg);
+            color: var(--text-primary);
+        }
+
+        /* Loading Screen */
+        #loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--terminal-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .radar {
+            width: 120px;
+            height: 120px;
+            border: 3px solid var(--glass-border);
+            border-radius: 50%;
+            position: relative;
+            animation: radar-pulse 2s infinite;
+        }
+
+        @keyframes radar-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(74, 158, 255, 0.4); }
+            50% { box-shadow: 0 0 0 30px rgba(74, 158, 255, 0); }
+        }
+
+        .radar-sweep {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 50%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--sky-blue));
+            transform-origin: left;
+            animation: sweep 2s linear infinite;
+        }
+
+        @keyframes sweep {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            margin-top: 30px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--sky-blue);
+            letter-spacing: 2px;
+        }
+
+        .loader-dots::after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* Main App */
+        #app {
+            height: 100%;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header - Airport Status Board Style */
+        .app-header {
+            background: linear-gradient(180deg, var(--terminal-dark), var(--terminal-bg));
+            border-bottom: 1px solid var(--glass-border);
+            padding: 16px 24px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 56px;
+            height: 56px;
+            background: var(--glass);
+            border: 2px solid var(--sky-blue);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 0 20px rgba(74, 158, 255, 0.3);
+        }
+
+        .logo-ring {
+            position: absolute;
+            inset: -4px;
+            border: 2px solid transparent;
+            border-top-color: var(--sky-blue);
+            border-radius: 20px;
+            animation: spin 4s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .brand-text h1 {
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--text-primary), var(--sky-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-family: 'JetBrains Mono', monospace;
+            letter-spacing: 1px;
+        }
+
+        /* Flight Status Board */
+        .status-board {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .status-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 20px;
+            min-width: 140px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--sky-blue);
+        }
+
+        .status-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .status-value .code {
+            color: var(--accent-orange);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .status-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            background: var(--accent-green);
+            color: var(--terminal-dark);
+            font-weight: 700;
+        }
+
+        /* Header Controls */
+        .header-controls {
+            display: flex;
+            gap: 12px;
+        }
+
+        .control-btn {
+            width: 44px;
+            height: 44px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .control-btn:hover {
+            background: var(--sky-blue);
+            border-color: var(--sky-blue);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+        }
+
+        .control-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--terminal-dark);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 24px;
+            padding: 24px;
+            overflow: hidden;
+        }
+
+        /* Sidebar - Flight Gates */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .gate-section {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .gate-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .gate-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--sky-blue), var(--sky-light));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .gate-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .gate-subtitle {
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        /* Game Selector Cards */
+        .game-gates {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .gate-card {
+            background: var(--terminal-dark);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            padding: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gate-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--sky-blue), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .gate-card:hover::before {
+            opacity: 1;
+        }
+
+        .gate-card.active {
+            border-color: var(--sky-blue);
+            background: linear-gradient(135deg, rgba(74, 158, 255, 0.1), var(--terminal-dark));
+        }
+
+        .gate-card.active::before {
+            opacity: 1;
+            background: var(--sky-blue);
+        }
+
+        .gate-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .gate-number {
+            width: 48px;
+            height: 48px;
+            background: var(--glass);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--sky-blue);
+        }
+
+        .gate-card.active .gate-number {
+            background: var(--sky-blue);
+            color: var(--terminal-dark);
+        }
+
+        .gate-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .gate-details p {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .gate-status {
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 11px;
+            color: var(--text-secondary);
+        }
+
+        .gate-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-green);
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Stats Panel */
+        .stats-panel {
+            margin-top: auto;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .stat-row:last-child {
+            border-bottom: none;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .stat-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--accent-gold);
+        }
+
+        /* Game Area - Terminal Window */
+        .game-terminal {
+            background: var(--terminal-dark);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .terminal-header {
+            background: var(--glass);
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .terminal-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .terminal-dots {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .terminal-dot.red { background: #ff5f56; }
+        .terminal-dot.yellow { background: #ffbd2e; }
+        .terminal-dot.green { background: #27c93f; }
+
+        .terminal-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .terminal-btn {
+            padding: 6px 16px;
+            background: var(--terminal-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            font-size: 11px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .terminal-btn:hover {
+            border-color: var(--sky-blue);
+            color: var(--sky-blue);
+        }
+
+        /* Canvas Container */
+        .canvas-container {
+            flex: 1;
+            position: relative;
+            background: #000;
+        }
+
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* HUD Overlay */
+        .hud-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            pointer-events: none;
+            z-index: 50;
+        }
+
+        .hud-panel {
+            display: flex;
+            gap: 16px;
+        }
+
+        .hud-display {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .hud-icon {
+            width: 36px;
+            height: 36px;
+            background: var(--glass);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .hud-data {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hud-label {
+            font-size: 10px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hud-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .hud-value.gold {
+            color: var(--accent-gold);
+        }
+
+        /* Screens */
+        .game-screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: rgba(10, 22, 40, 0.95);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            transition: all 0.4s;
+            padding: 40px;
+        }
+
+        .game-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .screen-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--sky-blue), var(--sky-light));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 24px;
+            box-shadow: 0 20px 60px rgba(74, 158, 255, 0.3);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .screen-title {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+
+        .screen-subtitle {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            text-align: center;
+        }
+
+        /* Flight Info Card */
+        .flight-info-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .flight-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .flight-row:last-child {
+            border-bottom: none;
+        }
+
+        .flight-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .flight-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .flight-value.highlight {
+            color: var(--accent-orange);
+        }
+
+        /* Digital Score Board */
+        .score-board {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 32px;
+        }
+
+        .digit-box {
+            width: 60px;
+            height: 80px;
+            background: linear-gradient(180deg, #1a1a2e, #0a0a14);
+            border: 2px solid #333;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-shadow: 0 0 20px rgba(255, 193, 7, 0.5);
+            box-shadow: inset 0 4px 8px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .digit-box::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0,0,0,0.5);
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .btn {
+            padding: 16px 40px;
+            border-radius: 12px;
+            border: none;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--sky-blue), var(--sky-light));
+            color: var(--terminal-dark);
+            box-shadow: 0 8px 24px rgba(74, 158, 255, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(74, 158, 255, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--sky-blue);
+            color: var(--sky-blue);
+        }
+
+        /* Notifications */
+        .notification {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            background: linear-gradient(135deg, var(--accent-gold), #ff8f00);
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--terminal-dark);
+            opacity: 0;
+            transition: all 0.3s;
+            z-index: 60;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 8px 24px rgba(255, 193, 7, 0.3);
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Footer */
+        .app-footer {
+            background: var(--terminal-dark);
+            border-top: 1px solid var(--glass-border);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-link:hover {
+            color: var(--sky-blue);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr;
+            }
+
+            .sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+            }
+
+            .gate-section {
+                min-width: 300px;
+            }
+
+            .stats-panel {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .app-header {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+
+            .status-board {
+                order: 3;
+            }
+
+            .hud-overlay {
+                top: 10px;
+                left: 10px;
+                right: 10px;
+            }
+
+            .hud-display {
+                padding: 8px 12px;
+            }
+
+            .hud-value {
+                font-size: 18px;
+            }
+
+            .digit-box {
+                width: 48px;
+                height: 64px;
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loader">
+        <div class="radar">
+            <div class="radar-sweep"></div>
+        </div>
+        <div class="loader-text">INITIALIZING SKYPORT<span class="loader-dots"></span></div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="brand">
+                <div class="logo-container">
+                    <div class="logo-ring"></div>
+                    ✈️
+                </div>
+                <div class="brand-text">
+                    <h1>SkyPort Terminal</h1>
+                    <p>ARCADE EDITION v2.0</p>
+                </div>
+            </div>
+
+            <div class="status-board">
+                <div class="status-item">
+                    <div class="status-label">Flight Status</div>
+                    <div class="status-value">
+                        <span class="code">AA001</span>
+                        <span class="status-badge">ON TIME</span>
+                    </div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Gate</div>
+                    <div class="status-value">A12</div>
+                </div>
+                <div class="status-item">
+                    <div class="status-label">Terminal</div>
+                    <div class="status-value">T1 - Arcade</div>
+                </div>
+            </div>
+
+            <div class="header-controls">
+                <button class="control-btn" data-tooltip="Sound" onclick="toggleSound()" id="soundBtn">🔊</button>
+                <button class="control-btn" data-tooltip="Help" onclick="showHelp()">❓</button>
+                <button class="control-btn" data-tooltip="Fullscreen" onclick="toggleFullscreen()">⛶</button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="gate-section">
+                    <div class="gate-header">
+                        <div class="gate-icon">🎮</div>
+                        <div>
+                            <div class="gate-title">Select Gate</div>
+                            <div class="gate-subtitle">Choose your flight</div>
+                        </div>
+                    </div>
+
+                    <div class="game-gates">
+                        <div class="gate-card active" onclick="selectGame('flight')" id="gate-flight">
+                            <div class="gate-info">
+                                <div class="gate-number">A1</div>
+                                <div class="gate-details">
+                                    <h3>Flight Path</h3>
+                                    <p>Navigate the skies</p>
+                                </div>
+                            </div>
+                            <div class="gate-status">
+                                <div class="gate-status-dot"></div>
+                                <span>BOARDING NOW</span>
+                            </div>
+                        </div>
+
+                        <div class="gate-card" onclick="selectGame('cargo')" id="gate-cargo">
+                            <div class="gate-info">
+                                <div class="gate-number">B2</div>
+                                <div class="gate-details">
+                                    <h3>Cargo Run</h3>
+                                    <p>Deliver packages</p>
+                                </div>
+                            </div>
+                            <div class="gate-status">
+                                <div class="gate-status-dot"></div>
+                                <span>OPEN</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gate-section stats-panel">
+                    <div class="gate-header">
+                        <div class="gate-icon">📊</div>
+                        <div>
+                            <div class="gate-title">Statistics</div>
+                            <div class="gate-subtitle">Your performance</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-row">
+                        <div class="stat-label">
+                            <span>✈️</span>
+                            Flight Best
+                        </div>
+                        <div class="stat-value" id="stat-flight">000</div>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-label">
+                            <span>📦</span>
+                            Cargo Best
+                        </div>
+                        <div class="stat-value" id="stat-cargo">000</div>
+                    </div>
+                    <div class="stat-row">
+                        <div class="stat-label">
+                            <span>🎯</span>
+                            Total Flights
+                        </div>
+                        <div class="stat-value" id="stat-total">0</div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Game Terminal -->
+            <div class="game-terminal">
+                <div class="terminal-header">
+                    <div class="terminal-title">
+                        <div class="terminal-dots">
+                            <div class="terminal-dot red"></div>
+                            <div class="terminal-dot yellow"></div>
+                            <div class="terminal-dot green"></div>
+                        </div>
+                        <span id="terminalTitle">FLIGHT_SIMULATION.exe</span>
+                    </div>
+                    <div class="terminal-controls">
+                        <button class="terminal-btn" onclick="resetGame()">RESET</button>
+                        <button class="terminal-btn" onclick="pauseGame()" id="pauseBtn">PAUSE</button>
+                    </div>
+                </div>
+
+                <div class="canvas-container">
+                    <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+                    <!-- HUD -->
+                    <div class="hud-overlay" id="hud" style="display: none;">
+                        <div class="hud-panel">
+                            <div class="hud-display">
+                                <div class="hud-icon">🏆</div>
+                                <div class="hud-data">
+                                    <div class="hud-label">Score</div>
+                                    <div class="hud-value gold" id="hudScore">000</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hud-panel">
+                            <div class="hud-display">
+                                <div class="hud-icon">📊</div>
+                                <div class="hud-data">
+                                    <div class="hud-label">Level</div>
+                                    <div class="hud-value" id="hudLevel">1</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notification -->
+                    <div class="notification" id="notification">
+                        <span>⚡</span>
+                        <span>TURBO MODE ACTIVATED</span>
+                    </div>
+
+                    <!-- Start Screen -->
+                    <div class="game-screen" id="startScreen">
+                        <div class="screen-icon" id="startIcon">✈️</div>
+                        <h2 class="screen-title" id="startTitle">Ready for Departure?</h2>
+                        <p class="screen-subtitle" id="startSubtitle">Clearance granted for takeoff</p>
+
+                        <div class="flight-info-card">
+                            <div class="flight-row">
+                                <span class="flight-label">Flight Number</span>
+                                <span class="flight-value highlight" id="flightCode">AA001</span>
+                            </div>
+                            <div class="flight-row">
+                                <span class="flight-label">Destination</span>
+                                <span class="flight-value">High Score</span>
+                            </div>
+                            <div class="flight-row">
+                                <span class="flight-label">Gate</span>
+                                <span class="flight-value" id="gateCode">A1</span>
+                            </div>
+                        </div>
+
+                        <div class="score-board" id="scoreBoard">
+                            <div class="digit-box">0</div>
+                            <div class="digit-box">0</div>
+                            <div class="digit-box">0</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="startGame()">
+                                <span>🚀</span>
+                                INITIATE FLIGHT
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Game Over Screen -->
+                    <div class="game-screen hidden" id="overScreen">
+                        <div class="screen-icon" style="background: linear-gradient(135deg, #ff5f56, #ff8a65);">💥</div>
+                        <h2 class="screen-title">Flight Terminated</h2>
+                        <p class="screen-subtitle">Emergency protocols activated</p>
+
+                        <div class="flight-info-card">
+                            <div class="flight-row">
+                                <span class="flight-label">Final Score</span>
+                                <span class="flight-value highlight" id="finalScoreDisplay">000</span>
+                            </div>
+                            <div class="flight-row">
+                                <span class="flight-label">Flight Level</span>
+                                <span class="flight-value" id="finalLevel">1</span>
+                            </div>
+                            <div class="flight-row">
+                                <span class="flight-label">Personal Best</span>
+                                <span class="flight-value gold" id="finalBest">000</span>
+                            </div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <button class="btn btn-primary" onclick="restartGame()">
+                                <span>🔄</span>
+                                NEW FLIGHT
+                            </button>
+                            <button class="btn btn-secondary" onclick="backToMenu()">
+                                <span>🏠</span>
+                                TERMINAL
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="app-footer">
+            <div>© 2024 SkyPort Terminal. All systems operational.</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy</a>
+                <a href="#" class="footer-link">Terms</a>
+                <a href="#" class="footer-link">Support</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // ==========================================
+        // SKYPORT TERMINAL - Professional Airport App
+        // ==========================================
+        
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // State
+        let currentGame = 'flight';
+        let gameState = 'start';
+        let score = 0;
+        let level = 1;
+        let soundEnabled = true;
+        let stats = { flight: 0, cargo: 0, total: 0 };
+        
+        // Audio
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        const audioCtx = new AudioContext();
+        
+        // ==========================================
+        // AUDIO SYSTEM
+        // ==========================================
+        
+        function playTone(freq, duration, type = 'sine', vol = 0.3) {
+            if (!soundEnabled) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.type = type;
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+        
+        function playSound(type) {
+            switch(type) {
+                case 'jump': playTone(350, 0.15, 'sine', 0.25); break;
+                case 'score': playTone(880, 0.1, 'sine', 0.2); break;
+                case 'powerup': 
+                    [400, 600, 800].forEach((f, i) => setTimeout(() => playTone(f, 0.1), i * 50));
+                    break;
+                case 'crash':
+                    const bufferSize = audioCtx.sampleRate * 0.3;
+                    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) {
+                        data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (audioCtx.sampleRate * 0.1));
+                    }
+                    const noise = audioCtx.createBufferSource();
+                    noise.buffer = buffer;
+                    const g = audioCtx.createGain();
+                    g.gain.value = 0.4;
+                    noise.connect(g);
+                    g.connect(audioCtx.destination);
+                    noise.start();
+                    break;
+            }
+        }
+        
+        // ==========================================
+        // VISUAL EFFECTS
+        // ==========================================
+        
+        function showNotification(text, icon = '⚡') {
+            const el = document.getElementById('notification');
+            el.innerHTML = `<span>${icon}</span><span>${text}</span>`;
+            el.classList.add('show');
+            setTimeout(() => el.classList.remove('show'), 2000);
+        }
+        
+        function updateScoreboard(score) {
+            const digits = score.toString().padStart(3, '0').split('');
+            document.getElementById('scoreBoard').innerHTML = digits.map(d => 
+                `<div class="digit-box">${d}</div>`
+            ).join('');
+            document.getElementById('hudScore').textContent = score.toString().padStart(3, '0');
+        }
+        
+        // ==========================================
+        // GAME OBJECTS
+        // ==========================================
+        
+        // Background
+        const background = {
+            clouds: Array(6).fill(0).map(() => ({
+                x: Math.random() * 800,
+                y: 30 + Math.random() * 200,
+                size: 40 + Math.random() * 30,
+                speed: 0.2 + Math.random() * 0.3
+            })),
+            
+            drawFlight() {
+                // Sky gradient
+                const g = ctx.createLinearGradient(0, 0, 0, 600);
+                g.addColorStop(0, '#0a1628');
+                g.addColorStop(0.4, '#1a3a5c');
+                g.addColorStop(1, '#2d5a87');
+                ctx.fillStyle = g;
+                ctx.fillRect(0, 0, 800, 600);
+                
+                // Stars
+                ctx.fillStyle = '#fff';
+                for (let i = 0; i < 50; i++) {
+                    const x = (i * 137) % 800;
+                    const y = (i * 89) % 400;
+                    const s = (i % 3) + 1;
+                    ctx.globalAlpha = 0.3 + (i % 5) / 10;
+                    ctx.fillRect(x, y, s, s);
+                }
+                ctx.globalAlpha = 1;
+                
+                // Clouds
+                ctx.fillStyle = 'rgba(255,255,255,0.08)';
+                this.clouds.forEach(c => {
+                    if (gameState === 'play') c.x -= c.speed + 2;
+                    if (c.x < -100) c.x = 900;
+                    
+                    ctx.beginPath();
+                    ctx.arc(c.x, c.y, c.size, 0, Math.PI * 2);
+                    ctx.arc(c.x + c.size * 0.6, c.y - c.size * 0.2, c.size * 0.8, 0, Math.PI * 2);
+                    ctx.arc(c.x - c.size * 0.4, c.y - c.size * 0.1, c.size * 0.7, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                // City lights
+                ctx.fillStyle = '#1a2d4a';
+                for (let i = 0; i < 10; i++) {
+                    const x = i * 80 - (Date.now() / 50) % 80;
+                    const h = 50 + Math.sin(i * 3) * 40;
+                    ctx.fillRect(x < -80 ? x + 800 : x, 500 - h, 60, h + 100);
+                    
+                    // Windows
+                    ctx.fillStyle = `rgba(255, 193, 7, ${0.3 + Math.sin(Date.now()/1000 + i)*0.2})`;
+                    for (let wy = 520 - h; wy < 500; wy += 20) {
+                        if (Math.random() > 0.4) {
+                            ctx.fillRect((x < -80 ? x + 800 : x) + 10, wy, 8, 12);
+                            ctx.fillRect((x < -80 ? x + 800 : x) + 30, wy, 8, 12);
+                        }
+                    }
+                    ctx.fillStyle = '#1a2d4a';
+                }
+                
+                // Ground
+                const gg = ctx.createLinearGradient(0, 550, 0, 600);
+                gg.addColorStop(0, '#0d3328');
+                gg.addColorStop(1, '#1a5f3f');
+                ctx.fillStyle = gg;
+                ctx.fillRect(0, 550, 800, 50);
+            },
+            
+            drawCargo() {
+                // Tarmac night
+                ctx.fillStyle = '#0a1628';
+                ctx.fillRect(0, 0, 800, 600);
+                
+                // Runway lights
+                ctx.fillStyle = '#4a9eff';
+                for (let i = 0; i < 800; i += 100) {
+                    const x = i - (Date.now() / 30) % 100;
+                    ctx.globalAlpha = 0.5 + Math.sin(Date.now()/200 + i)*0.3;
+                    ctx.fillRect(x < 0 ? x + 800 : x, 100, 40, 4);
+                    ctx.fillRect(x < 0 ? x + 800 : x, 500, 40, 4);
+                }
+                ctx.globalAlpha = 1;
+                
+                // Grid
+                ctx.strokeStyle = 'rgba(74, 158, 255, 0.1)';
+                ctx.lineWidth = 1;
+                for (let i = 0; i < 800; i += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(i, 0);
+                    ctx.lineTo(i, 600);
+                    ctx.stroke();
+                }
+                for (let i = 0; i < 600; i += 40) {
+                    ctx.beginPath();
+                    ctx.moveTo(0, i);
+                    ctx.lineTo(800, i);
+                    ctx.stroke();
+                }
+            }
+        };
+        
+        // Airplane
+        const airplane = {
+            x: 120,
+            y: 250,
+            size: 45,
+            velocity: 0,
+            gravity: 0.5,
+            lift: -9,
+            turbo: false,
+            rotation: 0,
+            
+            update() {
+                this.velocity += this.gravity;
+                this.y += this.velocity;
+                this.rotation = Math.min(0.4, Math.max(-0.4, this.velocity * 0.06));
+                
+                if (this.y > 520) {
+                    this.y = 520;
+                    if (!this.turbo) gameOver();
+                }
+                if (this.y < 20) {
+                    this.y = 20;
+                    this.velocity = 0;
+                }
+            },
+            
+            draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
+                
+                // Turbo glow
+                if (this.turbo) {
+                    ctx.beginPath();
+                    ctx.arc(0, 0, 55, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 193, 7, ${0.2 + Math.sin(Date.now() / 80) * 0.15})`;
+                    ctx.fill();
+                }
+                
+                // Main body
+                ctx.fillStyle = '#ff6b35';
+                ctx.beginPath();
+                ctx.ellipse(0, 0, 28, 16, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Cockpit
+                ctx.fillStyle = '#4a9eff';
+                ctx.beginPath();
+                ctx.ellipse(12, -4, 12, 7, 0, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Wings
+                ctx.fillStyle = '#e55a2b';
+                ctx.beginPath();
+                ctx.moveTo(-8, 0);
+                ctx.lineTo(8, -28);
+                ctx.lineTo(18, -28);
+                ctx.lineTo(12, 0);
+                ctx.fill();
+                ctx.beginPath();
+                ctx.moveTo(-8, 0);
+                ctx.lineTo(8, 28);
+                ctx.lineTo(18, 28);
+                ctx.lineTo(12, 0);
+                ctx.fill();
+                
+                // Tail
+                ctx.fillStyle = '#c44536';
+                ctx.beginPath();
+                ctx.moveTo(-20, 0);
+                ctx.lineTo(-30, -15);
+                ctx.lineTo(-18, -15);
+                ctx.fill();
+                
+                // Engine glow
+                ctx.fillStyle = this.turbo ? '#ffc107' : '#ff8a65';
+                ctx.beginPath();
+                ctx.arc(-30, 0, 5, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Navigation lights (blinking)
+                const blink = Math.sin(Date.now() / 200) > 0;
+                ctx.fillStyle = blink ? '#ff0000' : '#800000';
+                ctx.beginPath();
+                ctx.arc(-20, -12, 3, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = blink ? '#00ff00' : '#008000';
+                ctx.beginPath();
+                ctx.arc(-20, 12, 3, 0, Math.PI * 2);
+                ctx.fill();
+                
+                ctx.restore();
+            },
+            
+            fly() {
+                this.velocity = this.lift;
+                playSound('jump');
+            },
+            
+            activateTurbo() {
+                this.turbo = true;
+                showNotification('TURBO BOOST ACTIVE');
+                playSound('powerup');
+                setTimeout(() => {
+                    this.turbo = false;
+                }, 5000);
+            },
+            
+            reset() {
+                this.y = 250;
+                this.velocity = 0;
+                this.turbo = false;
+            }
+        };
+        
+        // Flight obstacles
+        let flightObstacles = [];
+        
+        class Obstacle {
+            constructor() {
+                this.x = 850;
+                this.w = 70;
+                this.gap = 160;
+                this.topHeight = 80 + Math.random() * 250;
+                this.passed = false;
+                this.hasPowerup = Math.random() < 0.25;
+                this.powerupTaken = false;
+            }
+            
+            update() {
+                this.x -= (airplane.turbo ? 6 : 4) + level * 0.4;
+            }
+            
+            draw() {
+                // Building gradient
+                const g1 = ctx.createLinearGradient(this.x, 0, this.x + this.w, 0);
+                g1.addColorStop(0, '#1a2d4a');
+                g1.addColorStop(0.5, '#2d4a6f');
+                g1.addColorStop(1, '#1a2d4a');
+                ctx.fillStyle = g1;
+                ctx.fillRect(this.x, 0, this.w, this.topHeight);
+                
+                // Windows
+                ctx.fillStyle = `rgba(255, 193, 7, ${0.4 + Math.sin(Date.now()/500)*0.2})`;
+                for (let row = 30; row < this.topHeight - 20; row += 35) {
+                    for (let col = 10; col < this.w - 10; col += 20) {
+                        if ((row + col) % 47 > 15) {
+                            ctx.fillRect(this.x + col, row, 12, 18);
+                        }
+                    }
+                }
+                
+                // Bottom building
+                const bottomY = this.topHeight + this.gap;
+                const g2 = ctx.createLinearGradient(this.x, bottomY, this.x + this.w, 600);
+                g2.addColorStop(0, '#1a2d4a');
+                g2.addColorStop(0.5, '#2d4a6f');
+                g2.addColorStop(1, '#1a2d4a');
+                ctx.fillStyle = g2;
+                ctx.fillRect(this.x, bottomY, this.w, 600 - bottomY);
+                
+                // Powerup
+                if (this.hasPowerup && !this.powerupTaken) {
+                    const py = this.topHeight + this.gap / 2 + Math.sin(Date.now() / 180) * 12;
+                    
+                    // Glow ring
+                    ctx.strokeStyle = `rgba(255, 193, 7, ${0.5 + Math.sin(Date.now()/100)*0.3})`;
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.arc(this.x + this.w / 2, py, 22, 0, Math.PI * 2);
+                    ctx.stroke();
+                    
+                    // Bolt
+                    ctx.fillStyle = '#ffc107';
+                    ctx.beginPath();
+                    ctx.moveTo(this.x + this.w / 2 - 4, py - 12);
+                    ctx.lineTo(this.x + this.w / 2 + 6, py);
+                    ctx.lineTo(this.x + this.w / 2, py);
+                    ctx.lineTo(this.x + this.w / 2 + 4, py + 12);
+                    ctx.lineTo(this.x + this.w / 2 - 6, py);
+                    ctx.lineTo(this.x + this.w / 2, py);
+                    ctx.fill();
+                }
+            }
+            
+            checkCollision(plane) {
+                const p = { x: plane.x - 20, y: plane.y - 12, w: 40, h: 24 };
+                const top = { x: this.x, y: 0, w: this.w, h: this.topHeight };
+                const bottom = { x: this.x, y: this.topHeight + this.gap, w: this.w, h: 600 };
+                
+                return this.rectIntersect(p, top) || this.rectIntersect(p, bottom);
+            }
+            
+            checkPowerup(plane) {
+                if (!this.hasPowerup || this.powerupTaken) return false;
+                const px = plane.x, py = plane.y;
+                const cx = this.x + this.w / 2;
+                const cy = this.topHeight + this.gap / 2;
+                if (Math.hypot(px - cx, py - cy) < 35) {
+                    this.powerupTaken = true;
+                    return true;
+                }
+                return false;
+            }
+            
+            rectIntersect(r1, r2) {
+                return r1.x < r2.x + r2.w && r1.x + r1.w > r2.x &&
+                       r1.y < r2.y + r2.h && r1.y + r1.h > r2.y;
+            }
+        }
+        
+        // Cargo snake
+        const cargoSnake = {
+            body: [{ x: 400, y: 300 }],
+            dir: { x: 1, y: 0 },
+            nextDir: { x: 1, y: 0 },
+            size: 25,
+            speed: 100,
+            lastMove: 0,
+            turbo: false,
+            
+            update(now) {
+                if (now - this.lastMove < (this.turbo ? this.speed / 2 : this.speed)) return;
+                this.lastMove = now;
+                
+                this.dir = { ...this.nextDir };
+                const head = {
+                    x: this.body[0].x + this.dir.x * this.size,
+                    y: this.body[0].y + this.dir.y * this.size
+                };
+                
+                // Wrap
+                if (head.x < 0) head.x = 775;
+                if (head.x > 775) head.x = 0;
+                if (head.y < 0) head.y = 575;
+                if (head.y > 575) head.y = 0;
+                
+                this.body.unshift(head);
+                
+                // Eat package
+                const pkg = packages.find(p => Math.abs(p.x - head.x) < 15 && Math.abs(p.y - head.y) < 15);
+                if (pkg) {
+                    playSound('score');
+                    score += 10;
+                    updateScoreboard(score);
+                    packages = packages.filter(p => p !== pkg);
+                    spawnPackage();
+                    if (this.body.length % 5 === 0) spawnPackage();
+                } else {
+                    this.body.pop();
+                }
+                
+                // Self hit
+                for (let i = 1; i < this.body.length; i++) {
+                    if (head.x === this.body[i].x && head.y === this.body[i].y && !this.turbo) {
+                        gameOver();
+                    }
+                }
+            },
+            
+            draw() {
+                this.body.forEach((seg, i) => {
+                    const colors = ['#ff6b35', '#4caf50', '#2196f3', '#ffc107', '#9c27b0'];
+                    const c = i === 0 ? '#ff6b35' : colors[i % colors.length];
+                    
+                    // Package box
+                    ctx.fillStyle = c;
+                    ctx.fillRect(seg.x + 2, seg.y + 2, this.size - 4, this.size - 4);
+                    
+                    // Border
+                    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(seg.x + 5, seg.y + 5, this.size - 10, this.size - 10);
+                    
+                    // Label on head
+                    if (i === 0) {
+                        ctx.fillStyle = '#fff';
+                        ctx.font = 'bold 11px JetBrains Mono';
+                        ctx.fillText('AA', seg.x + 7, seg.y + 17);
+                    }
+                });
+            },
+            
+            setDir(x, y) {
+                if (this.dir.x !== -x || this.dir.y !== -y) {
+                    this.nextDir = { x, y };
+                }
+            },
+            
+            activateTurbo() {
+                this.turbo = true;
+                showNotification('SPEED BOOST ACTIVE');
+                playSound('powerup');
+                setTimeout(() => this.turbo = false, 5000);
+            },
+            
+            reset() {
+                this.body = [{ x: 400, y: 300 }];
+                this.dir = { x: 1, y: 0 };
+                this.nextDir = { x: 1, y: 0 };
+                this.turbo = false;
+            }
+        };
+        
+        let packages = [];
+        
+        function spawnPackage() {
+            let x, y;
+            do {
+                x = Math.floor(Math.random() * 32) * 25;
+                y = Math.floor(Math.random() * 24) * 25;
+            } while (cargoSnake.body.some(b => b.x === x && b.y === y));
+            packages.push({ x, y, color: Math.floor(Math.random() * 5) });
+        }
+        
+        function drawPackages() {
+            packages.forEach(p => {
+                const colors = ['#ff6b35', '#4caf50', '#2196f3', '#ffc107', '#9c27b0'];
+                ctx.shadowColor = colors[p.color];
+                ctx.shadowBlur = 20;
+                ctx.fillStyle = colors[p.color];
+                ctx.fillRect(p.x + 5, p.y + 5, 15, 15);
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(p.x + 11, p.y + 5, 3, 15);
+                ctx.fillRect(p.x + 5, p.y + 11, 15, 3);
+                ctx.shadowBlur = 0;
+            });
+        }
+        
+        // ==========================================
+        // GAME CONTROL
+        // ==========================================
+        
+        function selectGame(game) {
+            if (gameState === 'play') return;
+            
+            currentGame = game;
+            document.querySelectorAll('.gate-card').forEach(c => c.classList.remove('active'));
+            document.getElementById(`gate-${game}`).classList.add('active');
+            
+            // Update UI
+            const isFlight = game === 'flight';
+            document.getElementById('terminalTitle').textContent = isFlight ? 'FLIGHT_SIMULATION.exe' : 'CARGO_SYSTEM.exe';
+            document.getElementById('startIcon').textContent = isFlight ? '✈️' : '📦';
+            document.getElementById('startTitle').textContent = isFlight ? 'Ready for Departure?' : 'Cargo Ready?';
+            document.getElementById('startSubtitle').textContent = isFlight ? 'Clearance granted for takeoff' : 'Packages awaiting delivery';
+            document.getElementById('flightCode').textContent = isFlight ? 'AA001' : 'CR001';
+            document.getElementById('gateCode').textContent = isFlight ? 'A1' : 'B2';
+            
+            // Reset
+            score = 0;
+            level = 1;
+            updateScoreboard(0);
+            airplane.reset();
+            cargoSnake.reset();
+            flightObstacles = [];
+            packages = [];
+        }
+        
+        function startGame() {
+            gameState = 'play';
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('hud').style.display = 'flex';
+            
+            if (currentGame === 'cargo') {
+                cargoSnake.setDir(1, 0);
+                for (let i = 0; i < 3; i++) spawnPackage();
+            }
+            
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+        }
+        
+        function gameOver() {
+            gameState = 'over';
+            playSound('crash');
+            
+            // Update stats
+            stats.total++;
+            if (currentGame === 'flight' && score > stats.flight) stats.flight = score;
+            if (currentGame === 'cargo' && score > stats.cargo) stats.cargo = score;
+            
+            document.getElementById('stat-flight').textContent = stats.flight.toString().padStart(3, '0');
+            document.getElementById('stat-cargo').textContent = stats.cargo.toString().padStart(3, '0');
+            document.getElementById('stat-total').textContent = stats.total;
+            
+            // Show game over
+            document.getElementById('finalScoreDisplay').textContent = score.toString().padStart(3, '0');
+            document.getElementById('finalLevel').textContent = level;
+            document.getElementById('finalBest').textContent = (currentGame === 'flight' ? stats.flight : stats.cargo).toString().padStart(3, '0');
+            document.getElementById('overScreen').classList.remove('hidden');
+            document.getElementById('hud').style.display = 'none';
+        }
+        
+        function restartGame() {
+            gameState = 'start';
+            score = 0;
+            level = 1;
+            updateScoreboard(0);
+            document.getElementById('hudLevel').textContent = '1';
+            
+            airplane.reset();
+            cargoSnake.reset();
+            flightObstacles = [];
+            packages = [];
+            
+            document.getElementById('overScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+        }
+        
+        function backToMenu() {
+            restartGame();
+        }
+        
+        function pauseGame() {
+            if (gameState === 'play') {
+                gameState = 'pause';
+                document.getElementById('pauseBtn').textContent = 'RESUME';
+            } else if (gameState === 'pause') {
+                gameState = 'play';
+                document.getElementById('pauseBtn').textContent = 'PAUSE';
+            }
+        }
+        
+        function resetGame() {
+            if (gameState === 'play') {
+                gameOver();
+            }
+        }
+        
+        // ==========================================
+        // UI CONTROLS
+        // ==========================================
+        
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            document.getElementById('soundBtn').classList.toggle('active', !soundEnabled);
+            document.getElementById('soundBtn').textContent = soundEnabled ? '🔊' : '🔇';
+        }
+        
+        function showHelp() {
+            alert('🎮 SKYPORT TERMINAL\n\nFLIGHT PATH (Gate A1):\n• TAP or SPACE to fly up\n• Avoid buildings\n• Collect ⚡ for turbo boost\n\nCARGO RUN (Gate B2):\n• Use ARROWS or SWIPE to move\n• Collect colored packages\n• Don\'t crash into yourself!\n\nGood luck, pilot! ✈️');
+        }
+        
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+        
+        // ==========================================
+        // INPUT
+        // ==========================================
+        
+        document.addEventListener('keydown', e => {
+            if (e.code === 'Space' && gameState === 'start') {
+                startGame();
+                return;
+            }
+            
+            if (e.code === 'Space' && gameState === 'over') {
+                restartGame();
+                return;
+            }
+            
+            if (gameState !== 'play') return;
+            
+            if (currentGame === 'flight') {
+                if (e.code === 'Space' || e.code === 'ArrowUp') {
+                    airplane.fly();
+                }
+            } else {
+                switch(e.code) {
+                    case 'ArrowUp': cargoSnake.setDir(0, -1); break;
+                    case 'ArrowDown': cargoSnake.setDir(0, 1); break;
+                    case 'ArrowLeft': cargoSnake.setDir(-1, 0); break;
+                    case 'ArrowRight': cargoSnake.setDir(1, 0); break;
+                }
+            }
+        });
+        
+        // Touch
+        let touchStartX = 0, touchStartY = 0;
+        
+        canvas.addEventListener('touchstart', e => {
+            e.preventDefault();
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            
+            if (gameState === 'start') startGame();
+            else if (gameState === 'over') restartGame();
+            else if (currentGame === 'flight') airplane.fly();
+        }, { passive: false });
+        
+        canvas.addEventListener('touchmove', e => {
+            if (gameState !== 'play' || currentGame !== 'cargo') return;
+            e.preventDefault();
+            
+            const dx = e.touches[0].clientX - touchStartX;
+            const dy = e.touches[0].clientY - touchStartY;
+            
+            if (Math.abs(dx) > 30 || Math.abs(dy) > 30) {
+                if (Math.abs(dx) > Math.abs(dy)) {
+                    cargoSnake.setDir(dx > 0 ? 1 : -1, 0);
+                } else {
+                    cargoSnake.setDir(0, dy > 0 ? 1 : -1);
+                }
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+            }
+        }, { passive: false });
+        
+        // Prevent scroll
+        window.addEventListener('keydown', e => {
+            if (e.code === 'Space' && e.target === document.body) e.preventDefault();
+        });
+        
+        // ==========================================
+        // GAME LOOP
+        // ==========================================
+        
+        let obstacleTimer = 0;
+        
+        function gameLoop() {
+            // Clear
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, 800, 600);
+            
+            if (gameState === 'pause') {
+                ctx.fillStyle = 'rgba(0,0,0,0.7)';
+                ctx.fillRect(0, 0, 800, 600);
+                ctx.fillStyle = '#fff';
+                ctx.font = 'bold 48px Inter';
+                ctx.textAlign = 'center';
+                ctx.fillText('PAUSED', 400, 300);
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+            
+            // Background
+            if (currentGame === 'flight') {
+                background.drawFlight();
+            } else {
+                background.drawCargo();
+            }
+            
+            if (gameState === 'play') {
+                if (currentGame === 'flight') {
+                    airplane.update();
+                    
+                    obstacleTimer++;
+                    if (obstacleTimer > 100 - level * 3) {
+                        flightObstacles.push(new Obstacle());
+                        obstacleTimer = 0;
+                    }
+                    
+                    for (let i = flightObstacles.length - 1; i >= 0; i--) {
+                        const obs = flightObstacles[i];
+                        obs.update();
+                        
+                        if (obs.checkPowerup(airplane)) {
+                            airplane.activateTurbo();
+                        }
+                        
+                        if (!airplane.turbo && obs.checkCollision(airplane)) {
+                            gameOver();
+                        }
+                        
+                        if (!obs.passed && obs.x + obs.w < airplane.x) {
+                            obs.passed = true;
+                            score += 5;
+                            updateScoreboard(score);
+                            playSound('score');
+                            
+                            if (score % 50 === 0) {
+                                level++;
+                                document.getElementById('hudLevel').textContent = level;
+                            }
+                        }
+                        
+                        if (obs.x < -100) flightObstacles.splice(i, 1);
+                    }
+                    
+                    airplane.draw();
+                    flightObstacles.forEach(o => o.draw());
+                    
+                } else {
+                    cargoSnake.update(Date.now());
+                    drawPackages();
+                    cargoSnake.draw();
+                }
+            } else {
+                // Demo
+                if (currentGame === 'flight') {
+                    airplane.y = 250 + Math.sin(Date.now() / 800) * 40;
+                    airplane.draw();
+                } else {
+                    cargoSnake.body[0].y = 300 + Math.sin(Date.now() / 800) * 30;
+                    cargoSnake.draw();
+                }
+            }
+            
+            requestAnimationFrame(gameLoop);
+        }
+        
+        // Start
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 1500);
+            gameLoop();
+        });
+    </script>
+    <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>

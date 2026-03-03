@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schoolyard RPS - Vintage Classroom Edition</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Special+Elite&family=Patrick+Hand&display=swap');
+
+        :root {
+            --chalk-green: #2d4a3e;
+            --chalk-dark: #1a2f26;
+            --wood-light: #d4a574;
+            --wood-dark: #8b5a2b;
+            --wood-floor: #6b4423;
+            --paper: #f4f1ea;
+            --paper-aged: #e8e4d9;
+            --ink: #2c241b;
+            --chalk-white: #f0f0f0;
+            --chalk-yellow: #fef08a;
+            --chalk-blue: #bfdbfe;
+            --chalk-pink: #fbcfe8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Patrick Hand', cursive;
+            background: var(--wood-floor);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Vintage Paper Texture Overlay */
+        .texture-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(0,0,0,0.03) 2px,
+                    rgba(0,0,0,0.03) 4px
+                ),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 1000;
+            opacity: 0.6;
+        }
+
+        /* Vignette Effect */
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.4) 100%);
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        /* Classroom Container */
+        .classroom {
+            min-height: 100vh;
+            background: 
+                linear-gradient(to bottom, 
+                    rgba(0,0,0,0.1) 0%, 
+                    transparent 20%, 
+                    transparent 80%, 
+                    rgba(0,0,0,0.2) 100%
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    var(--wood-floor) 0px,
+                    var(--wood-floor) 100px,
+                    #5a3518 100px,
+                    #5a3518 105px
+                );
+            position: relative;
+            padding: 20px;
+        }
+
+        /* Back Wall with Chalkboard */
+        .back-wall {
+            background: linear-gradient(to bottom, 
+                #e8e4d9 0%, 
+                #d4cfc3 60%, 
+                var(--wood-dark) 60%, 
+                var(--wood-dark) 62%,
+                #5a4a3a 62%,
+                #3d3126 100%
+            );
+            padding: 40px 20px 20px;
+            margin: -20px -20px 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        /* Chalkboard */
+        .chalkboard {
+            background: var(--chalk-green);
+            border: 12px solid #5c4033;
+            border-radius: 4px;
+            box-shadow: 
+                inset 0 0 40px rgba(0,0,0,0.5),
+                0 5px 15px rgba(0,0,0,0.3);
+            padding: 30px;
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            transform: perspective(1000px) rotateX(2deg);
+        }
+
+        .chalkboard::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 28px,
+                    rgba(255,255,255,0.03) 28px,
+                    rgba(255,255,255,0.03) 30px
+                );
+            pointer-events: none;
+        }
+
+        .chalk-tray {
+            position: absolute;
+            bottom: -12px;
+            left: 10%;
+            right: 10%;
+            height: 15px;
+            background: #5c4033;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
+
+        .chalk-piece {
+            position: absolute;
+            bottom: 2px;
+            width: 30px;
+            height: 8px;
+            border-radius: 2px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .chalk-white { background: var(--chalk-white); left: 20%; }
+        .chalk-yellow { background: var(--chalk-yellow); left: 50%; }
+        .chalk-pink { background: var(--chalk-pink); left: 80%; }
+
+        h1 {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: var(--chalk-white);
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            transform: rotate(-1deg);
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Caveat', cursive;
+            font-size: 1.5rem;
+            color: var(--chalk-yellow);
+            text-align: center;
+            opacity: 0.9;
+            transform: rotate(1deg);
+        }
+
+        /* Score Board on Chalkboard */
+        .chalk-scores {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .chalk-score {
+            text-align: center;
+            position: relative;
+        }
+
+        .chalk-label {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: var(--chalk-blue);
+            margin-bottom: 5px;
+            transform: rotate(-2deg);
+        }
+
+        .chalk-number {
+            font-family: 'Caveat', cursive;
+            font-size: 3.5rem;
+            color: var(--chalk-white);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            line-height: 1;
+            position: relative;
+            display: inline-block;
+        }
+
+        .chalk-number::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: -5px;
+            right: -5px;
+            height: 2px;
+            background: var(--chalk-white);
+            opacity: 0.5;
+            transform: rotate(-1deg);
+        }
+
+        /* Doodles on chalkboard */
+        .doodle {
+            position: absolute;
+            font-family: 'Caveat', cursive;
+            color: rgba(255,255,255,0.2);
+            font-size: 1.2rem;
+            pointer-events: none;
+        }
+
+        .doodle-1 { top: 20px; left: 20px; transform: rotate(-15deg); }
+        .doodle-2 { top: 30px; right: 30px; transform: rotate(10deg); }
+        .doodle-3 { bottom: 40px; left: 30px; transform: rotate(5deg); }
+
+        /* Students in Background */
+        .students-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin: 30px 0;
+            opacity: 0.7;
+            filter: blur(0.5px);
+        }
+
+        .student {
+            text-align: center;
+            animation: subtleMove 4s ease-in-out infinite;
+        }
+
+        .student:nth-child(2) { animation-delay: 0.5s; }
+        .student:nth-child(3) { animation-delay: 1s; }
+        .student:nth-child(4) { animation-delay: 1.5s; }
+
+        @keyframes subtleMove {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+
+        .student-avatar {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #f4c2a1, #e8b896);
+            border-radius: 50% 50% 45% 45%;
+            margin: 0 auto 5px;
+            position: relative;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .student-avatar::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 20px;
+            background: #4a3728;
+            border-radius: 50% 50% 0 0;
+        }
+
+        .student-avatar.girl::before {
+            background: #8b4513;
+            width: 55px;
+            height: 25px;
+            border-radius: 50%;
+        }
+
+        .student-name {
+            font-family: 'Caveat', cursive;
+            font-size: 0.9rem;
+            color: var(--ink);
+            background: var(--paper);
+            padding: 2px 8px;
+            border-radius: 3px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            transform: rotate(-1deg);
+        }
+
+        /* Wooden Desk/Battle Arena */
+        .desk-area {
+            max-width: 900px;
+            margin: 0 auto;
+            perspective: 1000px;
+        }
+
+        .desk-surface {
+            background: 
+                linear-gradient(to bottom, 
+                    var(--wood-light) 0%, 
+                    var(--wood-dark) 100%
+                );
+            border-radius: 10px;
+            padding: 40px;
+            box-shadow: 
+                0 20px 40px rgba(0,0,0,0.4),
+                inset 0 2px 5px rgba(255,255,255,0.2);
+            position: relative;
+            transform: perspective(1000px) rotateX(5deg);
+            border: 8px solid var(--wood-dark);
+        }
+
+        .desk-surface::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(
+                    0deg,
+                    transparent,
+                    transparent 49px,
+                    rgba(0,0,0,0.05) 50px
+                );
+            pointer-events: none;
+            border-radius: 5px;
+        }
+
+        /* Paper on desk */
+        .game-paper {
+            background: var(--paper);
+            padding: 30px;
+            border-radius: 2px;
+            box-shadow: 
+                0 2px 5px rgba(0,0,0,0.1),
+                0 0 0 1px rgba(0,0,0,0.05);
+            position: relative;
+            transform: rotate(-0.5deg);
+            min-height: 250px;
+        }
+
+        .game-paper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 30px;
+            width: 2px;
+            height: 100%;
+            background: #ff9999;
+            opacity: 0.6;
+        }
+
+        .game-paper::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 34px;
+            width: 2px;
+            height: 100%;
+            background: #ff9999;
+            opacity: 0.6;
+        }
+
+        /* Coffee stain */
+        .coffee-stain {
+            position: absolute;
+            bottom: 20px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            border: 3px solid rgba(139, 90, 43, 0.2);
+            border-radius: 50%;
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        .coffee-stain::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border: 2px solid rgba(139, 90, 43, 0.15);
+            border-radius: 50%;
+        }
+
+        /* Battle Display */
+        .battle-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            margin: 20px 0;
+            min-height: 120px;
+        }
+
+        .player-zone {
+            text-align: center;
+        }
+
+        .zone-label {
+            font-family: 'Caveat', cursive;
+            font-size: 1.2rem;
+            color: var(--ink);
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+
+        .hand-display {
+            font-size: 4rem;
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                0 4px 10px rgba(0,0,0,0.1),
+                inset 0 -5px 10px rgba(0,0,0,0.05);
+            border: 3px solid var(--paper-aged);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .hand-display.shaking {
+            animation: handShake 0.5s ease-in-out 3;
+        }
+
+        @keyframes handShake {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            25% { transform: translateY(-15px) rotate(-15deg); }
+            75% { transform: translateY(-15px) rotate(15deg); }
+        }
+
+        .vs-text {
+            font-family: 'Special Elite', monospace;
+            font-size: 1.5rem;
+            color: var(--wood-dark);
+            opacity: 0.5;
+            font-weight: bold;
+        }
+
+        .thinking-text {
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.2rem;
+            color: var(--ink);
+            opacity: 0.6;
+            font-style: italic;
+        }
+
+        /* Result Stamp */
+        .result-stamp {
+            font-family: 'Special Elite', monospace;
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 20px;
+            padding: 10px;
+            border: 4px solid;
+            border-radius: 8px;
+            display: inline-block;
+            transform: rotate(-3deg);
+            opacity: 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .result-stamp.show {
+            opacity: 1;
+            animation: stampEffect 0.4s ease;
+        }
+
+        @keyframes stampEffect {
+            0% { transform: rotate(-3deg) scale(2); opacity: 0; }
+            50% { transform: rotate(-3deg) scale(0.9); }
+            100% { transform: rotate(-3deg) scale(1); opacity: 1; }
+        }
+
+        .result-stamp.win {
+            color: #2d5a27;
+            border-color: #2d5a27;
+            background: rgba(45, 90, 39, 0.1);
+        }
+
+        .result-stamp.lose {
+            color: #8b2635;
+            border-color: #8b2635;
+            background: rgba(139, 38, 53, 0.1);
+        }
+
+        .result-stamp.draw {
+            color: #8b7355;
+            border-color: #8b7355;
+            background: rgba(139, 115, 85, 0.1);
+        }
+
+        /* Controls - Hand Gestures on Desk */
+        .controls-area {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .prompt-text {
+            font-family: 'Caveat', cursive;
+            font-size: 1.3rem;
+            color: var(--ink);
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .hand-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .hand-btn {
+            background: white;
+            border: 3px solid var(--paper-aged);
+            border-radius: 15px;
+            width: 100px;
+            height: 100px;
+            font-size: 3rem;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 4px 0 var(--wood-dark),
+                0 6px 10px rgba(0,0,0,0.2);
+            transform: translateY(0);
+        }
+
+        .hand-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 9px 0 var(--wood-dark),
+                0 12px 20px rgba(0,0,0,0.3);
+        }
+
+        .hand-btn:active {
+            transform: translateY(4px);
+            box-shadow: 
+                0 0 0 var(--wood-dark),
+                0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .hand-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: translateY(4px);
+            box-shadow: 0 0 0 var(--wood-dark);
+        }
+
+        .hand-btn-label {
+            position: absolute;
+            bottom: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Patrick Hand', cursive;
+            font-size: 0.9rem;
+            color: var(--ink);
+            white-space: nowrap;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .hand-btn:hover .hand-btn-label {
+            opacity: 1;
+            bottom: -35px;
+        }
+
+        /* Pencil decoration */
+        .pencil {
+            position: absolute;
+            width: 150px;
+            height: 12px;
+            background: linear-gradient(to bottom, #ffd700 0%, #ffed4e 40%, #ffd700 100%);
+            border-radius: 2px 6px 6px 2px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transform: rotate(-45deg);
+        }
+
+        .pencil::before {
+            content: '';
+            position: absolute;
+            right: -20px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-top: 6px solid transparent;
+            border-bottom: 6px solid transparent;
+            border-left: 20px solid #deb887;
+        }
+
+        .pencil::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 30px;
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            border-radius: 2px 0 0 2px;
+        }
+
+        .pencil-1 { top: 50px; right: 50px; }
+        .pencil-2 { bottom: 80px; left: 30px; transform: rotate(30deg); }
+
+        /* Reset Button */
+        .reset-area {
+            margin-top: 30px;
+        }
+
+        .eraser-btn {
+            background: linear-gradient(to bottom, #ffb6c1, #ff69b4);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 20px;
+            font-family: 'Patrick Hand', cursive;
+            font-size: 1.1rem;
+            color: white;
+            cursor: pointer;
+            box-shadow: 
+                0 4px 0 #c71585,
+                0 6px 10px rgba(0,0,0,0.2);
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .eraser-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 0 #c71585,
+                0 8px 15px rgba(0,0,0,0.3);
+        }
+
+        .eraser-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 #c71585;
+        }
+
+        /* Notebook paper lines effect for entire page */
+        .lined-paper {
+            background-image: 
+                linear-gradient(transparent 95%, rgba(0,0,0,0.05) 95%);
+            background-size: 100% 30px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .students-row { gap: 20px; }
+            .student-avatar { width: 45px; height: 45px; }
+            .chalk-scores { gap: 30px; }
+            .hand-display { width: 80px; height: 80px; font-size: 3rem; }
+            .hand-btn { width: 80px; height: 80px; font-size: 2.2rem; }
+        }
+
+        /* Dust particles */
+        .dust {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) translateX(100px); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="texture-overlay"></div>
+    <div class="vignette"></div>
+    
+    <!-- Dust particles -->
+    <div id="dustContainer"></div>
+
+    <div class="classroom">
+        <!-- Back Wall with Chalkboard -->
+        <div class="back-wall">
+            <div class="chalkboard">
+                <div class="doodle doodle-1">R + P = S ?</div>
+                <div class="doodle doodle-2">Class of '95</div>
+                <div class="doodle doodle-3">✓</div>
+                
+                <h1>Recess RPS Championship</h1>
+                <p class="subtitle">Best of luck, student!</p>
+                
+                <div class="chalk-scores">
+                    <div class="chalk-score">
+                        <div class="chalk-label">You</div>
+                        <div class="chalk-number" id="playerScore">0</div>
+                    </div>
+                    <div class="chalk-score">
+                        <div class="chalk-label">Teacher</div>
+                        <div class="chalk-number" id="computerScore">0</div>
+                    </div>
+                </div>
+                
+                <div class="chalk-tray">
+                    <div class="chalk-piece chalk-white"></div>
+                    <div class="chalk-piece chalk-yellow"></div>
+                    <div class="chalk-piece chalk-pink"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Students Watching -->
+        <div class="students-row">
+            <div class="student">
+                <div class="student-avatar"></div>
+                <div class="student-name">Tommy</div>
+            </div>
+            <div class="student">
+                <div class="student-avatar girl"></div>
+                <div class="student-name">Sarah</div>
+            </div>
+            <div class="student">
+                <div class="student-avatar"></div>
+                <div class="student-name">Mike</div>
+            </div>
+            <div class="student">
+                <div class="student-avatar girl"></div>
+                <div class="student-name">Emma</div>
+            </div>
+            <div class="student">
+                <div class="student-avatar"></div>
+                <div class="student-name">Alex</div>
+            </div>
+        </div>
+
+        <!-- Desk Game Area -->
+        <div class="desk-area">
+            <div class="desk-surface">
+                <div class="pencil pencil-1"></div>
+                <div class="pencil pencil-2"></div>
+                
+                <div class="game-paper">
+                    <div class="coffee-stain"></div>
+                    
+                    <div class="battle-display" id="battleDisplay">
+                        <div class="player-zone">
+                            <div class="zone-label">Your Hand</div>
+                            <div class="hand-display" id="playerHand">✏️</div>
+                        </div>
+                        
+                        <div class="vs-text" id="vsText">VS</div>
+                        
+                        <div class="player-zone">
+                            <div class="zone-label">Teacher's Hand</div>
+                            <div class="hand-display" id="computerHand">🍎</div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center;">
+                        <div class="thinking-text" id="thinkingText" style="display: none;">
+                            Teacher is thinking...
+                        </div>
+                        <div class="result-stamp" id="resultStamp"></div>
+                    </div>
+                </div>
+
+                <div class="controls-area">
+                    <div class="prompt-text">Choose your move:</div>
+                    <div class="hand-buttons">
+                        <button class="hand-btn" onclick="play('rock')" data-choice="rock">
+                            ✊
+                            <span class="hand-btn-label">Rock</span>
+                        </button>
+                        <button class="hand-btn" onclick="play('paper')" data-choice="paper">
+                            ✋
+                            <span class="hand-btn-label">Paper</span>
+                        </button>
+                        <button class="hand-btn" onclick="play('scissors')" data-choice="scissors">
+                            ✌️
+                            <span class="hand-btn-label">Scissors</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="reset-area" style="text-align: center; margin-top: 20px;">
+                    <button class="eraser-btn" onclick="resetGame()">🧹 Clear Board</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let playerScore = 0;
+        let computerScore = 0;
+        let isPlaying = false;
+
+        const choices = ['rock', 'paper', 'scissors'];
+        const emojis = { rock: '✊', paper: '✋', scissors: '✌️' };
+        const teacherEmojis = { rock: '✊', paper: '✋', scissors: '✌️' };
+
+        // Create dust particles
+        function createDust() {
+            const container = document.getElementById('dustContainer');
+            for (let i = 0; i < 15; i++) {
+                const dust = document.createElement('div');
+                dust.className = 'dust';
+                dust.style.left = Math.random() * 100 + '%';
+                dust.style.animationDelay = Math.random() * 20 + 's';
+                dust.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(dust);
+            }
+        }
+        createDust();
+
+        function getComputerChoice() {
+            return choices[Math.floor(Math.random() * choices.length)];
+        }
+
+        function determineWinner(player, computer) {
+            if (player === computer) return 'draw';
+            if (
+                (player === 'rock' && computer === 'scissors') ||
+                (player === 'paper' && computer === 'rock') ||
+                (player === 'scissors' && computer === 'paper')
+            ) return 'win';
+            return 'lose';
+        }
+
+        async function play(playerChoice) {
+            if (isPlaying) return;
+            isPlaying = true;
+
+            // Disable buttons
+            document.querySelectorAll('.hand-btn').forEach(btn => btn.disabled = true);
+
+            const playerHand = document.getElementById('playerHand');
+            const computerHand = document.getElementById('computerHand');
+            const resultStamp = document.getElementById('resultStamp');
+            const thinkingText = document.getElementById('thinkingText');
+
+            // Reset
+            resultStamp.classList.remove('show');
+            resultStamp.className = 'result-stamp';
+            
+            // Show fists (closed hands for shaking)
+            playerHand.textContent = '✊';
+            computerHand.textContent = '✊';
+            
+            // Shake animation
+            playerHand.classList.add('shaking');
+            computerHand.classList.add('shaking');
+            
+            await new Promise(r => setTimeout(r, 1500));
+            
+            // Stop shaking
+            playerHand.classList.remove('shaking');
+            computerHand.classList.remove('shaking');
+            
+            // Show player choice
+            playerHand.textContent = emojis[playerChoice];
+            
+            // Teacher thinking
+            thinkingText.style.display = 'block';
+            computerHand.style.opacity = '0.5';
+            
+            await new Promise(r => setTimeout(r, 800));
+            
+            // Show computer choice
+            thinkingText.style.display = 'none';
+            computerHand.style.opacity = '1';
+            const computerChoice = getComputerChoice();
+            computerHand.textContent = teacherEmojis[computerChoice];
+            
+            // Determine winner
+            const result = determineWinner(playerChoice, computerChoice);
+            
+            await new Promise(r => setTimeout(r, 200));
+            
+            // Update scores
+            if (result === 'win') {
+                playerScore++;
+                document.getElementById('playerScore').style.animation = 'none';
+                setTimeout(() => {
+                    document.getElementById('playerScore').textContent = playerScore;
+                    document.getElementById('playerScore').style.animation = 'stampEffect 0.4s ease';
+                }, 10);
+            } else if (result === 'lose') {
+                computerScore++;
+                document.getElementById('computerScore').style.animation = 'none';
+                setTimeout(() => {
+                    document.getElementById('computerScore').textContent = computerScore;
+                    document.getElementById('computerScore').style.animation = 'stampEffect 0.4s ease';
+                }, 10);
+            }
+            
+            // Show result stamp
+            const messages = {
+                win: 'PASS! ✓',
+                lose: 'FAIL! ✗',
+                draw: 'TIE! ○'
+            };
+            
+            resultStamp.textContent = messages[result];
+            resultStamp.classList.add(result, 'show');
+            
+            // Re-enable buttons
+            setTimeout(() => {
+                document.querySelectorAll('.hand-btn').forEach(btn => btn.disabled = false);
+                isPlaying = false;
+            }, 1500);
+        }
+
+        function resetGame() {
+            playerScore = 0;
+            computerScore = 0;
+            
+            document.getElementById('playerScore').textContent = '0';
+            document.getElementById('computerScore').textContent = '0';
+            document.getElementById('playerHand').textContent = '✏️';
+            document.getElementById('computerHand').textContent = '🍎';
+            document.getElementById('resultStamp').classList.remove('show');
+            document.getElementById('thinkingText').style.display = 'none';
+        }
+    </script>
+    <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>

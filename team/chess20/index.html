@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Premium Animated Chess</title>
+
+<style>
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    font-family:Segoe UI;
+    background:linear-gradient(135deg,#141e30,#243b55,#0f2027);
+    overflow:hidden;
+}
+
+h1{
+    color:white;
+    letter-spacing:3px;
+    margin-bottom:20px;
+    text-shadow:0 0 20px rgba(255,255,255,0.6);
+}
+
+#board{
+    position:relative;
+    display:grid;
+    grid-template-columns:repeat(8,90px);
+    grid-template-rows:repeat(8,90px);
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 0 60px rgba(0,0,0,0.8);
+    backdrop-filter:blur(10px);
+}
+
+.square{
+    width:90px;
+    height:90px;
+}
+
+.white-square{
+    background:linear-gradient(145deg,#f8f3e7,#e6d8b5);
+}
+
+.black-square{
+    background:linear-gradient(145deg,#7a5230,#3e2a18);
+}
+
+.piece{
+    position:absolute;
+    width:90px;
+    height:90px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:55px;
+    cursor:pointer;
+    transition:all 0.45s cubic-bezier(.25,.8,.25,1);
+}
+
+.white-piece{
+    color:white;
+    text-shadow:0 0 15px rgba(255,255,255,0.8);
+}
+
+.black-piece{
+    color:black;
+    text-shadow:0 0 10px rgba(0,0,0,0.7);
+}
+
+.selected{
+    transform:scale(1.2);
+    filter:drop-shadow(0 0 15px yellow);
+}
+
+.capture{
+    animation:explode 0.4s forwards;
+}
+
+@keyframes explode{
+    0%{transform:scale(1);opacity:1;}
+    100%{transform:scale(2);opacity:0;}
+}
+
+#status{
+    margin-top:20px;
+    font-size:20px;
+    color:white;
+    font-weight:bold;
+}
+
+</style>
+</head>
+<body>
+
+<h1>♟ Premium Chess</h1>
+<div id="board"></div>
+<div id="status">White's Turn</div>
+
+<script>
+
+const boardEl=document.getElementById("board");
+const statusText=document.getElementById("status");
+let turn="white";
+let selectedPiece=null;
+
+const symbols={
+r:"♜", n:"♞", b:"♝", q:"♛", k:"♚", p:"♟",
+R:"♖", N:"♘", B:"♗", Q:"♕", K:"♔", P:"♙"
+};
+
+let board=[
+["r","n","b","q","k","b","n","r"],
+["p","p","p","p","p","p","p","p"],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["","","","","","","",""],
+["P","P","P","P","P","P","P","P"],
+["R","N","B","Q","K","B","N","R"]
+];
+
+function initBoard(){
+    for(let r=0;r<8;r++){
+        for(let c=0;c<8;c++){
+            const sq=document.createElement("div");
+            sq.classList.add("square");
+            sq.classList.add((r+c)%2==0?"white-square":"black-square");
+            boardEl.appendChild(sq);
+        }
+    }
+    drawPieces();
+}
+
+function drawPieces(){
+    document.querySelectorAll(".piece").forEach(p=>p.remove());
+
+    for(let r=0;r<8;r++){
+        for(let c=0;c<8;c++){
+            if(board[r][c]!=""){
+                const piece=document.createElement("div");
+                piece.classList.add("piece");
+                piece.classList.add(board[r][c]===board[r][c].toUpperCase()?"white-piece":"black-piece");
+                piece.innerHTML=symbols[board[r][c]];
+                piece.dataset.row=r;
+                piece.dataset.col=c;
+                setPosition(piece,r,c);
+                piece.addEventListener("click",selectPiece);
+                boardEl.appendChild(piece);
+            }
+        }
+    }
+}
+
+function setPosition(piece,r,c){
+    piece.style.top=(r*90)+"px";
+    piece.style.left=(c*90)+"px";
+}
+
+function selectPiece(e){
+    e.stopPropagation();
+
+    if(selectedPiece){
+        selectedPiece.classList.remove("selected");
+    }
+
+    const r=this.dataset.row;
+    const c=this.dataset.col;
+
+    if(turn==="white" && board[r][c]===board[r][c].toUpperCase() ||
+       turn==="black" && board[r][c]===board[r][c].toLowerCase()){
+        selectedPiece=this;
+        this.classList.add("selected");
+    }
+}
+
+boardEl.addEventListener("click",function(e){
+    if(!selectedPiece) return;
+
+    const rect=boardEl.getBoundingClientRect();
+    const x=e.clientX-rect.left;
+    const y=e.clientY-rect.top;
+
+    const c=Math.floor(x/90);
+    const r=Math.floor(y/90);
+
+    movePiece(r,c);
+});
+
+function movePiece(r,c){
+    const fr=selectedPiece.dataset.row;
+    const fc=selectedPiece.dataset.col;
+
+    if(fr==r && fc==c) return;
+
+    document.querySelectorAll(".piece").forEach(p=>{
+        if(p.dataset.row==r && p.dataset.col==c){
+            p.classList.add("capture");
+            setTimeout(()=>p.remove(),400);
+        }
+    });
+
+    board[r][c]=board[fr][fc];
+    board[fr][fc]="";
+
+    selectedPiece.dataset.row=r;
+    selectedPiece.dataset.col=c;
+    setPosition(selectedPiece,r,c);
+
+    selectedPiece.classList.remove("selected");
+    selectedPiece=null;
+
+    turn=turn==="white"?"black":"white";
+    statusText.innerText=turn.charAt(0).toUpperCase()+turn.slice(1)+"'s Turn";
+}
+
+initBoard();
+
+</script>
+<img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+
+</body>
+</html>
