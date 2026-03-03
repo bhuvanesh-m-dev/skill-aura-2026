@@ -1,0 +1,1531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Card Flip Game - Car Edition</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: rgba(0, 0, 0, 0.3);
+            --text-primary: #ffffff;
+            --text-secondary: #e0e0e0;
+            --accent-color: #ff6b6b;
+            --accent-secondary: #4ecdc4;
+            --card-back: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+
+        .light-theme {
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --glass-shadow: rgba(0, 0, 0, 0.1);
+            --text-primary: #2c3e50;
+            --text-secondary: #34495e;
+            --card-back: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Particle Background */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Start Screen */
+        .start-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.5s ease;
+        }
+
+        .start-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .start-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 25px 50px var(--glass-shadow);
+            max-width: 600px;
+            width: 90%;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .start-content h1 {
+            font-size: 3rem;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .start-content p {
+            color: var(--text-secondary);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .car-preview {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .car-preview-img {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid var(--glass-border);
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .car-preview-img:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--accent-secondary));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            margin: 10px;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Game Container */
+        .game-container {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 30px;
+            box-shadow: 0 25px 50px var(--glass-shadow);
+            max-width: 1000px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .title {
+            font-size: 2rem;
+            color: var(--text-primary);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .control-btn {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .control-btn.active {
+            background: var(--accent-color);
+            color: white;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 10px;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-primary);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 5px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(90deg, var(--accent-color), var(--accent-secondary));
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Game Grid */
+        .game-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+            perspective: 1000px;
+        }
+
+        .game-grid.easy {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .game-grid.medium {
+            grid-template-columns: repeat(6, 1fr);
+        }
+
+        .game-grid.hard {
+            grid-template-columns: repeat(8, 1fr);
+        }
+
+        /* Card Styles */
+        .card {
+            aspect-ratio: 1;
+            position: relative;
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+        }
+
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card.matched {
+            animation: matchPulse 0.6s ease;
+        }
+
+        @keyframes matchPulse {
+            0%, 100% { transform: rotateY(180deg) scale(1); }
+            50% { transform: rotateY(180deg) scale(1.1); }
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card-front {
+            background: var(--card-back);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .card-front::before {
+            content: '🚗';
+            font-size: 2.5rem;
+            opacity: 0.8;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            transform: rotateY(180deg);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .card-back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 13px;
+        }
+
+        .card:hover .card-front {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .card.matched .card-back {
+            box-shadow: 0 0 20px var(--success-color);
+            border-color: var(--success-color);
+        }
+
+        /* Multiplayer Indicator */
+        .player-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+        }
+
+        .player-badge {
+            padding: 15px 30px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .player-badge.active {
+            background: rgba(255, 107, 107, 0.3);
+            border-color: var(--accent-color);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+        }
+
+        .player-name {
+            font-weight: bold;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .player-score {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+        }
+
+        /* Victory Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: modalPop 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes modalPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-content::before {
+            content: '🏆';
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 20px;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .modal-title {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 20px;
+        }
+
+        .modal-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .modal-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+        }
+
+        .modal-stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .modal-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* Confetti Canvas */
+        #confetti-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1500;
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            margin-top: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .leaderboard h3 {
+            color: var(--text-primary);
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+
+        .leaderboard-rank {
+            font-weight: bold;
+            color: var(--accent-color);
+            width: 30px;
+        }
+
+        .difficulty-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            margin-left: 5px;
+            text-transform: uppercase;
+        }
+
+        .difficulty-tag.easy { background: #2ecc71; color: white; }
+        .difficulty-tag.medium { background: #f39c12; color: white; }
+        .difficulty-tag.hard { background: #e74c3c; color: white; }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .game-grid.medium {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .game-grid.hard {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .title {
+                font-size: 1.5rem;
+            }
+
+            .header {
+                justify-content: center;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .car-preview-img {
+                width: 60px;
+                height: 45px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 15px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 1rem;
+            }
+
+            .player-badge {
+                padding: 10px 20px;
+            }
+
+            .start-content {
+                padding: 30px 20px;
+            }
+
+            .start-content h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Sound Toggle */
+        .sound-toggle {
+            position: relative;
+            width: 50px;
+            height: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .sound-toggle.active {
+            background: var(--success-color);
+        }
+
+        .sound-toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2.5px;
+            left: 2.5px;
+            transition: all 0.3s ease;
+        }
+
+        .sound-toggle.active::after {
+            left: 27.5px;
+        }
+
+        /* Difficulty Selector */
+        .difficulty-selector {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .difficulty-btn {
+            padding: 12px 24px;
+            border: 2px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .difficulty-btn:hover:not(.locked) {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .difficulty-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+
+        .difficulty-btn.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .difficulty-btn.locked::after {
+            content: '🔒';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.2rem;
+        }
+
+        .difficulty-label {
+            display: block;
+            font-size: 0.9rem;
+        }
+
+        .difficulty-cars {
+            display: block;
+            font-size: 0.7rem;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        /* Mode Selector */
+        .mode-selector {
+            margin: 20px 0;
+        }
+
+        .mode-selector label {
+            color: var(--text-primary);
+            margin-right: 10px;
+            font-weight: 600;
+        }
+
+        .mode-selector select {
+            padding: 10px 20px;
+            border-radius: 20px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Car Category Info */
+        .car-category-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 1px solid var(--glass-border);
+        }
+
+        .car-category-info h4 {
+            color: var(--accent-color);
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .car-category-info p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <!-- Particle Background -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Confetti Canvas -->
+    <canvas id="confetti-canvas"></canvas>
+
+    <!-- Start Screen -->
+    <div class="start-screen" id="startScreen">
+        <div class="start-content">
+            <h1>🏎️ Car Memory Game</h1>
+            <p>Match the cars and test your memory! Each difficulty features different car categories.</p>
+
+            <div class="car-category-info" id="carCategoryInfo">
+                <h4>🚗 Classic Cars (Easy)</h4>
+                <p>Legendary vintage muscle cars and classics</p>
+            </div>
+
+            <div class="mode-selector">
+                <label>Game Mode:</label>
+                <select id="gameMode">
+                    <option value="single">Single Player</option>
+                    <option value="multi">2 Players</option>
+                </select>
+            </div>
+
+            <div class="difficulty-selector">
+                <button class="difficulty-btn active" data-difficulty="easy" onclick="selectDifficulty('easy')">
+                    <span class="difficulty-label">EASY</span>
+                    <span class="difficulty-cars">Classic Cars</span>
+                </button>
+                <button class="difficulty-btn" data-difficulty="medium" onclick="selectDifficulty('medium')">
+                    <span class="difficulty-label">MEDIUM</span>
+                    <span class="difficulty-cars">Sports Cars</span>
+                </button>
+                <button class="difficulty-btn locked" data-difficulty="hard" onclick="selectDifficulty('hard')">
+                    <span class="difficulty-label">HARD</span>
+                    <span class="difficulty-cars">Supercars</span>
+                </button>
+            </div>
+
+            <div style="margin: 20px 0;">
+                <label style="color: var(--text-primary); margin-right: 10px; font-weight: 600;">Sound:</label>
+                <div class="sound-toggle active" id="soundToggle" onclick="toggleSoundSetting()"></div>
+            </div>
+
+            <button class="btn" onclick="startGame()">🏁 Start Race</button>
+
+            <div class="leaderboard" id="startLeaderboard">
+                <h3>🏆 Leaderboard</h3>
+                <div id="leaderboardList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div class="game-container" id="gameContainer" style="display: none;">
+        <div class="header">
+            <h1 class="title">🏎️ Car Memory</h1>
+            <div class="controls">
+                <button class="control-btn" onclick="toggleTheme()">🌓 Theme</button>
+                <button class="control-btn" onclick="toggleSound()">🔊 Sound</button>
+                <button class="control-btn" onclick="showLeaderboard()">🏆 Scores</button>
+                <button class="control-btn" onclick="restartGame()">🔄 Restart</button>
+            </div>
+        </div>
+
+        <div class="player-indicator" id="playerIndicator" style="display: none;">
+            <div class="player-badge active" id="player1Badge">
+                <div class="player-name">Player 1</div>
+                <div class="player-score" id="player1Score">0</div>
+            </div>
+            <div class="player-badge" id="player2Badge">
+                <div class="player-name">Player 2</div>
+                <div class="player-score" id="player2Score">0</div>
+            </div>
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-label">⏱️ Time</div>
+                <div class="stat-value" id="timer">00:00</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">🔄 Moves</div>
+                <div class="stat-value" id="moves">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">🎯 Pairs</div>
+                <div class="stat-value" id="pairs">0/8</div>
+            </div>
+            <div class="stat-item" id="bestScoreContainer">
+                <div class="stat-label">🏅 Best</div>
+                <div class="stat-value" id="bestScore">-</div>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+        </div>
+
+        <div class="game-grid easy" id="gameGrid"></div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div class="modal-overlay" id="victoryModal">
+        <div class="modal-content">
+            <h2 class="modal-title" id="victoryTitle">Victory!</h2>
+            <div class="modal-stats">
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="modalTime">00:00</div>
+                    <div class="modal-stat-label">Time</div>
+                </div>
+                <div class="modal-stat">
+                    <div class="modal-stat-value" id="modalMoves">0</div>
+                    <div class="modal-stat-label">Moves</div>
+                </div>
+            </div>
+            <p id="victoryMessage" style="color: var(--text-secondary); margin-bottom: 20px;"></p>
+            <button class="btn" onclick="closeModal()">🔄 Play Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Car Image URLs for each difficulty
+        const carImages = {
+            easy: [
+                'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1503376763036-066120622c74?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&h=400&fit=crop'
+            ],
+            medium: [
+                'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1503376763036-066120622c74?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1503376763036-066120622c74?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=400&fit=crop'
+            ],
+            hard: [
+                'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1503376763036-066120622c74?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1503376763036-066120622c74?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1503376763036-066120622c74?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1617531653332-bd46c24f2068?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1507136566006-cfc505b114fc?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=400&h=400&fit=crop',
+                'https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=400&h=400&fit=crop'
+            ]
+        };
+
+        const carCategories = {
+            easy: { name: 'Classic Cars', desc: 'Legendary vintage muscle cars and classics from the golden era' },
+            medium: { name: 'Sports Cars', desc: 'High-performance sports cars and modern performance vehicles' },
+            hard: { name: 'Supercars', desc: 'Exotic hypercars and limited edition supercars' }
+        };
+
+        // Game State
+        let gameState = {
+            cards: [],
+            flippedCards: [],
+            matchedPairs: 0,
+            totalPairs: 8,
+            moves: 0,
+            timer: 0,
+            timerInterval: null,
+            isPlaying: false,
+            difficulty: 'easy',
+            gameMode: 'single',
+            currentPlayer: 1,
+            playerScores: { 1: 0, 2: 0 },
+            soundEnabled: true,
+            theme: 'dark',
+            locked: { medium: false, hard: true },
+            leaderboard: []
+        };
+
+        // Audio Context for Sound Effects
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            loadLeaderboard();
+            updateLeaderboardDisplay();
+            loadUnlockedLevels();
+        });
+
+        // Create Background Particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 50; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        // Select Difficulty
+        function selectDifficulty(difficulty) {
+            const btn = document.querySelector(`[data-difficulty="${difficulty}"]`);
+            if (btn.classList.contains('locked')) return;
+
+            document.querySelectorAll('.difficulty-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            gameState.difficulty = difficulty;
+
+            // Update category info
+            const info = carCategories[difficulty];
+            document.querySelector('.car-category-info h4').textContent = 
+                difficulty === 'easy' ? '🚗 ' + info.name + ' (Easy)' :
+                difficulty === 'medium' ? '🏎️ ' + info.name + ' (Medium)' :
+                '🔥 ' + info.name + ' (Hard)';
+            document.querySelector('.car-category-info p').textContent = info.desc;
+        }
+
+        // Toggle Sound Setting
+        function toggleSoundSetting() {
+            const toggle = document.getElementById('soundToggle');
+            toggle.classList.toggle('active');
+            gameState.soundEnabled = toggle.classList.contains('active');
+        }
+
+        // Load Unlocked Levels
+        function loadUnlockedLevels() {
+            const unlocked = JSON.parse(localStorage.getItem('memoryGameUnlocked') || '{"medium": false, "hard": true}');
+            gameState.locked = unlocked;
+
+            if (!unlocked.medium) {
+                document.querySelector('[data-difficulty="medium"]').classList.remove('locked');
+            }
+            if (!unlocked.hard) {
+                document.querySelector('[data-difficulty="hard"]').classList.remove('locked');
+            }
+        }
+
+        // Sound Effects
+        function playSound(type) {
+            if (!gameState.soundEnabled) return;
+
+            if (!audioCtx) {
+                audioCtx = new AudioContext();
+            }
+
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            switch(type) {
+                case 'flip':
+                    oscillator.frequency.setValueAtTime(400, audioCtx.currentTime);
+                    oscillator.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
+                    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.1);
+                    break;
+                case 'match':
+                    oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                    oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+                    oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+                    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.4);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.4);
+                    break;
+                case 'win':
+                    oscillator.frequency.setValueAtTime(523.25, audioCtx.currentTime);
+                    oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime + 0.1);
+                    oscillator.frequency.setValueAtTime(783.99, audioCtx.currentTime + 0.2);
+                    oscillator.frequency.setValueAtTime(1046.50, audioCtx.currentTime + 0.3);
+                    gainNode.gain.setValueAtTime(0.4, audioCtx.currentTime);
+                    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.8);
+                    oscillator.start(audioCtx.currentTime);
+                    oscillator.stop(audioCtx.currentTime + 0.8);
+                    break;
+            }
+        }
+
+        // Start Game
+        function startGame() {
+            gameState.gameMode = document.getElementById('gameMode').value;
+
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameContainer').style.display = 'block';
+
+            if (gameState.gameMode === 'multi') {
+                document.getElementById('playerIndicator').style.display = 'flex';
+                document.getElementById('bestScoreContainer').style.display = 'none';
+            } else {
+                document.getElementById('playerIndicator').style.display = 'none';
+                document.getElementById('bestScoreContainer').style.display = 'block';
+            }
+
+            initGame();
+        }
+
+        // Initialize Game
+        function initGame() {
+            // Reset state
+            gameState.flippedCards = [];
+            gameState.matchedPairs = 0;
+            gameState.moves = 0;
+            gameState.timer = 0;
+            gameState.isPlaying = false;
+            gameState.currentPlayer = 1;
+            gameState.playerScores = { 1: 0, 2: 0 };
+
+            // Clear timer
+            if (gameState.timerInterval) {
+                clearInterval(gameState.timerInterval);
+            }
+
+            // Update UI
+            updateStats();
+            updatePlayerIndicator();
+
+            // Setup grid based on difficulty
+            const grid = document.getElementById('gameGrid');
+            grid.className = 'game-grid ' + gameState.difficulty;
+
+            // Determine grid size
+            switch(gameState.difficulty) {
+                case 'easy':
+                    gameState.totalPairs = 8;
+                    break;
+                case 'medium':
+                    gameState.totalPairs = 18;
+                    break;
+                case 'hard':
+                    gameState.totalPairs = 32;
+                    break;
+            }
+
+            // Generate cards
+            const images = carImages[gameState.difficulty].slice(0, gameState.totalPairs);
+            const cardPairs = [...images, ...images];
+            gameState.cards = shuffle(cardPairs);
+
+            // Render grid
+            grid.innerHTML = '';
+            gameState.cards.forEach((image, index) => {
+                const card = createCard(image, index);
+                grid.appendChild(card);
+            });
+
+            // Update progress bar
+            updateProgressBar();
+
+            // Load best score
+            if (gameState.gameMode === 'single') {
+                loadBestScore();
+            }
+        }
+
+        // Create Card Element
+        function createCard(imageUrl, index) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.dataset.index = index;
+            card.dataset.image = imageUrl;
+
+            card.innerHTML = `
+                <div class="card-face card-front"></div>
+                <div class="card-face card-back">
+                    <img src="${imageUrl}" alt="Car" loading="lazy">
+                </div>
+            `;
+
+            card.addEventListener('click', () => flipCard(card));
+
+            return card;
+        }
+
+        // Shuffle Array
+        function shuffle(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // Flip Card
+        function flipCard(card) {
+            if (card.classList.contains('flipped') || 
+                card.classList.contains('matched') || 
+                gameState.flippedCards.length >= 2) {
+                return;
+            }
+
+            if (!gameState.isPlaying) {
+                gameState.isPlaying = true;
+                startTimer();
+            }
+
+            card.classList.add('flipped');
+            gameState.flippedCards.push(card);
+
+            playSound('flip');
+
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+
+            if (gameState.flippedCards.length === 2) {
+                gameState.moves++;
+                updateStats();
+                checkMatch();
+            }
+        }
+
+        // Check Match
+        function checkMatch() {
+            const [card1, card2] = gameState.flippedCards;
+            const match = card1.dataset.image === card2.dataset.image;
+
+            if (match) {
+                setTimeout(() => {
+                    card1.classList.add('matched');
+                    card2.classList.add('matched');
+                    gameState.matchedPairs++;
+                    gameState.flippedCards = [];
+
+                    if (gameState.gameMode === 'multi') {
+                        gameState.playerScores[gameState.currentPlayer]++;
+                        updatePlayerIndicator();
+                    }
+
+                    playSound('match');
+
+                    if (navigator.vibrate) {
+                        navigator.vibrate([100, 50, 100]);
+                    }
+
+                    updateStats();
+                    updateProgressBar();
+
+                    if (gameState.matchedPairs === gameState.totalPairs) {
+                        endGame();
+                    }
+                }, 500);
+            } else {
+                setTimeout(() => {
+                    card1.classList.remove('flipped');
+                    card2.classList.remove('flipped');
+                    gameState.flippedCards = [];
+
+                    if (gameState.gameMode === 'multi') {
+                        gameState.currentPlayer = gameState.currentPlayer === 1 ? 2 : 1;
+                        updatePlayerIndicator();
+                    }
+                }, 1000);
+            }
+        }
+
+        // Update Player Indicator
+        function updatePlayerIndicator() {
+            const badge1 = document.getElementById('player1Badge');
+            const badge2 = document.getElementById('player2Badge');
+
+            badge1.classList.toggle('active', gameState.currentPlayer === 1);
+            badge2.classList.toggle('active', gameState.currentPlayer === 2);
+
+            document.getElementById('player1Score').textContent = gameState.playerScores[1];
+            document.getElementById('player2Score').textContent = gameState.playerScores[2];
+        }
+
+        // Start Timer
+        function startTimer() {
+            gameState.timerInterval = setInterval(() => {
+                gameState.timer++;
+                updateTimer();
+            }, 1000);
+        }
+
+        // Update Timer Display
+        function updateTimer() {
+            const minutes = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
+            const seconds = (gameState.timer % 60).toString().padStart(2, '0');
+            document.getElementById('timer').textContent = `${minutes}:${seconds}`;
+        }
+
+        // Update Stats
+        function updateStats() {
+            document.getElementById('moves').textContent = gameState.moves;
+            document.getElementById('pairs').textContent = `${gameState.matchedPairs}/${gameState.totalPairs}`;
+        }
+
+        // Update Progress Bar
+        function updateProgressBar() {
+            const progress = (gameState.matchedPairs / gameState.totalPairs) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // End Game
+        function endGame() {
+            clearInterval(gameState.timerInterval);
+            playSound('win');
+
+            if (gameState.gameMode === 'single') {
+                saveScore();
+            }
+
+            unlockNextDifficulty();
+            showConfetti();
+
+            setTimeout(() => {
+                showVictoryModal();
+            }, 500);
+        }
+
+        // Show Victory Modal
+        function showVictoryModal() {
+            const modal = document.getElementById('victoryModal');
+            const minutes = Math.floor(gameState.timer / 60).toString().padStart(2, '0');
+            const seconds = (gameState.timer % 60).toString().padStart(2, '0');
+
+            document.getElementById('modalTime').textContent = `${minutes}:${seconds}`;
+            document.getElementById('modalMoves').textContent = gameState.moves;
+
+            if (gameState.gameMode === 'multi') {
+                const winner = gameState.playerScores[1] > gameState.playerScores[2] ? 'Player 1' : 
+                              gameState.playerScores[2] > gameState.playerScores[1] ? 'Player 2' : 'It\'s a Tie';
+                document.getElementById('victoryTitle').textContent = winner === 'It\'s a Tie' ? 'It\'s a Tie!' : `${winner} Wins! 🏆`;
+                document.getElementById('victoryMessage').textContent = 
+                    `Player 1: ${gameState.playerScores[1]} pairs | Player 2: ${gameState.playerScores[2]} pairs`;
+            } else {
+                const category = carCategories[gameState.difficulty].name;
+                document.getElementById('victoryTitle').textContent = '🏁 Victory!';
+                document.getElementById('victoryMessage').textContent = 
+                    `You mastered the ${category}! Great job!`;
+            }
+
+            modal.classList.add('show');
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('victoryModal').classList.remove('show');
+            restartGame();
+        }
+
+        // Confetti Animation
+        function showConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#fd79a8'];
+
+            for (let i = 0; i < 150; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    size: Math.random() * 10 + 5,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    speed: Math.random() * 3 + 2,
+                    angle: Math.random() * 360,
+                    rotation: Math.random() * 0.2 - 0.1
+                });
+            }
+
+            let animationId;
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                particles.forEach((p, i) => {
+                    p.y += p.speed;
+                    p.angle += p.rotation;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.angle);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+
+                    if (p.y > canvas.height) {
+                        p.y = -20;
+                        p.x = Math.random() * canvas.width;
+                    }
+                });
+
+                animationId = requestAnimationFrame(animate);
+            }
+
+            animate();
+
+            setTimeout(() => {
+                cancelAnimationFrame(animationId);
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }, 5000);
+        }
+
+        // Save Score
+        function saveScore() {
+            const scores = JSON.parse(localStorage.getItem('memoryGameScores') || '[]');
+            scores.push({
+                difficulty: gameState.difficulty,
+                time: gameState.timer,
+                moves: gameState.moves,
+                date: new Date().toLocaleDateString(),
+                category: carCategories[gameState.difficulty].name
+            });
+            scores.sort((a, b) => a.time - b.time);
+            localStorage.setItem('memoryGameScores', JSON.stringify(scores.slice(0, 10)));
+        }
+
+        // Load Best Score
+        function loadBestScore() {
+            const scores = JSON.parse(localStorage.getItem('memoryGameScores') || '[]');
+            const difficultyScores = scores.filter(s => s.difficulty === gameState.difficulty);
+            if (difficultyScores.length > 0) {
+                const best = difficultyScores[0];
+                const minutes = Math.floor(best.time / 60).toString().padStart(2, '0');
+                const seconds = (best.time % 60).toString().padStart(2, '0');
+                document.getElementById('bestScore').textContent = `${minutes}:${seconds}`;
+            } else {
+                document.getElementById('bestScore').textContent = '-';
+            }
+        }
+
+        // Unlock Next Difficulty
+        function unlockNextDifficulty() {
+            if (gameState.difficulty === 'easy') {
+                gameState.locked.medium = false;
+                document.querySelector('[data-difficulty="medium"]').classList.remove('locked');
+            } else if (gameState.difficulty === 'medium') {
+                gameState.locked.hard = false;
+                document.querySelector('[data-difficulty="hard"]').classList.remove('locked');
+            }
+            localStorage.setItem('memoryGameUnlocked', JSON.stringify(gameState.locked));
+        }
+
+        // Load Leaderboard
+        function loadLeaderboard() {
+            const scores = JSON.parse(localStorage.getItem('memoryGameScores') || '[]');
+            gameState.leaderboard = scores;
+        }
+
+        // Update Leaderboard Display
+        function updateLeaderboardDisplay() {
+            const list = document.getElementById('leaderboardList');
+            if (gameState.leaderboard.length === 0) {
+                list.innerHTML = '<p style="color: var(--text-secondary);">No races completed yet!</p>';
+                return;
+            }
+
+            list.innerHTML = gameState.leaderboard.slice(0, 5).map((score, index) => {
+                const minutes = Math.floor(score.time / 60).toString().padStart(2, '0');
+                const seconds = (score.time % 60).toString().padStart(2, '0');
+                return `
+                    <div class="leaderboard-item">
+                        <span>
+                            <span class="leaderboard-rank">#${index + 1}</span>
+                            ${score.category || score.difficulty}
+                            <span class="difficulty-tag ${score.difficulty}">${score.difficulty}</span>
+                        </span>
+                        <span>${minutes}:${seconds}</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle Theme
+        function toggleTheme() {
+            document.body.classList.toggle('light-theme');
+            gameState.theme = document.body.classList.contains('light-theme') ? 'light' : 'dark';
+        }
+
+        // Toggle Sound
+        function toggleSound() {
+            gameState.soundEnabled = !gameState.soundEnabled;
+        }
+
+        // Show Leaderboard
+        function showLeaderboard() {
+            loadLeaderboard();
+            updateLeaderboardDisplay();
+            alert('🏆 Check the start screen for the full leaderboard!');
+        }
+
+        // Restart Game
+        function restartGame() {
+            initGame();
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('confetti-canvas');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+    <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>
