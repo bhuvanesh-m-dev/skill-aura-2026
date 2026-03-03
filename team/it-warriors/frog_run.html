@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frog Escape: Level 01</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #0f172a;
+            font-family: 'Press Start 2P', cursive;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        #game-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        canvas {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .hud-text {
+            color: white;
+            text-shadow: 2px 2px 0 #000;
+            font-size: 1.2rem;
+            z-index: 10;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            pointer-events: auto;
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00ff88, #00cc6a);
+            border: 4px solid #fff;
+            color: white;
+            padding: 15px 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 20px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px #00ff88;
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #00ff88;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.1) 50%,
+                rgba(0,0,0,0.1)
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 50;
+        }
+        
+        .vignette {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: radial-gradient(circle, rgba(0,0,0,0) 60%, rgba(0,0,0,0.6) 100%);
+            pointer-events: none;
+            z-index: 51;
+        }
+
+        .mobile-hint {
+            position: absolute;
+            bottom: 10%;
+            width: 100%;
+            text-align: center;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.8rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0.3; }
+        }
+
+        .frog-icon {
+            font-size: 4rem;
+            filter: drop-shadow(0 0 20px #00ff88);
+        }
+
+        .snake-icon {
+            font-size: 3rem;
+            filter: drop-shadow(0 0 10px #ff0000);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <canvas id="gameCanvas"></canvas>
+        
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+
+        <div id="ui-layer">
+            <div class="flex justify-between w-full">
+                <div class="hud-text">SCORE: <span id="scoreDisplay">0</span></div>
+                <div class="hud-text text-yellow-400">HI: <span id="highScoreDisplay">0</span></div>
+            </div>
+            <div class="absolute top-5 left-1/2 transform -translate-x-1/2 hud-text text-2xl text-green-400 tracking-widest">
+                FROG ESCAPE
+            </div>
+            <div class="mobile-hint md:hidden">TAP TO JUMP</div>
+        </div>
+
+        <div id="startScreen" class="screen">
+            <div class="frog-icon mb-4">🐸</div>
+            <h1 class="text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-cyan-500 mb-4 text-center leading-tight" style="filter: drop-shadow(0 0 10px rgba(0,255,136,0.5));">
+                FROG<br>ESCAPE
+            </h1>
+            <p class="text-gray-300 mb-8 text-xs md:text-sm text-center max-w-md leading-6">
+                ESCAPE FROM THE SNAKES!<br>JUMP TO SURVIVE.<br>USE [SPACE] OR [CLICK].
+            </p>
+            <button id="startBtn" class="btn">START HOPPING</button>
+        </div>
+
+        <div id="gameOverScreen" class="screen hidden">
+            <div class="snake-icon mb-4">🐍</div>
+            <h2 class="text-red-500 text-4xl mb-2 text-shadow-lg" style="text-shadow: 4px 4px 0 #000;">CAUGHT!</h2>
+            <p class="text-white mb-6">FINAL SCORE: <span id="finalScore">0</span></p>
+            <button id="restartBtn" class="btn">TRY AGAIN</button>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            gravity: 0.6,
+            jumpForce: -14,
+            groundHeight: 100,
+            baseSpeed: 6,
+            maxSpeed: 15,
+            speedIncrement: 0.001,
+            spawnRate: 120,
+            colors: {
+                player: '#00ff88',
+                playerGlow: '#00ff88',
+                obstacle: '#ff3333',
+                obstacleGlow: '#ff0000',
+                ground: '#1e3a2f',
+                groundTop: '#2d5a3d',
+                bg: '#0a1f15'
+            }
+        };
+
+        const state = {
+            isPlaying: false,
+            isGameOver: false,
+            score: 0,
+            highScore: 0,
+            speed: CONFIG.baseSpeed,
+            frames: 0,
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+
+        const Audio = {
+            synth: null,
+            noise: null,
+            bgm: null,
+            isInit: false,
+
+            init: async () => {
+                if (Audio.isInit) return;
+                await Tone.start();
+                
+                Audio.synth = new Tone.PolySynth(Tone.Synth, {
+                    oscillator: { type: "square" },
+                    envelope: { attack: 0.01, decay: 0.1, sustain: 0, release: 0.1 }
+                }).toDestination();
+                Audio.synth.volume.value = -10;
+
+                Audio.noise = new Tone.NoiseSynth({
+                    noise: { type: "white" },
+                    envelope: { attack: 0.005, decay: 0.3, sustain: 0 }
+                }).toDestination();
+
+                const bass = new Tone.MembraneSynth().toDestination();
+                bass.volume.value = -20;
+                
+                const loop = new Tone.Loop(time => {
+                    bass.triggerAttackRelease("C2", "8n", time);
+                    bass.triggerAttackRelease("C2", "8n", time + 0.5);
+                    bass.triggerAttackRelease("G1", "8n", time + 1.0);
+                    bass.triggerAttackRelease("C2", "8n", time + 1.5);
+                }, "2n");
+                
+                Audio.bgm = loop;
+                Audio.isInit = true;
+            },
+
+            playJump: () => {
+                if(Audio.synth) Audio.synth.triggerAttackRelease(["C5", "E5", "G5"], "16n");
+            },
+
+            playCrash: () => {
+                if(Audio.noise) Audio.noise.triggerAttackRelease("8n");
+            },
+
+            startMusic: () => {
+                if(Audio.bgm) {
+                    Tone.Transport.start();
+                    Audio.bgm.start(0);
+                }
+            },
+
+            stopMusic: () => {
+                if(Audio.bgm) {
+                    Audio.bgm.stop();
+                    Tone.Transport.stop();
+                }
+            }
+        };
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            state.width = canvas.width;
+            state.height = canvas.height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Frog {
+            constructor() {
+                this.size = 50;
+                this.x = 100;
+                this.y = state.height - CONFIG.groundHeight - this.size;
+                this.dy = 0;
+                this.isGrounded = true;
+                this.legAngle = 0;
+                this.trail = [];
+            }
+
+            jump() {
+                if (this.isGrounded) {
+                    this.dy = CONFIG.jumpForce;
+                    this.isGrounded = false;
+                    Audio.playJump();
+                    createParticles(this.x + this.size/2, this.y + this.size, 8, '#00ff88');
+                }
+            }
+
+            update() {
+                this.y += this.dy;
+                
+                if (this.y < state.height - CONFIG.groundHeight - this.size) {
+                    this.dy += CONFIG.gravity;
+                    this.isGrounded = false;
+                    this.legAngle += 0.3;
+                } else {
+                    this.dy = 0;
+                    this.isGrounded = true;
+                    this.y = state.height - CONFIG.groundHeight - this.size;
+                    this.legAngle = 0;
+                }
+
+                if (state.frames % 3 === 0) {
+                    this.trail.push({x: this.x, y: this.y, alpha: 0.6});
+                }
+                
+                for (let i = this.trail.length - 1; i >= 0; i--) {
+                    this.trail[i].x -= state.speed;
+                    this.trail[i].alpha -= 0.05;
+                    if (this.trail[i].alpha <= 0) this.trail.splice(i, 1);
+                }
+            }
+
+            draw() {
+                this.trail.forEach(t => {
+                    ctx.fillStyle = `rgba(0, 255, 136, ${t.alpha})`;
+                    ctx.beginPath();
+                    ctx.arc(t.x + this.size/2, t.y + this.size/2, this.size/3, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                ctx.save();
+                ctx.translate(this.x + this.size/2, this.y + this.size/2);
+                
+                const bounce = this.isGrounded ? Math.sin(state.frames * 0.2) * 3 : 0;
+                ctx.translate(0, bounce);
+
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = CONFIG.colors.playerGlow;
+
+                // Frog body (green circle)
+                ctx.fillStyle = '#00cc44';
+                ctx.beginPath();
+                ctx.arc(0, 0, this.size/2.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Belly (lighter green)
+                ctx.fillStyle = '#88ffaa';
+                ctx.beginPath();
+                ctx.arc(0, 5, this.size/4, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Eyes
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(-12, -15, 10, 0, Math.PI * 2);
+                ctx.arc(12, -15, 10, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Pupils
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.arc(-10, -15, 5, 0, Math.PI * 2);
+                ctx.arc(14, -15, 5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Eye shine
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(-8, -17, 2, 0, Math.PI * 2);
+                ctx.arc(16, -17, 2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Mouth
+                ctx.strokeStyle = '#004411';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.arc(0, 5, 15, 0.2, Math.PI - 0.2);
+                ctx.stroke();
+
+                // Legs (animated when jumping)
+                const legOffset = Math.sin(this.legAngle) * 10;
+                
+                // Back legs
+                ctx.fillStyle = '#00aa33';
+                ctx.beginPath();
+                ctx.ellipse(-20 + legOffset, 15, 8, 15, -0.5, 0, Math.PI * 2);
+                ctx.ellipse(20 - legOffset, 15, 8, 15, 0.5, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Front legs
+                ctx.beginPath();
+                ctx.ellipse(-15, 20, 6, 12, -0.3, 0, Math.PI * 2);
+                ctx.ellipse(15, 20, 6, 12, 0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                ctx.restore();
+            }
+        }
+
+        class Snake {
+            constructor() {
+                this.size = 40;
+                this.x = state.width;
+                this.y = state.height - CONFIG.groundHeight - this.size;
+                this.markedForDeletion = false;
+                this.wiggle = 0;
+                this.segments = [];
+                for(let i=0; i<5; i++) {
+                    this.segments.push({x: 0, y: 0});
+                }
+            }
+
+            update() {
+                this.x -= state.speed;
+                this.wiggle += 0.3;
+                
+                // Update segments for wiggle effect
+                for(let i=0; i<this.segments.length; i++) {
+                    this.segments[i].x = this.x - i * 15;
+                    this.segments[i].y = Math.sin(this.wiggle + i * 0.5) * 5;
+                }
+                
+                if (this.x + this.size * 3 < 0) this.markedForDeletion = true;
+            }
+
+            draw() {
+                ctx.save();
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = CONFIG.colors.obstacleGlow;
+
+                // Draw snake body segments
+                for(let i=this.segments.length-1; i>=0; i--) {
+                    const seg = this.segments[i];
+                    const size = this.size * (1 - i * 0.1);
+                    
+                    // Body color gradient from dark to light green
+                    const green = Math.floor(100 + i * 30);
+                    ctx.fillStyle = `rgb(0, ${green}, 0)`;
+                    
+                    ctx.beginPath();
+                    ctx.arc(seg.x + this.size/2, this.y + this.size/2 + seg.y, size/2, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    // Scales pattern
+                    ctx.strokeStyle = `rgba(0, ${green-30}, 0, 0.5)`;
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.arc(seg.x + this.size/2, this.y + this.size/2 + seg.y, size/3, 0, Math.PI * 2);
+                    ctx.stroke();
+                }
+
+                // Head
+                ctx.fillStyle = '#228822';
+                ctx.beginPath();
+                ctx.arc(this.x + this.size/2, this.y + this.size/2 + this.segments[0].y, this.size/2, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Eyes
+                ctx.fillStyle = 'yellow';
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.size/2 - 8, this.y + this.size/2 - 10 + this.segments[0].y, 6, 10, -0.3, 0, Math.PI * 2);
+                ctx.ellipse(this.x + this.size/2 + 8, this.y + this.size/2 - 10 + this.segments[0].y, 6, 10, 0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Pupils (slits)
+                ctx.fillStyle = 'black';
+                ctx.beginPath();
+                ctx.ellipse(this.x + this.size/2 - 8, this.y + this.size/2 - 10 + this.segments[0].y, 2, 8, -0.3, 0, Math.PI * 2);
+                ctx.ellipse(this.x + this.size/2 + 8, this.y + this.size/2 - 10 + this.segments[0].y, 2, 8, 0.3, 0, Math.PI * 2);
+                ctx.fill();
+
+                // Tongue (flicking)
+                if (Math.sin(this.wiggle * 2) > 0.7) {
+                    ctx.strokeStyle = '#ff6666';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(this.x + this.size/2, this.y + this.size/2 + this.segments[0].y);
+                    ctx.lineTo(this.x + this.size/2 - 20, this.y + this.size/2 - 5 + this.segments[0].y);
+                    ctx.stroke();
+                    
+                    // Forked tip
+                    ctx.beginPath();
+                    ctx.moveTo(this.x + this.size/2 - 20, this.y + this.size/2 - 5 + this.segments[0].y);
+                    ctx.lineTo(this.x + this.size/2 - 25, this.y + this.size/2 - 10 + this.segments[0].y);
+                    ctx.moveTo(this.x + this.size/2 - 20, this.y + this.size/2 - 5 + this.segments[0].y);
+                    ctx.lineTo(this.x + this.size/2 - 25, this.y + this.size/2 + this.segments[0].y);
+                    ctx.stroke();
+                }
+
+                ctx.restore();
+            }
+
+            getBounds() {
+                return {
+                    x: this.x,
+                    y: this.y + this.segments[0].y,
+                    w: this.size,
+                    h: this.size
+                };
+            }
+        }
+
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.size = Math.random() * 6 + 2;
+                this.speedX = Math.random() * 6 - 3;
+                this.speedY = Math.random() * 6 - 3;
+                this.color = color;
+                this.life = 1.0;
+            }
+            
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                this.speedY += 0.2; // gravity
+                this.life -= 0.02;
+            }
+            
+            draw() {
+                ctx.globalAlpha = this.life;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
+        }
+
+        class Background {
+            constructor() {
+                this.lilyPads = [];
+                for(let i=0; i<8; i++) {
+                    this.lilyPads.push({
+                        x: Math.random() * state.width,
+                        y: state.height - CONFIG.groundHeight - 20 - Math.random() * 30,
+                        size: 30 + Math.random() * 20,
+                        speed: 0.5 + Math.random() * 0.5
+                    });
+                }
+                
+                this.reeds = [];
+                for(let i=0; i<15; i++) {
+                    this.reeds.push({
+                        x: Math.random() * state.width,
+                        h: 50 + Math.random() * 80,
+                        sway: Math.random() * Math.PI * 2
+                    });
+                }
+            }
+            
+            update() {
+                this.lilyPads.forEach(pad => {
+                    pad.x -= pad.speed * (state.speed * 0.3);
+                    if(pad.x < -50) {
+                        pad.x = state.width + 50;
+                        pad.y = state.height - CONFIG.groundHeight - 20 - Math.random() * 30;
+                    }
+                });
+                
+                this.reeds.forEach(reed => {
+                    reed.x -= state.speed * 0.8;
+                    reed.sway += 0.05;
+                    if(reed.x < -20) reed.x = state.width + 20;
+                });
+            }
+
+            draw() {
+                // Swamp gradient sky
+                const grad = ctx.createLinearGradient(0, 0, 0, state.height);
+                grad.addColorStop(0, '#0a1a0a');
+                grad.addColorStop(0.5, '#1a3a1a');
+                grad.addColorStop(1, '#0d2b1d');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, state.width, state.height);
+
+                // Distant trees silhouette
+                ctx.fillStyle = '#051005';
+                for(let x=0; x<state.width; x+=100) {
+                    const h = 100 + Math.sin(x * 0.01) * 50;
+                    ctx.beginPath();
+                    ctx.moveTo(x, state.height - CONFIG.groundHeight);
+                    ctx.lineTo(x + 30, state.height - CONFIG.groundHeight - h);
+                    ctx.lineTo(x + 60, state.height - CONFIG.groundHeight);
+                    ctx.fill();
+                }
+
+                // Reeds
+                this.reeds.forEach(reed => {
+                    const sway = Math.sin(reed.sway) * 10;
+                    ctx.strokeStyle = '#2d5016';
+                    ctx.lineWidth = 3;
+                    ctx.beginPath();
+                    ctx.moveTo(reed.x, state.height - CONFIG.groundHeight);
+                    ctx.quadraticCurveTo(
+                        reed.x + sway, 
+                        state.height - CONFIG.groundHeight - reed.h/2,
+                        reed.x + sway * 2, 
+                        state.height - CONFIG.groundHeight - reed.h
+                    );
+                    ctx.stroke();
+                    
+                    // Reed head
+                    ctx.fillStyle = '#4a7023';
+                    ctx.beginPath();
+                    ctx.ellipse(reed.x + sway * 2, state.height - CONFIG.groundHeight - reed.h, 4, 15, sway * 0.05, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+
+                // Water/ground
+                ctx.fillStyle = CONFIG.colors.ground;
+                ctx.fillRect(0, state.height - CONFIG.groundHeight, state.width, CONFIG.groundHeight);
+                
+                // Water line
+                ctx.fillStyle = '#4a90e8';
+                ctx.fillRect(0, state.height - CONFIG.groundHeight, state.width, 10);
+                
+                ctx.fillStyle = CONFIG.colors.groundTop;
+                ctx.fillRect(0, state.height - CONFIG.groundHeight + 10, state.width, 5);
+
+                // Lily pads
+                this.lilyPads.forEach(pad => {
+                    ctx.fillStyle = '#228b22';
+                    ctx.beginPath();
+                    ctx.arc(pad.x, pad.y, pad.size, 0.2, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Lily pad detail
+                    ctx.strokeStyle = '#1a6b1a';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(pad.x, pad.y);
+                    ctx.lineTo(pad.x + pad.size * 0.8, pad.y);
+                    ctx.stroke();
+                    
+                    // Flower on some pads
+                    if(pad.size > 40) {
+                        ctx.fillStyle = '#ff69b4';
+                        ctx.beginPath();
+                        ctx.arc(pad.x, pad.y - 5, 8, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                });
+            }
+        }
+
+        let frog;
+        let snakes = [];
+        let particles = [];
+        let background;
+        let animationId;
+        let spawnTimer = 0;
+
+        function initGame() {
+            frog = new Frog();
+            background = new Background();
+            snakes = [];
+            particles = [];
+            state.score = 0;
+            state.speed = CONFIG.baseSpeed;
+            state.frames = 0;
+            state.isGameOver = false;
+            state.isPlaying = true;
+            
+            document.getElementById('scoreDisplay').innerText = '0';
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            
+            Audio.startMusic();
+            animate();
+        }
+
+        function createParticles(x, y, count, color) {
+            for(let i=0; i<count; i++) {
+                particles.push(new Particle(x, y, color));
+            }
+        }
+
+        function checkCollision(frog, snake) {
+            const snakeBounds = snake.getBounds();
+            return (
+                frog.x < snakeBounds.x + snakeBounds.w &&
+                frog.x + frog.size > snakeBounds.x &&
+                frog.y < snakeBounds.y + snakeBounds.h &&
+                frog.y + frog.size > snakeBounds.y
+            );
+        }
+
+        function gameOver() {
+            state.isPlaying = false;
+            state.isGameOver = true;
+            cancelAnimationFrame(animationId);
+            Audio.stopMusic();
+            Audio.playCrash();
+
+            canvas.style.transform = 'translate(5px, 5px)';
+            setTimeout(() => canvas.style.transform = 'translate(-5px, -5px)', 50);
+            setTimeout(() => canvas.style.transform = 'translate(0, 0)', 100);
+
+            if (state.score > state.highScore) {
+                state.highScore = state.score;
+                document.getElementById('highScoreDisplay').innerText = state.highScore;
+            }
+
+            document.getElementById('finalScore').innerText = Math.floor(state.score);
+            document.getElementById('gameOverScreen').classList.remove('hidden');
+        }
+
+        function animate() {
+            if (!state.isPlaying) return;
+
+            ctx.clearRect(0, 0, state.width, state.height);
+            state.frames++;
+
+            if (state.speed < CONFIG.maxSpeed) {
+                state.speed += CONFIG.speedIncrement;
+            }
+
+            state.score += state.speed * 0.01;
+            document.getElementById('scoreDisplay').innerText = Math.floor(state.score);
+
+            background.update();
+            background.draw();
+
+            spawnTimer--;
+            if (spawnTimer <= 0) {
+                snakes.push(new Snake());
+                spawnTimer = CONFIG.spawnRate - (state.speed * 2) + Math.random() * 50;
+                if (spawnTimer < 40) spawnTimer = 40;
+            }
+
+            for (let i = snakes.length - 1; i >= 0; i--) {
+                let snake = snakes[i];
+                snake.update();
+                snake.draw();
+
+                if (checkCollision(frog, snake)) {
+                    createParticles(frog.x + frog.size/2, frog.y + frog.size/2, 30, '#00ff88');
+                    gameOver();
+                    return;
+                }
+
+                if (snake.markedForDeletion) {
+                    snakes.splice(i, 1);
+                }
+            }
+
+            frog.update();
+            frog.draw();
+
+            for (let i = particles.length - 1; i >= 0; i--) {
+                particles[i].update();
+                particles[i].draw();
+                if (particles[i].life <= 0) particles.splice(i, 1);
+            }
+
+            animationId = requestAnimationFrame(animate);
+        }
+
+        function handleInput(e) {
+            if (e.code === 'Space') e.preventDefault();
+            if ((e.code === 'Space' || e.type === 'touchstart' || e.type === 'mousedown') && state.isPlaying) {
+                frog.jump();
+            }
+        }
+
+        window.addEventListener('keydown', handleInput);
+        window.addEventListener('touchstart', handleInput, {passive: false});
+        window.addEventListener('mousedown', handleInput);
+
+        document.getElementById('startBtn').addEventListener('click', async () => {
+            await Audio.init();
+            initGame();
+        });
+
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            initGame();
+        });
+
+        ctx.fillStyle = CONFIG.colors.bg;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    </script>
+</body>
+</html>
