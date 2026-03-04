@@ -1,0 +1,1631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PHOENIX RISE: Galaxy Edition 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Rajdhani:wght@300;500;700&display=swap');
+       
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+       
+        body {
+            background: #000;
+            overflow: hidden;
+            font-family: 'Rajdhani', sans-serif;
+            touch-action: none;
+        }
+       
+        #gameCanvas {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+       
+        /* Screen System */
+        .screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(5,5,8,0.95);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+       
+        .screen.active {
+            display: flex;
+        }
+       
+        /* Game UI */
+        .game-ui {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: none;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px;
+            z-index: 50;
+        }
+       
+        .game-ui.active {
+            display: flex;
+        }
+       
+        .hud-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            pointer-events: auto;
+        }
+       
+        .hud-left {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+       
+        .coin-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 2px solid #ffd700;
+            padding: 8px 15px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+       
+        .coin-icon {
+            width: 25px;
+            height: 25px;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            border-radius: 50%;
+            border: 2px solid #fff;
+            box-shadow: 0 0 8px #ffd700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #b8860b;
+            font-weight: bold;
+        }
+       
+        .coin-text {
+            color: #ffd700;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+        }
+       
+        .hud-btn {
+            background: linear-gradient(45deg, #ff006e, #ff4d00);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 15px;
+            color: #fff;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.4);
+            transition: all 0.3s;
+            pointer-events: auto;
+        }
+       
+        .hud-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px rgba(255, 0, 110, 0.6);
+        }
+       
+        .score-box {
+            text-align: center;
+        }
+       
+        .score-label {
+            color: #00d4ff;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+       
+        .score-value {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 42px;
+            color: #fff;
+            text-shadow: 0 0 20px #00d4ff;
+        }
+       
+        .level-box {
+            text-align: center;
+        }
+       
+        .level-text {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 20px;
+            color: #ff00ff;
+            text-shadow: 0 0 15px #ff00ff;
+        }
+       
+        .progress-bg {
+            width: 180px;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+       
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff00ff, #00d4ff);
+            width: 0%;
+            transition: width 0.3s;
+            box-shadow: 0 0 10px #ff00ff;
+        }
+       
+        .hud-bottom {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            pointer-events: auto;
+        }
+       
+        .fire-box {
+            width: 250px;
+            height: 35px;
+            background: rgba(0,0,0,0.5);
+            border: 2px solid #ff6b35;
+            border-radius: 17px;
+            overflow: hidden;
+            position: relative;
+        }
+       
+        .fire-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff6b35, #f7931e, #ff006e);
+            transition: width 0.3s;
+        }
+       
+        .fire-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #000;
+        }
+       
+        .combo-box {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: right;
+        }
+       
+        .combo-value {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 32px;
+            color: #f7931e;
+            text-shadow: 0 0 15px #f7931e;
+        }
+       
+        .combo-label {
+            color: #666;
+            font-size: 10px;
+            letter-spacing: 2px;
+        }
+       
+        /* Overlays */
+        .mode-text {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Syncopate', sans-serif;
+            font-size: 64px;
+            color: #ff006e;
+            text-shadow: 0 0 30px #ff006e;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 80;
+        }
+       
+        .mode-text.show {
+            animation: modePop 2s ease-out;
+        }
+       
+        @keyframes modePop {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+            20% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+            80% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1); }
+        }
+       
+        .popup-text {
+            position: fixed;
+            top: 35%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Syncopate', sans-serif;
+            font-size: 48px;
+            color: #ffd700;
+            text-shadow: 0 0 30px #ffd700, 0 0 60px #ff00ff;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 80;
+            white-space: nowrap;
+        }
+       
+        .popup-text.show {
+            animation: popupAnim 1.5s ease-out;
+        }
+       
+        @keyframes popupAnim {
+            0% { opacity: 0; transform: translate(-50%, -50%) scale(0) rotate(-10deg); }
+            25% { opacity: 1; transform: translate(-50%, -50%) scale(1.3) rotate(5deg); }
+            50% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+            75% { opacity: 1; transform: translate(-50%, -70%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -90%) scale(0.8); }
+        }
+       
+        /* Buttons */
+        .neon-btn {
+            background: transparent;
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            padding: 18px 50px;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 16px;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            margin: 10px;
+            box-shadow: 0 0 20px rgba(0,212,255,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+       
+        .neon-btn:hover {
+            background: #00d4ff;
+            color: #000;
+            box-shadow: 0 0 40px rgba(0,212,255,0.8);
+            transform: translateY(-3px);
+        }
+       
+        .neon-btn.pink {
+            border-color: #ff006e;
+            color: #ff006e;
+            box-shadow: 0 0 20px rgba(255,0,110,0.3);
+        }
+       
+        .neon-btn.pink:hover {
+            background: #ff006e;
+            color: #fff;
+            box-shadow: 0 0 40px rgba(255,0,110,0.8);
+        }
+       
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 12px;
+            z-index: 200;
+            transition: all 0.3s;
+        }
+       
+        .back-btn:hover {
+            background: #fff;
+            color: #000;
+        }
+       
+        .audio-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,212,255,0.2);
+            border: 2px solid #00d4ff;
+            color: #00d4ff;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            z-index: 200;
+            transition: all 0.3s;
+        }
+       
+        .audio-btn:hover {
+            background: #00d4ff;
+            color: #000;
+        }
+       
+        /* Typography */
+        .game-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 56px;
+            background: linear-gradient(45deg, #00d4ff, #ff006e, #f7931e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            letter-spacing: 6px;
+            animation: glow 3s ease-in-out infinite;
+        }
+       
+        @keyframes glow {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(30deg); }
+        }
+       
+        .game-subtitle {
+            color: #888;
+            font-size: 16px;
+            letter-spacing: 4px;
+            margin-bottom: 50px;
+            text-transform: uppercase;
+        }
+       
+        .screen-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 42px;
+            color: #fff;
+            margin-bottom: 40px;
+            text-shadow: 0 0 20px #00d4ff;
+        }
+       
+        /* Level Map */
+        .level-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 25px;
+            max-width: 700px;
+            margin: 20px 0;
+        }
+       
+        .level-node {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+       
+        .level-node.locked {
+            background: rgba(100,100,100,0.2);
+            border: 2px solid #555;
+            color: #555;
+            cursor: not-allowed;
+        }
+       
+        .level-node.available {
+            background: linear-gradient(135deg, #ff00ff, #00d4ff);
+            border: 3px solid #fff;
+            color: #fff;
+            box-shadow: 0 0 30px rgba(255,0,255,0.5);
+            animation: pulse 2s infinite;
+        }
+       
+        .level-node.completed {
+            background: linear-gradient(135deg, #00ff88, #00d4ff);
+            border: 3px solid #fff;
+            color: #fff;
+            box-shadow: 0 0 20px rgba(0,255,136,0.5);
+        }
+       
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+        }
+       
+        .node-num {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+        }
+       
+        .node-stars {
+            font-size: 14px;
+            color: #ffd700;
+            margin-top: 2px;
+        }
+       
+        /* Shop */
+        .shop-header {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 200;
+        }
+       
+        .shop-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            max-width: 800px;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+       
+        .shop-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+       
+        .shop-card:hover {
+            border-color: #00d4ff;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,212,255,0.3);
+        }
+       
+        .shop-card.owned {
+            border-color: #00ff88;
+            background: rgba(0,255,136,0.1);
+        }
+       
+        .shop-card.equipped {
+            border-color: #ffd700;
+            background: rgba(255,215,0,0.1);
+            box-shadow: 0 0 30px rgba(255,215,0,0.3);
+        }
+       
+        .item-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0,212,255,0.3), transparent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+       
+        .item-name {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+       
+        .item-price {
+            color: #ffd700;
+            font-size: 18px;
+            font-family: 'Syncopate', sans-serif;
+        }
+       
+        .item-status {
+            color: #00ff88;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+       
+        /* Game Over */
+        .result-score {
+            font-size: 80px;
+            color: #fff;
+            font-family: 'Syncopate', sans-serif;
+            text-shadow: 0 0 30px #ff006e;
+            margin: 20px 0;
+        }
+       
+        .result-stars {
+            font-size: 50px;
+            color: #ffd700;
+            margin-bottom: 30px;
+            text-shadow: 0 0 20px #ffd700;
+        }
+       
+        .btn-row {
+            display: flex;
+            gap: 15px;
+        }
+       
+        .instructions {
+            margin-top: 50px;
+            color: #666;
+            text-align: center;
+            line-height: 2;
+            font-size: 14px;
+        }
+       
+        .instructions span {
+            color: #00d4ff;
+            font-weight: 700;
+        }
+       
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+       
+        ::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.3);
+        }
+       
+        ::-webkit-scrollbar-thumb {
+            background: #00d4ff;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+   
+    <!-- Overlays -->
+    <div class="mode-text" id="modeOverlay">FIRE MODE</div>
+    <div class="popup-text" id="popupOverlay">AMAZING!</div>
+   
+    <!-- Game UI -->
+    <div class="game-ui" id="gameUI">
+        <div class="hud-top">
+            <div class="hud-left">
+                <div class="coin-box">
+                    <div class="coin-icon">$</div>
+                    <div class="coin-text" id="hudCoins">0</div>
+                </div>
+                <button class="hud-btn" id="hudShopBtn">SHOP</button>
+                <button class="hud-btn" id="hudMapBtn">MAP</button>
+            </div>
+            <div class="score-box">
+                <div class="score-label">SCORE</div>
+                <div class="score-value" id="hudScore">0</div>
+            </div>
+            <div class="level-box">
+                <div class="level-text">LEVEL <span id="hudLevel">1</span></div>
+                <div class="progress-bg">
+                    <div class="progress-fill" id="hudProgress"></div>
+                </div>
+            </div>
+        </div>
+        <div class="hud-bottom">
+            <div class="fire-box">
+                <div class="fire-bar" id="hudFire"></div>
+                <div class="fire-label">INFERNO CHARGE</div>
+            </div>
+            <div class="combo-box">
+                <div class="combo-value" id="hudCombo">x1.0</div>
+                <div class="combo-label">MULTIPLIER</div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Audio Button -->
+    <button class="audio-btn" id="audioBtn">🔊 ON</button>
+   
+    <!-- Start Screen -->
+    <div class="screen active" id="startScreen">
+        <h1 class="game-title">PHOENIX RISE</h1>
+        <p class="game-subtitle">Galaxy Edition 2026</p>
+        <button class="neon-btn" id="btnPlay">PLAY</button>
+        <button class="neon-btn pink" id="btnShop">SHOP</button>
+        <div class="instructions">
+            <p>Press <span>SPACE</span> or <span>CLICK</span> to Fly</p>
+            <p>Collect <span>COINS</span> and <span>ORBS</span></p>
+            <p>Fill <span>FIRE MODE</span> to Destroy Pipes</p>
+        </div>
+    </div>
+   
+    <!-- Level Map Screen -->
+    <div class="screen" id="mapScreen">
+        <button class="back-btn" id="btnMapBack">← BACK</button>
+        <h2 class="screen-title">SELECT GALAXY</h2>
+        <div class="level-grid" id="levelGrid"></div>
+    </div>
+   
+    <!-- Shop Screen -->
+    <div class="screen" id="shopScreen">
+        <button class="back-btn" id="btnShopBack">← BACK</button>
+        <div class="shop-header">
+            <div class="coin-box">
+                <div class="coin-icon">$</div>
+                <div class="coin-text" id="shopCoins">0</div>
+            </div>
+        </div>
+        <h2 class="screen-title" style="margin-top: 40px;">GALACTIC SHOP</h2>
+        <div class="shop-grid" id="shopGrid"></div>
+    </div>
+   
+    <!-- Game Over Screen -->
+    <div class="screen" id="overScreen">
+        <h2 class="screen-title" id="overTitle">LEVEL COMPLETE</h2>
+        <div class="result-score" id="overScore">0</div>
+        <div class="result-stars" id="overStars">★★★</div>
+        <div class="btn-row">
+            <button class="neon-btn" id="btnRetry">RETRY</button>
+            <button class="neon-btn pink" id="btnNext" style="display: none;">NEXT</button>
+            <button class="neon-btn" id="btnOverMap">MAP</button>
+        </div>
+    </div>
+
+    <script>
+        // ==================== AUDIO SYSTEM ====================
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let audioEnabled = true;
+        let bgmOscillators = [];
+       
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+        }
+       
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('audioBtn').textContent = audioEnabled ? '🔊 ON' : '🔇 OFF';
+            if (audioEnabled) playBGM();
+            else stopBGM();
+        }
+       
+        function playTone(freq, type, duration, vol = 0.1) {
+            if (!audioEnabled || !audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.frequency.value = freq;
+            osc.type = type;
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+            osc.start();
+            osc.stop(audioCtx.currentTime + duration);
+        }
+       
+        function playBGM() {
+            if (!audioEnabled || !audioCtx) return;
+            stopBGM();
+            const freqs = [110, 164.81, 196.00, 246.94];
+            const gain = audioCtx.createGain();
+            gain.gain.value = 0.03;
+            gain.connect(audioCtx.destination);
+           
+            freqs.forEach((f, i) => {
+                const osc = audioCtx.createOscillator();
+                osc.frequency.value = f;
+                osc.type = 'sine';
+                const lfo = audioCtx.createOscillator();
+                lfo.frequency.value = 0.1 + (i * 0.05);
+                const lfoGain = audioCtx.createGain();
+                lfoGain.gain.value = 3;
+                lfo.connect(lfoGain);
+                lfoGain.connect(osc.frequency);
+                osc.connect(gain);
+                osc.start();
+                lfo.start();
+                bgmOscillators.push(osc, lfo);
+            });
+        }
+       
+        function stopBGM() {
+            bgmOscillators.forEach(osc => { try { osc.stop(); } catch(e) {} });
+            bgmOscillators = [];
+        }
+       
+        function playSound(type) {
+            if (!audioEnabled || !audioCtx) return;
+            switch(type) {
+                case 'jump': playTone(400, 'sine', 0.1, 0.1); break;
+                case 'coin':
+                    playTone(880, 'sine', 0.1, 0.1);
+                    setTimeout(() => playTone(1100, 'sine', 0.1, 0.1), 50);
+                    break;
+                case 'orb': playTone(660, 'sine', 0.2, 0.15); break;
+                case 'fire': playTone(220, 'sawtooth', 0.5, 0.2); break;
+                case 'popup':
+                    playTone(523.25, 'triangle', 0.2, 0.2);
+                    setTimeout(() => playTone(659.25, 'triangle', 0.2, 0.2), 100);
+                    setTimeout(() => playTone(783.99, 'triangle', 0.4, 0.2), 200);
+                    break;
+                case 'win':
+                    playTone(523.25, 'sine', 0.2, 0.2);
+                    setTimeout(() => playTone(659.25, 'sine', 0.2, 0.2), 200);
+                    setTimeout(() => playTone(783.99, 'sine', 0.2, 0.2), 400);
+                    setTimeout(() => playTone(1046.50, 'sine', 0.6, 0.2), 600);
+                    break;
+                case 'lose': playTone(200, 'sawtooth', 0.5, 0.2); break;
+            }
+        }
+       
+        // ==================== GAME DATA ====================
+        const gameData = {
+            coins: parseInt(localStorage.getItem('pr_coins')) || 0,
+            unlocked: parseInt(localStorage.getItem('pr_unlocked')) || 1,
+            ownedBirds: JSON.parse(localStorage.getItem('pr_birds')) || ['default'],
+            ownedThemes: JSON.parse(localStorage.getItem('pr_themes')) || ['nebula'],
+            equippedBird: localStorage.getItem('pr_bird') || 'default',
+            equippedTheme: localStorage.getItem('pr_theme') || 'nebula',
+            scores: JSON.parse(localStorage.getItem('pr_scores')) || {}
+        };
+       
+        function saveData() {
+            localStorage.setItem('pr_coins', gameData.coins);
+            localStorage.setItem('pr_unlocked', gameData.unlocked);
+            localStorage.setItem('pr_birds', JSON.stringify(gameData.ownedBirds));
+            localStorage.setItem('pr_themes', JSON.stringify(gameData.ownedThemes));
+            localStorage.setItem('pr_bird', gameData.equippedBird);
+            localStorage.setItem('pr_theme', gameData.equippedTheme);
+            localStorage.setItem('pr_scores', JSON.stringify(gameData.scores));
+        }
+       
+        // ==================== CONFIGURATION ====================
+        const levels = [
+            { id: 1, name: "Nebula", target: 50, speed: 3, gap: 170 },
+            { id: 2, name: "Cosmic", target: 100, speed: 3.5, gap: 160 },
+            { id: 3, name: "Stellar", target: 150, speed: 4, gap: 150 },
+            { id: 4, name: "Quantum", target: 200, speed: 4.5, gap: 140 },
+            { id: 5, name: "Void", target: 300, speed: 5, gap: 130 },
+            { id: 6, name: "Supernova", target: 500, speed: 6, gap: 120 },
+            { id: 7, name: "Horizon", target: 750, speed: 7, gap: 110 },
+            { id: 8, name: "Big Bang", target: 1000, speed: 8, gap: 100 },
+            { id: 9, name: "Multiverse", target: 1500, speed: 9, gap: 90 },
+            { id: 10, name: "Infinity", target: 2000, speed: 10, gap: 80 }
+        ];
+       
+        const themes = {
+            nebula: { bg: ['#0d001a', '#2d0066', '#5900b3'], pipe: '#8000ff', coin: '#ffd700', star: '#ffffff' },
+            cosmic: { bg: ['#001a33', '#004080', '#0080ff'], pipe: '#00ccff', coin: '#ffed4e', star: '#ffffff' },
+            stellar: { bg: ['#1a0d00', '#663d00', '#b36b00'], pipe: '#ffaa00', coin: '#ffffff', star: '#ffdd88' },
+            quantum: { bg: ['#001a0d', '#006633', '#00b359'], pipe: '#00ff88', coin: '#ffff00', star: '#ccffcc' },
+            void: { bg: ['#000000', '#0d0d0d', '#1a1a1a'], pipe: '#444444', coin: '#ff00ff', star: '#888888' },
+            supernova: { bg: ['#1a0000', '#660000', '#b30000'], pipe: '#ff4444', coin: '#ffffff', star: '#ffcccc' }
+        };
+       
+        const shopItems = {
+            birds: [
+                { id: 'default', name: 'Phoenix', emoji: '🔥', price: 0 },
+                { id: 'dragon', name: 'Cyber Dragon', emoji: '🐉', price: 500 },
+                { id: 'eagle', name: 'Neon Eagle', emoji: '🦅', price: 1000 },
+                { id: 'owl', name: 'Quantum Owl', emoji: '🦉', price: 2000 },
+                { id: 'raven', name: 'Void Raven', emoji: '🐦‍⬛', price: 3500 },
+                { id: 'dove', name: 'Cosmic Dove', emoji: '🕊️', price: 5000 }
+            ],
+            themes: [
+                { id: 'nebula', name: 'Nebula', emoji: '🌌', price: 0 },
+                { id: 'cosmic', name: 'Cosmic', emoji: '🌠', price: 800 },
+                { id: 'stellar', name: 'Stellar', emoji: '✨', price: 1500 },
+                { id: 'quantum', name: 'Quantum', emoji: '⚛️', price: 2500 },
+                { id: 'void', name: 'Void', emoji: '🕳️', price: 4000 },
+                { id: 'supernova', name: 'Supernova', emoji: '💥', price: 6000 }
+            ]
+        };
+       
+        // ==================== CANVAS SETUP ====================
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+       
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resize();
+        window.addEventListener('resize', resize);
+       
+        // ==================== GAME STATE ====================
+        let gameState = 'start';
+        let currentLevel = null;
+        let score = 0;
+        let levelScore = 0;
+        let combo = 1;
+        let fireCharge = 0;
+        let fireMode = false;
+        let fireTimer = 0;
+        let frames = 0;
+        let animationId = null;
+       
+        const bird = {
+            x: 0, y: 0, velocity: 0, radius: 18,
+            angle: 0, trail: [], wingAngle: 0
+        };
+       
+        let pipes = [];
+        let coins = [];
+        let orbs = [];
+        let particles = [];
+        let stars = [];
+        let galaxies = [];
+       
+        // ==================== SCREEN MANAGEMENT ====================
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('gameUI').classList.remove('active');
+            document.getElementById(id).classList.add('active');
+        }
+       
+        function showGame() {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            document.getElementById('gameUI').classList.add('active');
+        }
+       
+        // ==================== BACKGROUND SYSTEM ====================
+        function initBackground() {
+            stars = [];
+            galaxies = [];
+            for (let i = 0; i < 200; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 2 + 0.5,
+                    speed: Math.random() * 0.8 + 0.2,
+                    alpha: Math.random(),
+                    twinkle: Math.random() * Math.PI * 2
+                });
+            }
+            for (let i = 0; i < 3; i++) {
+                galaxies.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 150 + 80,
+                    rotation: Math.random() * Math.PI * 2,
+                    speed: (Math.random() - 0.5) * 0.001
+                });
+            }
+        }
+       
+        function drawBackground() {
+            const theme = themes[gameData.equippedTheme];
+           
+            // Gradient background
+            const grad = ctx.createRadialGradient(
+                canvas.width/2, canvas.height/2, 0,
+                canvas.width/2, canvas.height/2, canvas.width
+            );
+            theme.bg.forEach((c, i) => grad.addColorStop(i/(theme.bg.length-1), c));
+            ctx.fillStyle = grad;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+           
+            // Galaxies
+            galaxies.forEach(g => {
+                g.rotation += g.speed;
+                ctx.save();
+                ctx.translate(g.x, g.y);
+                ctx.rotate(g.rotation);
+                const galGrad = ctx.createRadialGradient(0, 0, 0, 0, 0, g.size);
+                galGrad.addColorStop(0, 'rgba(255,255,255,0.08)');
+                galGrad.addColorStop(0.5, 'rgba(255,255,255,0.03)');
+                galGrad.addColorStop(1, 'transparent');
+                ctx.fillStyle = galGrad;
+                ctx.beginPath();
+                ctx.ellipse(0, 0, g.size, g.size * 0.4, 0, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+           
+            // Stars
+            ctx.fillStyle = theme.star;
+            stars.forEach(s => {
+                s.x -= s.speed;
+                s.twinkle += 0.05;
+                if (s.x < 0) s.x = canvas.width;
+                const alpha = s.alpha * (0.5 + Math.sin(s.twinkle) * 0.3);
+                ctx.globalAlpha = alpha;
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            ctx.globalAlpha = 1;
+           
+            // Grid
+            ctx.strokeStyle = 'rgba(255,255,255,0.02)';
+            ctx.lineWidth = 1;
+            const offset = (frames * 2) % 40;
+            for (let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+            for (let y = offset; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+        }
+       
+        // ==================== PARTICLE SYSTEM ====================
+        function createParticles(x, y, count, color, speed = 3) {
+            for (let i = 0; i < count; i++) {
+                const angle = (Math.PI * 2 / count) * i + Math.random() * 0.5;
+                particles.push({
+                    x: x, y: y,
+                    vx: Math.cos(angle) * speed * (0.5 + Math.random()),
+                    vy: Math.sin(angle) * speed * (0.5 + Math.random()),
+                    life: 1,
+                    color: color,
+                    size: Math.random() * 5 + 2
+                });
+            }
+        }
+       
+        function updateParticles() {
+            for (let i = particles.length - 1; i >= 0; i--) {
+                const p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= 0.025;
+                p.size *= 0.97;
+                if (p.life <= 0) particles.splice(i, 1);
+            }
+        }
+       
+        function drawParticles() {
+            particles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = p.life;
+                ctx.fillStyle = p.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+       
+        // ==================== BIRD SYSTEM ====================
+        function updateBird() {
+            bird.velocity += 0.35;
+            bird.y += bird.velocity;
+            bird.angle = Math.min(Math.PI/3, Math.max(-Math.PI/3, bird.velocity * 0.08));
+            bird.wingAngle += 0.25;
+           
+            // Trail
+            bird.trail.push({x: bird.x, y: bird.y, size: bird.radius});
+            if (bird.trail.length > 8) bird.trail.shift();
+           
+            // Fire particles
+            if (fireMode && frames % 2 === 0) {
+                createParticles(bird.x - 10, bird.y, 2, '#ff6b35', 2);
+            }
+           
+            // Bounds check
+            if (bird.y + bird.radius > canvas.height || bird.y - bird.radius < 0) {
+                endGame(false);
+            }
+        }
+       
+        function drawBird() {
+            const theme = themes[gameData.equippedTheme];
+           
+            // Trail
+            bird.trail.forEach((t, i) => {
+                const alpha = (i / bird.trail.length) * 0.4;
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = fireMode ? '#ff6b35' : theme.pipe;
+                ctx.beginPath();
+                ctx.arc(t.x - (bird.trail.length - i), t.y, t.size * (i/bird.trail.length), 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+           
+            // Bird body
+            ctx.save();
+            ctx.translate(bird.x, bird.y);
+            ctx.rotate(bird.angle);
+           
+            ctx.shadowBlur = 25;
+            ctx.shadowColor = fireMode ? '#ff6b35' : theme.pipe;
+           
+            // Get bird emoji
+            const birdItem = shopItems.birds.find(b => b.id === gameData.equippedBird);
+            ctx.font = '36px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(birdItem.emoji, 0, 0);
+           
+            ctx.restore();
+        }
+       
+        // ==================== PIPE SYSTEM ====================
+        function updatePipes() {
+            // Spawn
+            const spawnRate = Math.floor(90 / (currentLevel.speed / 3));
+            if (frames % spawnRate === 0) {
+                const minH = 60;
+                const maxH = canvas.height - currentLevel.gap - minH;
+                const topH = Math.random() * (maxH - minH) + minH;
+                pipes.push({
+                    x: canvas.width,
+                    topH: topH,
+                    gap: currentLevel.gap,
+                    passed: false,
+                    destroyed: false,
+                    destroyFrame: 0
+                });
+            }
+           
+            // Update
+            const speed = fireMode ? currentLevel.speed * 1.3 : currentLevel.speed;
+           
+            for (let i = pipes.length - 1; i >= 0; i--) {
+                const p = pipes[i];
+                p.x -= speed;
+               
+                // Destroy animation
+                if (p.destroyed) {
+                    p.destroyFrame++;
+                    if (p.destroyFrame > 10) {
+                        pipes.splice(i, 1);
+                        continue;
+                    }
+                }
+               
+                // Remove off-screen
+                if (p.x < -70 && !p.destroyed) {
+                    pipes.splice(i, 1);
+                    continue;
+                }
+               
+                // Collision
+                if (!p.destroyed && !fireMode) {
+                    if (bird.x + bird.radius > p.x && bird.x - bird.radius < p.x + 60) {
+                        if (bird.y - bird.radius < p.topH || bird.y + bird.radius > p.topH + p.gap) {
+                            endGame(false);
+                        }
+                    }
+                }
+               
+                // Fire mode destroy
+                if (fireMode && !p.destroyed) {
+                    if (bird.x > p.x && bird.x < p.x + 60 && !p.destroyTriggered) {
+                        p.destroyTriggered = true;
+                        p.destroyed = true;
+                        score += 30 * combo;
+                        createParticles(p.x + 30, p.topH, 15, '#ff6b35', 4);
+                        createParticles(p.x + 30, p.topH + p.gap, 15, '#ff6b35', 4);
+                        updateHUD();
+                    }
+                }
+               
+                // Score
+                if (!p.passed && !p.destroyed && p.x + 60 < bird.x) {
+                    p.passed = true;
+                    score += 10 * combo;
+                    levelScore += 10 * combo;
+                    combo = Math.min(combo + 0.05, 3);
+                    checkMilestones();
+                    updateHUD();
+                }
+            }
+        }
+       
+        function drawPipes() {
+            const theme = themes[gameData.equippedTheme];
+           
+            pipes.forEach(p => {
+                if (p.destroyed) {
+                    ctx.save();
+                    ctx.globalAlpha = 1 - (p.destroyFrame / 10);
+                }
+               
+                const grad = ctx.createLinearGradient(p.x, 0, p.x + 60, 0);
+                if (p.destroyed) {
+                    grad.addColorStop(0, '#ff6b35');
+                    grad.addColorStop(0.5, '#f7931e');
+                    grad.addColorStop(1, '#ff6b35');
+                } else {
+                    grad.addColorStop(0, theme.bg[0]);
+                    grad.addColorStop(0.5, theme.pipe);
+                    grad.addColorStop(1, theme.bg[0]);
+                }
+               
+                ctx.fillStyle = grad;
+                ctx.strokeStyle = p.destroyed ? '#ff006e' : theme.pipe;
+                ctx.lineWidth = 3;
+               
+                // Top pipe
+                ctx.fillRect(p.x, 0, 60, p.topH);
+                ctx.strokeRect(p.x, 0, 60, p.topH);
+               
+                // Bottom pipe
+                ctx.fillRect(p.x, p.topH + p.gap, 60, canvas.height - p.topH - p.gap);
+                ctx.strokeRect(p.x, p.topH + p.gap, 60, canvas.height - p.topH - p.gap);
+               
+                // Caps
+                ctx.fillStyle = p.destroyed ? '#ff006e' : theme.pipe;
+                ctx.fillRect(p.x - 5, p.topH - 25, 70, 25);
+                ctx.fillRect(p.x - 5, p.topH + p.gap, 70, 25);
+               
+                if (p.destroyed) ctx.restore();
+            });
+        }
+       
+        // ==================== COIN SYSTEM (Subway Style) ====================
+        function updateCoins() {
+            if (frames % 120 === 0) {
+                const pattern = Math.floor(Math.random() * 3);
+                const baseY = Math.random() * (canvas.height - 200) + 100;
+               
+                if (pattern === 0) {
+                    // Single coin
+                    coins.push({ x: canvas.width, y: baseY, rot: 0, collected: false });
+                } else if (pattern === 1) {
+                    // Line of 3
+                    for (let i = 0; i < 3; i++) {
+                        coins.push({ x: canvas.width + i * 40, y: baseY, rot: 0, collected: false });
+                    }
+                } else {
+                    // Arc of 5
+                    for (let i = 0; i < 5; i++) {
+                        const y = baseY - Math.sin((i / 4) * Math.PI) * 60;
+                        coins.push({ x: canvas.width + i * 35, y: y, rot: 0, collected: false });
+                    }
+                }
+            }
+           
+            for (let i = coins.length - 1; i >= 0; i--) {
+                const c = coins[i];
+                c.x -= currentLevel.speed;
+                c.rot += 0.08;
+               
+                const dist = Math.hypot(bird.x - c.x, bird.y - c.y);
+                if (dist < bird.radius + 20 && !c.collected) {
+                    c.collected = true;
+                    gameData.coins += 5;
+                    score += 5;
+                    playSound('coin');
+                    createParticles(c.x, c.y, 8, '#ffd700', 3);
+                    updateHUD();
+                }
+               
+                if (c.x < -50 || c.collected) {
+                    if (c.collected) coins.splice(i, 1);
+                    else if (c.x < -50) coins.splice(i, 1);
+                }
+            }
+        }
+       
+        function drawCoins() {
+            const theme = themes[gameData.equippedTheme];
+           
+            coins.forEach(c => {
+                if (c.collected) return;
+               
+                ctx.save();
+                ctx.translate(c.x, c.y);
+               
+                // Rotate coin effect
+                const scaleX = Math.abs(Math.cos(c.rot));
+                ctx.scale(scaleX, 1);
+               
+                // Outer glow
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = theme.coin;
+               
+                // Coin body
+                ctx.fillStyle = theme.coin;
+                ctx.beginPath();
+                ctx.arc(0, 0, 16, 0, Math.PI * 2);
+                ctx.fill();
+               
+                // Inner
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(0, 0, 10, 0, Math.PI * 2);
+                ctx.fill();
+               
+                // $ symbol
+                ctx.fillStyle = theme.coin;
+                ctx.font = 'bold 14px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.fillText('$', 0, 0);
+               
+                ctx.restore();
+            });
+        }
+       
+        // ==================== ORB SYSTEM ====================
+        function updateOrbs() {
+            if (frames % 180 === 0 && !fireMode) {
+                orbs.push({
+                    x: canvas.width,
+                    y: Math.random() * (canvas.height - 150) + 75,
+                    pulse: 0
+                });
+            }
+           
+            for (let i = orbs.length - 1; i >= 0; i--) {
+                const o = orbs[i];
+                o.x -= currentLevel.speed;
+                o.pulse += 0.1;
+               
+                const dist = Math.hypot(bird.x - o.x, bird.y - o.y);
+                if (dist < bird.radius + 20) {
+                    fireCharge = Math.min(fireCharge + 20, 100);
+                    playSound('orb');
+                    createParticles(o.x, o.y, 12, '#f7931e', 3);
+                    orbs.splice(i, 1);
+                    checkFireMode();
+                    updateHUD();
+                    continue;
+                }
+               
+                if (o.x < -50) orbs.splice(i, 1);
+            }
+        }
+       
+        function drawOrbs() {
+            orbs.forEach(o => {
+                const pulse = Math.sin(o.pulse) * 4;
+               
+                ctx.save();
+                ctx.shadowBlur = 25;
+                ctx.shadowColor = '#f7931e';
+               
+                // Outer
+                ctx.fillStyle = 'rgba(247, 147, 30, 0.3)';
+                ctx.beginPath();
+                ctx.arc(o.x, o.y, 18 + pulse, 0, Math.PI * 2);
+                ctx.fill();
+               
+                // Inner
+                ctx.fillStyle = '#f7931e';
+                ctx.beginPath();
+                ctx.arc(o.x, o.y, 12 + pulse * 0.5, 0, Math.PI * 2);
+                ctx.fill();
+               
+                // Core
+                ctx.fillStyle = '#fff';
+                ctx.beginPath();
+                ctx.arc(o.x, o.y, 6, 0, Math.PI * 2);
+                ctx.fill();
+               
+                ctx.restore();
+            });
+        }
+       
+        function checkFireMode() {
+            if (fireCharge >= 100 && !fireMode) {
+                activateFireMode();
+            }
+        }
+       
+        function activateFireMode() {
+            fireMode = true;
+            fireTimer = 480; // 8 seconds at 60fps
+            document.getElementById('modeOverlay').classList.add('show');
+            playSound('fire');
+            createParticles(bird.x, bird.y, 40, '#ff6b35', 6);
+           
+            setTimeout(() => {
+                document.getElementById('modeOverlay').classList.remove('show');
+            }, 2000);
+        }
+       
+        function updateFireMode() {
+            if (fireMode) {
+                fireTimer--;
+                fireCharge = (fireTimer / 480) * 100;
+                if (fireTimer <= 0) {
+                    fireMode = false;
+                    fireCharge = 0;
+                    combo = 1;
+                }
+                updateHUD();
+            }
+        }
+       
+        // ==================== MILESTONE SYSTEM ====================
+        function checkMilestones() {
+            const points = Math.floor(score / 50);
+            const milestones = {
+                1: 'NICE!',
+                2: 'GREAT!',
+                5: 'AMAZING!',
+                10: 'INCREDIBLE!',
+                20: 'LEGENDARY!'
+            };
+           
+            if (milestones[points] && points * 50 === score) {
+                showPopup(milestones[points]);
+                playSound('popup');
+            }
+        }
+       
+        function showPopup(text) {
+            const popup = document.getElementById('popupOverlay');
+            popup.textContent = text;
+            popup.classList.remove('show');
+            void popup.offsetWidth;
+            popup.classList.add('show');
+           
+            setTimeout(() => popup.classList.remove('show'), 1500);
+        }
+       
+        // ==================== HUD ====================
+        function updateHUD() {
+            document.getElementById('hudScore').textContent = Math.floor(score);
+            document.getElementById('hudCoins').textContent = gameData.coins;
+            document.getElementById('hudCombo').textContent = 'x' + combo.toFixed(1);
+            document.getElementById('hudFire').style.width = fireCharge + '%';
+           
+            const progress = Math.min((levelScore / currentLevel.target) * 100, 100);
+            document.getElementById('hudProgress').style.width = progress + '%';
+           
+            if (levelScore >= currentLevel.target) {
+                endGame(true);
+            }
+        }
+       
+        // ==================== GAME LOOP ====================
+        function gameLoop() {
+            if (gameState !== 'playing') return;
+           
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            frames++;
+           
+            drawBackground();
+            updateCoins();
+            drawCoins();
+            updateOrbs();
+            drawOrbs();
+            updatePipes();
+            drawPipes();
+            updateBird();
+            drawBird();
+            updateParticles();
+            drawParticles();
+            updateFireMode();
+           
+            animationId = requestAnimationFrame(gameLoop);
+        }
+       
+        // ==================== GAME CONTROL ====================
+        function startGame(levelId) {
+            initAudio();
+            currentLevel = levels.find(l => l.id === levelId);
+            gameState = 'playing';
+           
+            showGame();
+            document.getElementById('hudLevel').textContent = levelId;
+           
+            resetBird();
+            pipes = [];
+            coins = [];
+            orbs = [];
+            particles = [];
+            score = 0;
+            levelScore = 0;
+            combo = 1;
+            fireCharge = 0;
+            fireMode = false;
+            frames = 0;
+           
+            initBackground();
+            updateHUD();
+            playBGM();
+           
+            if (animationId) cancelAnimationFrame(animationId);
+            gameLoop();
+        }
+       
+        function resetBird() {
+            bird.x = canvas.width * 0.2;
+            bird.y = canvas.height / 2;
+            bird.velocity = 0;
+            bird.angle = 0;
+            bird.trail = [];
+        }
+       
+        function endGame(success) {
+            gameState = success ? 'won' : 'lost';
+            stopBGM();
+           
+            const stars = success ?
+                (levelScore >= currentLevel.target * 1.5 ? 3 :
+                 levelScore >= currentLevel.target * 1.2 ? 2 : 1) : 0;
+           
+            if (success) {
+                playSound('win');
+                const prevStars = gameData.scores[currentLevel.id] || 0;
+                if (stars > prevStars) gameData.scores[currentLevel.id] = stars;
+               
+                if (currentLevel.id >= gameData.unlocked && currentLevel.id < 10) {
+                    gameData.unlocked = currentLevel.id + 1;
+                }
+                saveData();
+            } else {
+                playSound('lose');
+            }
+           
+            document.getElementById('overTitle').textContent = success ? 'LEVEL COMPLETE!' : 'MISSION FAILED';
+            document.getElementById('overScore').textContent = Math.floor(score);
+            document.getElementById('overStars').textContent = success ? '★'.repeat(stars) + '☆'.repeat(3-stars) : 'TRY AGAIN';
+            document.getElementById('btnNext').style.display = (success && currentLevel.id < 10) ? 'block' : 'none';
+           
+            showScreen('overScreen');
+        }
+       
+        // ==================== INPUT ====================
+        function handleInput(e) {
+            if (e.type === 'keydown' && e.code !== 'Space') return;
+            if (e.type === 'keydown') e.preventDefault();
+           
+            initAudio();
+           
+            if (gameState === 'playing') {
+                bird.velocity = -7;
+                playSound('jump');
+                createParticles(bird.x, bird.y, 5, themes[gameData.equippedTheme].pipe, 2);
+            }
+        }
+       
+        document.addEventListener('keydown', handleInput);
+        document.addEventListener('mousedown', handleInput);
+        document.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleInput(e);
+        });
+       
+        // ==================== UI RENDERING ====================
+        function renderLevelMap() {
+            const grid = document.getElementById('levelGrid');
+            grid.innerHTML = '';
+           
+            levels.forEach(lvl => {
+                const node = document.createElement('div');
+                node.className = 'level-node';
+               
+                const stars = gameData.scores[lvl.id] || 0;
+                let status = 'locked';
+                if (lvl.id <= gameData.unlocked) status = stars > 0 ? 'completed' : 'available';
+               
+                node.classList.add(status);
+                node.innerHTML = `
+                    <div class="node-num">${lvl.id}</div>
+                    <div class="node-stars">${'★'.repeat(stars)}${'☆'.repeat(3-stars)}</div>
+                `;
+               
+                if (status !== 'locked') {
+                    node.addEventListener('click', () => startGame(lvl.id));
+                }
+               
+                grid.appendChild(node);
+            });
+        }
+       
+        function renderShop() {
+            document.getElementById('shopCoins').textContent = gameData.coins;
+            const grid = document.getElementById('shopGrid');
+            grid.innerHTML = '';
+           
+            [...shopItems.birds, ...shopItems.themes].forEach(item => {
+                const isBird = shopItems.birds.includes(item);
+                const owned = isBird ?
+                    gameData.ownedBirds.includes(item.id) :
+                    gameData.ownedThemes.includes(item.id);
+                const equipped = isBird ?
+                    gameData.equippedBird === item.id :
+                    gameData.equippedTheme === item.id;
+               
+                const card = document.createElement('div');
+                card.className = 'shop-card';
+                if (owned) card.classList.add('owned');
+                if (equipped) card.classList.add('equipped');
+               
+                card.innerHTML = `
+                    <div class="item-icon">${item.emoji}</div>
+                    <div class="item-name">${item.name}</div>
+                    ${owned ?
+                        `<div class="item-status">${equipped ? '✓ EQUIPPED' : 'CLICK TO EQUIP'}</div>` :
+                        `<div class="item-price">${item.price} 🪙</div>`
+                    }
+                `;
+               
+                card.addEventListener('click', () => {
+                    if (owned) {
+                        if (isBird) gameData.equippedBird = item.id;
+                        else gameData.equippedTheme = item.id;
+                        saveData();
+                        renderShop();
+                        playSound('coin');
+                    } else if (gameData.coins >= item.price) {
+                        gameData.coins -= item.price;
+                        if (isBird) {
+                            gameData.ownedBirds.push(item.id);
+                            gameData.equippedBird = item.id;
+                        } else {
+                            gameData.ownedThemes.push(item.id);
+                            gameData.equippedTheme = item.id;
+                        }
+                        saveData();
+                        renderShop();
+                        playSound('win');
+                    }
+                });
+               
+                grid.appendChild(card);
+            });
+        }
+       
+        // ==================== BUTTON EVENTS ====================
+        document.getElementById('btnPlay').addEventListener('click', () => {
+            showScreen('mapScreen');
+            renderLevelMap();
+        });
+       
+        document.getElementById('btnShop').addEventListener('click', () => {
+            showScreen('shopScreen');
+            renderShop();
+        });
+       
+        document.getElementById('btnMapBack').addEventListener('click', () => showScreen('startScreen'));
+        document.getElementById('btnShopBack').addEventListener('click', () => showScreen('startScreen'));
+       
+        document.getElementById('hudShopBtn').addEventListener('click', () => {
+            gameState = 'paused';
+            showScreen('shopScreen');
+            renderShop();
+        });
+       
+        document.getElementById('hudMapBtn').addEventListener('click', () => {
+            gameState = 'paused';
+            showScreen('mapScreen');
+            renderLevelMap();
+        });
+       
+        document.getElementById('btnRetry').addEventListener('click', () => {
+            startGame(currentLevel.id);
+        });
+       
+        document.getElementById('btnNext').addEventListener('click', () => {
+            startGame(currentLevel.id + 1);
+        });
+       
+        document.getElementById('btnOverMap').addEventListener('click', () => {
+            showScreen('mapScreen');
+            renderLevelMap();
+        });
+       
+        document.getElementById('audioBtn').addEventListener('click', toggleAudio);
+       
+        // ==================== INITIALIZATION ====================
+        initBackground();
+        drawBackground();
+        updateHUD();
+    </script>
+</body>
+</html>
