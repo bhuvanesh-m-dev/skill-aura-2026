@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PromptX Event - Team Certificates</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .download-section {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .download-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 20px;
+            background: white;
+            border-radius: 8px;
+            border: 2px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .download-link:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .controls {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .search-box {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .search-box:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .table-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th {
+            padding: 16px;
+            text-align: left;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #e9ecef;
+            color: #495057;
+        }
+
+        tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tbody tr:nth-child(even):hover {
+            background: #e9ecef;
+        }
+
+        .team-name {
+            font-weight: 600;
+            color: #667eea;
+            text-transform: capitalize;
+        }
+
+        .certificate-link {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s;
+        }
+
+        .certificate-link:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .stats {
+            padding: 15px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+            font-size: 14px;
+            color: #6c757d;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .table-container {
+                padding: 15px;
+            }
+
+            th, td {
+                padding: 12px;
+                font-size: 13px;
+            }
+
+            .search-box {
+                max-width: 100%;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>PromptX Event 2026</h1>
+            <p>Team Certificates Database</p>
+        </div>
+
+        <div class="download-section">
+            <a href="team_certificates.xlsx" download class="download-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                Download Original Spreadsheet
+            </a>
+        </div>
+
+        <div class="controls">
+            <input type="text" class="search-box" id="searchInput" placeholder="Search by team name or certificate URL...">
+        </div>
+
+        <div class="table-container">
+            <table id="dataTable">
+                <thead>
+                    <tr>
+                        <th>Team Name</th>
+                        <th>Certificate URL</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+            <div id="noResults" class="no-results" style="display: none;">
+                No matching records found.
+            </div>
+        </div>
+
+        <div class="stats" id="stats">
+            Showing all records
+        </div>
+    </div>
+
+    <script>
+        const spreadsheetData = [
+            { teamName: "amos-payaluga", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/amos-payaluga/?id=ranjeet" },
+            { teamName: "amos-payaluga", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/amos-payaluga/?id=rajalingam" },
+            { teamName: "amos-payaluga", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/amos-payaluga/?id=venkateshwaran" },
+            { teamName: "amos-payaluga", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/amos-payaluga/?id=sam" },
+            { teamName: "chess20", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/chess20/?id=subalakshmi" },
+            { teamName: "chess20", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/chess20/?id=mahalakshmi" },
+            { teamName: "chess20", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/chess20/?id=muthu" },
+            { teamName: "CosmoTalker", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/CosmoTalker/?id=bhuvanesh" },
+            { teamName: "CosmoTalker", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/CosmoTalker/?id=sudarmani" },
+            { teamName: "CosmoTalker", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/CosmoTalker/?id=aslin" },
+            { teamName: "CosmoTalker", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/CosmoTalker/?id=raashiya" },
+            { teamName: "destroyer", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/destroyer/?id=mohan" },
+            { teamName: "destroyer", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/destroyer/?id=gokul" },
+            { teamName: "destroyer", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/destroyer/?id=jemil" },
+            { teamName: "destroyer", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/destroyer/?id=saajid" },
+            { teamName: "game-changer", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/game-changer/?id=hemalraj" },
+            { teamName: "game-changer", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/game-changer/?id=dhanush" },
+            { teamName: "game-changer", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/game-changer/?id=james" },
+            { teamName: "gggang", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/gggang/?id=madhumitha" },
+            { teamName: "gggang", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/gggang/?id=johannah" },
+            { teamName: "gggang", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/gggang/?id=hannah" },
+            { teamName: "gggang", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/gggang/?id=kanishka" },
+            { teamName: "it-warriors", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/it-warriors/?id=mahizhan" },
+            { teamName: "it-warriors", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/it-warriors/?id=sudhakar" },
+            { teamName: "it-warriors", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/it-warriors/?id=vengadapathi" },
+            { teamName: "it-warriors", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/it-warriors/?id=naveen" },
+            { teamName: "CosmoTalker", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/CosmoTalker/?id=sudaram" },
+            { teamName: "CosmoTalker", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/CosmoTalker/?id=mahesh" },
+            { teamName: "nexatrons", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/nexatrons/?id=divya" },
+            { teamName: "nexatrons", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/nexatrons/?id=annie" },
+            { teamName: "nexatrons", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/nexatrons/?id=hema" },
+            { teamName: "nexatrons", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/nexatrons/?id=kanni" },
+            { teamName: "powerrangers", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/powerrangers/?id=juan" },
+            { teamName: "powerrangers", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/powerrangers/?id=lokesh" },
+            { teamName: "powerrangers", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/powerrangers/?id=deepak" },
+            { teamName: "powerrangers", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/powerrangers/?id=dinesh" },
+            { teamName: "team-rolex", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-rolex/?id=thilokesh" },
+            { teamName: "team-rolex", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-rolex/?id=libin" },
+            { teamName: "team-rolex", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-rolex/?id=karthikeyan" },
+            { teamName: "team-rolex", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-rolex/?id=augustin" },
+            { teamName: "singam-squad", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/singam-squad/?id=joseph" },
+            { teamName: "singam-squad", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/singam-squad/?id=jeberson" },
+            { teamName: "singam-squad", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/singam-squad/?id=mathesh" },
+            { teamName: "singam-squad", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/singam-squad/?id=kingsly" },
+            { teamName: "team-blitz", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-blitz/?id=jebaz" },
+            { teamName: "team-blitz", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-blitz/?id=ranjith" },
+            { teamName: "team-blitz", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-blitz/?id=praveen" },
+            { teamName: "team-blitz", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/team-blitz/?id=monishwaran" },
+            { teamName: "techno-z4", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/techno-z4/?id=sujin" },
+            { teamName: "techno-z4", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/techno-z4/?id=udhaya" },
+            { teamName: "techno-z4", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/techno-z4/?id=vishnu" },
+            { teamName: "techno-z4", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/techno-z4/?id=sriram" },
+            { teamName: "zen-crew", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/zen-crew/?id=kayal" },
+            { teamName: "zen-crew", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/zen-crew/?id=prasheetha" },
+            { teamName: "zen-crew", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/zen-crew/?id=xena" },
+            { teamName: "zen-crew", certificateUrl: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/zen-crew/?id=kaviya" },
+            { "teamName": "biospark", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/biospark/?id=kanimozhi" },
+            { "teamName": "biospark", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/biospark/?id=raghavi" },
+            { "teamName": "biospark", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/biospark/?id=jenifer" },
+            { "teamName": "biospark", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/biospark/?id=niraimathikaran" },
+            { "teamName": "karata-iruntha-parotta", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/karata-iruntha-parotta/?id=sundaram" },
+            { "teamName": "karata-iruntha-parotta", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/karata-iruntha-parotta/?id=mahesh" },
+            { "teamName": "pheonix-rise", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/pheonix-rise/?id=manisha" },
+            { "teamName": "pheonix-rise", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/pheonix-rise/?id=kavitha" },
+            { "teamName": "pheonix-rise", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/pheonix-rise/?id=saranya" },
+            { "teamName": "pheonix-rise", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/pheonix-rise/?id=babitha" },
+            { "teamName": "flamigos", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/flamigos/?id=tharani" },
+            { "teamName": "flamigos", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/flamigos/?id=nithyavani" },
+            { "teamName": "flamigos", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/flamigos/?id=nithyasri" },
+            { "teamName": "flamigos", "certificateUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/certificate/team/flamigos/?id=nithyashree" }]
+        ];
+
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+        const stats = document.getElementById('stats');
+
+        function renderTable(data) {
+            tableBody.innerHTML = '';
+            
+            if (data.length === 0) {
+                noResults.style.display = 'block';
+                stats.textContent = 'No records found';
+                return;
+            }
+            
+            noResults.style.display = 'none';
+            
+            data.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'fade-in';
+                tr.style.animationDelay = `${index * 0.02}s`;
+                
+                tr.innerHTML = `
+                    <td class="team-name">${escapeHtml(row.teamName)}</td>
+                    <td>
+                        <a href="${escapeHtml(row.certificateUrl)}" target="_blank" class="certificate-link">
+                            ${escapeHtml(row.certificateUrl)}
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                <polyline points="15 3 21 3 21 9"></polyline>
+                                <line x1="10" y1="14" x2="21" y2="3"></line>
+                            </svg>
+                        </a>
+                    </td>
+                `;
+                
+                tableBody.appendChild(tr);
+            });
+            
+            stats.textContent = `Showing ${data.length} of ${spreadsheetData.length} records`;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function filterData(searchTerm) {
+            const term = searchTerm.toLowerCase().trim();
+            
+            if (!term) {
+                renderTable(spreadsheetData);
+                return;
+            }
+            
+            const filtered = spreadsheetData.filter(row => 
+                row.teamName.toLowerCase().includes(term) ||
+                row.certificateUrl.toLowerCase().includes(term)
+            );
+            
+            renderTable(filtered);
+        }
+
+        searchInput.addEventListener('input', (e) => {
+            filterData(e.target.value);
+        });
+
+        renderTable(spreadsheetData);
+    </script>
+  <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>
