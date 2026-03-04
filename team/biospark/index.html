@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BioType Pro - Biomedical Typing Test</title>
+    <style>
+        body {
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .container {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            border-radius: 15px;
+            width: 60%;
+            margin: auto;
+        }
+
+        #textDisplay {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 100px;
+            font-size: 16px;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .stats {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 8px;
+            border: none;
+            background: #00c6ff;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>BioType Pro</h1>
+    <p id="textDisplay">
+        The cardiovascular system regulates blood circulation and oxygen transport in the human body.
+    </p>
+
+    <textarea id="inputText" placeholder="Start typing here..."></textarea>
+
+    <div class="stats">
+        <p>Time Left: <span id="time">60</span> seconds</p>
+        <p>WPM: <span id="wpm">0</span></p>
+        <p>Accuracy: <span id="accuracy">0</span>%</p>
+    </div>
+
+    <button onclick="startTest()">Start Test</button>
+</div>
+
+<script>
+let timeLeft = 60;
+let timer;
+let started = false;
+
+function startTest() {
+    document.getElementById("inputText").value = "";
+    timeLeft = 60;
+    document.getElementById("time").innerText = timeLeft;
+    started = true;
+
+    timer = setInterval(function() {
+        timeLeft--;
+        document.getElementById("time").innerText = timeLeft;
+
+        if (timeLeft <= 0) {
+            clearInterval(timer);
+            calculateResult();
+        }
+    }, 1000);
+}
+
+function calculateResult() {
+    let originalText = document.getElementById("textDisplay").innerText;
+    let typedText = document.getElementById("inputText").value;
+
+    let words = typedText.trim().split(" ").length;
+    let wpm = words;
+
+    let correctChars = 0;
+    for (let i = 0; i < typedText.length; i++) {
+        if (typedText[i] === originalText[i]) {
+            correctChars++;
+        }
+    }
+
+    let accuracy = ((correctChars / originalText.length) * 100).toFixed(2);
+
+    document.getElementById("wpm").innerText = wpm;
+    document.getElementById("accuracy").innerText = accuracy;
+}
+</script>
+
+</body>
+</html>
