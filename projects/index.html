@@ -1,1 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill Aura 2026 | Innovation Hub</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        /* Toast Notification Animation */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s, visibility 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col">
+
+    <!-- Header Section -->
+    <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white shadow-lg py-12 px-4 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-3 tracking-tight">Skill Aura 2026</h1>
+            <p class="text-xl md:text-2xl font-light opacity-90">by <span class="font-semibold">Innovation Hub</span></p>
+            <p class="mt-6 max-w-2xl mx-auto text-blue-100 text-sm md:text-base">
+                Explore the amazing project work done by our talented teams. Discover their innovations, share their links, and celebrate their hard work!
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-12 max-w-7xl">
+        <div id="team-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            <!-- Team cards will be injected here via JavaScript -->
+        </div>
+    </main>
+
+
+    <!-- Toast Notification -->
+    <div id="toast">
+        <i class="fa-solid fa-circle-check text-green-400 mr-2"></i>
+        <span id="toast-message">Action successful!</span>
+    </div>
+
+    <script>
+        // Data Array holding all the team projects (removed the duplicate Amos Payaluga)
+        const teams = [
+            { name: "Techno Z4", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/techno-z4" },
+            { name: "Team Blitz", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/team-blitz" },
+            { name: "Zen Crew", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/zen-crew" },
+            { name: "Amos Payaluga", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/amos-payaluga" },
+            { name: "Singam Squad", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/singam-squad" },
+            { name: "Rolex", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/rolex" },
+            { name: "Power Rangers", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/powerrangers" },
+            { name: "Pheonix Rise", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/pheonix-rise" },
+            { name: "Nexatrons", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/nexatrons" },
+            { name: "Karata Iruntha Parotta", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/karata-iruntha-parotta" },
+            { name: "IT Warriors", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/it-warriors" },
+            { name: "GG Gang", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/gggang" },
+            { name: "Game Changer", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/game-changer" },
+            { name: "Flamigos", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/flamigos" },
+            { name: "Destroyer", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/destroyer" },
+            { name: "Chess20", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/chess20" },
+            { name: "Biospark", url: "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/biospark" }
+        ];
+
+        // The grammatically corrected message for sharing
+        const shareMessageText = "Check out the project work done using our team's prompts!";
+
+        // Function to display toast notifications
+        function showToast(message) {
+            const toast = document.getElementById("toast");
+            const toastMessage = document.getElementById("toast-message");
+            
+            toastMessage.textContent = message;
+            toast.className = "show";
+            
+            // Hide after 3 seconds
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+
+        // Function to copy text to clipboard using fallback for better compatibility in iframes
+        function copyToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // Avoid scrolling to bottom
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+
+            try {
+                const successful = document.execCommand('copy');
+                if(successful) {
+                    showToast("URL copied to clipboard!");
+                } else {
+                    showToast("Failed to copy URL.");
+                }
+            } catch (err) {
+                console.error('Fallback: Oops, unable to copy', err);
+                showToast("Error copying link.");
+            }
+
+            document.body.removeChild(textArea);
+        }
+
+        // Function to trigger Universal Share API
+        function shareLink(title, url) {
+            if (navigator.share) {
+                navigator.share({
+                    title: `${title} - Skill Aura 2026`,
+                    text: shareMessageText,
+                    url: url
+                }).then(() => {
+                    console.log('Thanks for sharing!');
+                })
+                .catch((error) => console.log('Error sharing', error));
+            } else {
+                // Fallback to copying to clipboard if Web Share API is not supported (e.g., desktop browsers)
+                copyToClipboard(url);
+                showToast("Share not supported here. Link copied instead!");
+            }
+        }
+
+        // Render the cards dynamically
+        const gridContainer = document.getElementById('team-grid');
+
+        teams.forEach((team, index) => {
+            // Encode the WhatsApp message to ensure special characters work in URLs
+            const waMessage = encodeURIComponent(`${shareMessageText}\n\n${team.url}`);
+            const whatsappLink = `https://api.whatsapp.com/send?text=${waMessage}`;
+
+            // Create card element
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-slate-100 overflow-hidden flex flex-col h-full";
+            
+            // Determine avatar initials
+            const initials = team.name.substring(0, 2).toUpperCase();
+
+            card.innerHTML = `
+                <div class="p-5 flex-grow">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="h-12 w-12 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold text-lg flex-shrink-0">
+                            ${initials}
+                        </div>
+                        <h2 class="text-xl font-semibold text-slate-800 leading-tight">${team.name}</h2>
+                    </div>
+                    <p class="text-slate-500 text-sm mb-6 break-all line-clamp-2" title="${team.url}">${team.url}</p>
+                </div>
+                
+                <div class="bg-slate-50 p-4 border-t border-slate-100 grid grid-cols-4 gap-2">
+                    
+                    <!-- Visit Link Button -->
+                    <a href="${team.url}" target="_blank" rel="noopener noreferrer" 
+                       class="flex flex-col items-center justify-center text-slate-600 hover:text-blue-600 transition-colors p-2 rounded-lg hover:bg-blue-50 group"
+                       title="Visit Project">
+                        <i class="fa-solid fa-arrow-up-right-from-square mb-1 text-lg group-hover:scale-110 transition-transform"></i>
+                        <span class="text-[10px] font-medium uppercase tracking-wider">Visit</span>
+                    </a>
+
+                    <!-- Copy Button -->
+                    <button onclick="copyToClipboard('${team.url}')" 
+                            class="flex flex-col items-center justify-center text-slate-600 hover:text-slate-900 transition-colors p-2 rounded-lg hover:bg-slate-200 group"
+                            title="Copy Link">
+                        <i class="fa-regular fa-copy mb-1 text-lg group-hover:scale-110 transition-transform"></i>
+                        <span class="text-[10px] font-medium uppercase tracking-wider">Copy</span>
+                    </button>
+
+                    <!-- WhatsApp Share Button -->
+                    <a href="${whatsappLink}" target="_blank" rel="noopener noreferrer"
+                       class="flex flex-col items-center justify-center text-slate-600 hover:text-green-600 transition-colors p-2 rounded-lg hover:bg-green-50 group"
+                       title="Share on WhatsApp">
+                        <i class="fa-brands fa-whatsapp mb-1 text-lg group-hover:scale-110 transition-transform"></i>
+                        <span class="text-[10px] font-medium uppercase tracking-wider">WhatsApp</span>
+                    </a>
+
+                    <!-- Universal Share Button -->
+                    <button onclick="shareLink('${team.name.replace(/'/g, "\\'")}', '${team.url}')" 
+                            class="flex flex-col items-center justify-center text-slate-600 hover:text-purple-600 transition-colors p-2 rounded-lg hover:bg-purple-50 group"
+                            title="Share via Device">
+                        <i class="fa-solid fa-share-nodes mb-1 text-lg group-hover:scale-110 transition-transform"></i>
+                        <span class="text-[10px] font-medium uppercase tracking-wider">Share</span>
+                    </button>
+
+                </div>
+            `;
+            
+            gridContainer.appendChild(card);
+        });
+    </script>
+  <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+</body>
+</html>
