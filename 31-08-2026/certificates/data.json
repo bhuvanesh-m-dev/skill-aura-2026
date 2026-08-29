@@ -1,0 +1,70 @@
+{
+  "teams": [
+    {
+      "teamName": "biospark",
+      "projectUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/biospark",
+      "participants": [
+        {
+          "id": "kanimozhi",
+          "name": "S.Kanimozhi"
+        },
+        {
+          "id": "raghavi",
+          "name": "S.Raghavi Babysha"
+        },
+        {
+          "id": "jenifer",
+          "name": "J.Arockia Jenifer"
+        },
+        {
+          "id": "niraimathi",
+          "name": "S.Niraimathi"
+        }
+      ]
+    },
+    {
+      "teamName": "destroyer",
+      "projectUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/destroyer",
+      "participants": [
+        {
+          "id": "mohan",
+          "name": "Mohan Kumar S"
+        },
+        {
+          "id": "gokul",
+          "name": "Gokul G"
+        },
+        {
+          "id": "jemil",
+          "name": "Jemil Sheron S B"
+        },
+        {
+          "id": "saajid",
+          "name": "Mohammed Moheideen Saajid S"
+        }
+      ]
+    },
+    {
+      "teamName": "flamigos",
+      "projectUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/flamigos",
+      "participants": [
+        {
+          "id": "nithyashree",
+          "name": "Nithyashree N"
+        },
+        {
+          "id": "nithyasri",
+          "name": "Nithyasri A"
+        },
+        {
+          "id": "nithyavani",
+          "name": "Nithyavani S"
+        },
+        {
+          "id": "tharani",
+          "name": "Tharani S"
+        }
+      ]
+    }
+  ]
+}
