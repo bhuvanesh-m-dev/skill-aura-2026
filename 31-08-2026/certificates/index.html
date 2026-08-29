@@ -335,7 +335,7 @@
     <div class="container">
         <!-- Certificate -->
         <div class="certificate-wrapper" id="certificate">
-            <svg class="certificate-svg" viewBox="0 0 1000 750" xmlns="http://www.w3.org/2000/svg"
+            <svg class="certificate-svg" viewBox="0 0 1000 750" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                 preserveAspectRatio="xMidYMid meet">
                 <defs>
                     <linearGradient id="borderGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -410,7 +410,7 @@
                 </g>
 
                 <!-- Main Content -->
-                <g transform="translate(500, 230)">
+                <g transform="translate(500, 225)">
                     <text x="0" y="0" text-anchor="middle" font-family="'Playfair Display', serif" font-size="14"
                         font-style="italic" fill="#475569">This is to certify that</text>
 
@@ -418,16 +418,21 @@
                         fill="#1e40af" filter="url(#shadow)" id="participant-name">[Participant Name]</text>
                     <line x1="-150" y1="50" x2="150" y2="50" stroke="#d4af37" stroke-width="1" />
 
-                    <text x="0" y="80" text-anchor="middle" font-family="'Playfair Display', serif" font-size="13"
+                    <text x="0" y="78" text-anchor="middle" font-family="'Playfair Display', serif" font-size="13"
                         fill="#475569">as a member of team <tspan font-weight="700" fill="#1e40af" font-size="15"
                             id="team-name">[Team Name]</tspan>,</text>
 
-                    <text x="0" y="105" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12"
+                    <text x="0" y="96" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11"
+                        fill="#2563eb">
+                        Project Hosted At: <a href="#" target="_blank" id="project-url-link"><tspan font-weight="600" fill="#1d4ed8" style="text-decoration: underline;" id="project-url-cert">[Project URL]</tspan></a>
+                    </text>
+
+                    <text x="0" y="118" text-anchor="middle" font-family="'Inter', sans-serif" font-size="12"
                         fill="#334155">has successfully participated in the Technical Event</text>
-                    <text x="0" y="130" text-anchor="middle" font-family="'Cinzel', serif" font-size="18"
+                    <text x="0" y="140" text-anchor="middle" font-family="'Cinzel', serif" font-size="18"
                         font-weight="700" fill="#dc2626">Prompt2Portfolio</text>
 
-                    <text x="0" y="160" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11"
+                    <text x="0" y="166" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11"
                         fill="#475569">
                         conducted as part of <a href="http://bhuvanesh-m-dev.github.io/skill-aura-2026" target="_blank"
                             style="cursor: pointer;">
@@ -435,7 +440,7 @@
                             </tspan>
                         </a>
                     </text>
-                    <text x="0" y="180" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11"
+                    <text x="0" y="184" text-anchor="middle" font-family="'Inter', sans-serif" font-size="11"
                         fill="#475569">
                         held on <tspan font-weight="700">31st August 2026</tspan> at Kings Engineering College
                     </text>
@@ -547,8 +552,8 @@
 
         <!-- Verification Note -->
         <div class="verification-note">
-            <div class="label">Original Verified Certificate</div>
-            <div class="domain">https://bhuvanesh-m-dev.github.io/skill-aura-2026</div>
+            <div class="label">Verified Project Portfolio URL</div>
+            <div class="domain" id="project-url-display">https://bhuvanesh-m-dev.github.io/skill-aura-2026</div>
             <div class="status">Verified & Hosted</div>
         </div>
 
@@ -558,10 +563,13 @@
                 <svg viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"
                     style="width: 100%; height: auto;">
                     <defs>
+                        <!-- Background Gradient -->
                         <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" stop-color="#0B0C10" />
                             <stop offset="100%" stop-color="#1F2833" />
                         </linearGradient>
+
+                        <!-- Title Gradients -->
                         <linearGradient id="promptGradient" x1="0%" y1="0%" x2="100%" y2="0%">
                             <stop offset="0%" stop-color="#FFFFFF" />
                             <stop offset="100%" stop-color="#CBD5E1" />
@@ -571,10 +579,14 @@
                             <stop offset="50%" stop-color="#8B5CF6" />
                             <stop offset="100%" stop-color="#3B82F6" />
                         </linearGradient>
+
+                        <!-- Grid Pattern -->
                         <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#FFFFFF" stroke-opacity="0.03"
+                            <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#FFFFFF" stroke-opacity="0.04"
                                 stroke-width="1" />
                         </pattern>
+
+                        <!-- Glow Filters -->
                         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
                             <feGaussianBlur stdDeviation="12" result="blur" />
                             <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -589,57 +601,97 @@
                                 <feMergeNode in="SourceGraphic" />
                             </feMerge>
                         </filter>
+
+                        <!-- Accent Glow -->
+                        <filter id="accent-glow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="6" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
                     </defs>
+
+                    <!-- Base -->
                     <rect width="100%" height="100%" rx="24" fill="url(#bgGradient)" />
                     <rect width="100%" height="100%" rx="24" fill="url(#grid)" />
 
+                    <!-- Decorative Orbs -->
+                    <circle cx="100" cy="500" r="120" fill="#F43F5E" opacity="0.08" filter="url(#glow-intense)" />
+                    <circle cx="1100" cy="130" r="100" fill="#3B82F6" opacity="0.06" filter="url(#glow-intense)" />
+
                     <!-- Laptop / Portfolio Abstract -->
-                    <g transform="translate(600, 310)">
-                        <rect x="-300" y="-150" width="600" height="300" rx="12" fill="#1E293B" stroke="#334155"
+                    <g transform="translate(600, 370)">
+                        <!-- Laptop Base -->
+                        <rect x="-320" y="-140" width="640" height="290" rx="14" fill="#1E293B" stroke="#334155"
                             stroke-width="2" />
-                        <rect x="-280" y="-130" width="560" height="240" fill="#0F172A" />
+                        <rect x="-300" y="-120" width="600" height="230" rx="4" fill="#0F172A" />
 
                         <!-- Browser Chrome -->
-                        <rect x="-280" y="-130" width="560" height="40" fill="#1E293B" />
-                        <circle cx="-250" cy="-110" r="6" fill="#FF5F56" />
-                        <circle cx="-230" cy="-110" r="6" fill="#FFBD2E" />
-                        <circle cx="-210" cy="-110" r="6" fill="#27C93F" />
-                        <rect x="-150" y="-118" width="300" height="16" rx="8" fill="#0F172A" />
+                        <rect x="-300" y="-120" width="600" height="38" rx="4" fill="#1E293B" />
+                        <circle cx="-270" cy="-101" r="6" fill="#FF5F56" />
+                        <circle cx="-250" cy="-101" r="6" fill="#FFBD2E" />
+                        <circle cx="-230" cy="-101" r="6" fill="#27C93F" />
+
+                        <!-- URL Bar -->
+                        <rect x="-190" y="-109" width="350" height="16" rx="8" fill="#0F172A" />
 
                         <!-- Content Mockup -->
-                        <rect x="-260" y="-70" width="120" height="120" rx="8" fill="#334155" opacity="0.5" />
-                        <rect x="-120" y="-70" width="380" height="20" rx="4" fill="#475569" opacity="0.5" />
-                        <rect x="-120" y="-40" width="300" height="20" rx="4" fill="#475569" opacity="0.3" />
-                        <rect x="-120" y="-10" width="340" height="20" rx="4" fill="#475569" opacity="0.3" />
-                        <rect x="-120" y="20" width="200" height="40" rx="6" fill="url(#xGradient)" opacity="0.8" />
+                        <rect x="-280" y="-65" width="120" height="120" rx="8" fill="#334155" opacity="0.4" />
+
+                        <!-- Title Lines -->
+                        <rect x="-140" y="-65" width="270" height="18" rx="4" fill="#475569" opacity="0.5" />
+                        <rect x="-140" y="-37" width="200" height="14" rx="4" fill="#475569" opacity="0.3" />
+                        <rect x="-140" y="-13" width="300" height="14" rx="4" fill="#475569" opacity="0.3" />
+
+                        <!-- CTA Button -->
+                        <rect x="-140" y="15" width="170" height="34" rx="6" fill="url(#xGradient)" opacity="0.85" />
 
                         <!-- AI Sparkles -->
-                        <circle cx="250" cy="-80" r="8" fill="#F43F5E" filter="url(#glow)" />
-                        <circle cx="280" cy="-40" r="5" fill="#8B5CF6" filter="url(#glow)" />
-                        <circle cx="230" cy="-20" r="6" fill="#3B82F6" filter="url(#glow)" />
+                        <circle cx="260" cy="-80" r="8" fill="#F43F5E" filter="url(#accent-glow)" />
+                        <circle cx="290" cy="-40" r="5" fill="#8B5CF6" filter="url(#accent-glow)" />
+                        <circle cx="240" cy="-20" r="6" fill="#3B82F6" filter="url(#accent-glow)" />
+                        <circle cx="280" cy="0" r="4" fill="#F43F5E" filter="url(#accent-glow)" />
+                        <circle cx="310" cy="-70" r="4" fill="#8B5CF6" filter="url(#accent-glow)" />
                     </g>
 
-                    <!-- Main Title -->
-                    <g transform="translate(600, 150)">
-                        <text x="0" y="0" font-family="'Outfit', sans-serif" font-weight="900" font-size="100"
-                            fill="url(#promptGradient)" text-anchor="middle" letter-spacing="-2"
-                            filter="url(#glow)">Prompt2</text>
-                        <text x="0" y="110" font-family="'Outfit', sans-serif" font-weight="900" font-size="100"
-                            fill="url(#xGradient)" text-anchor="middle" letter-spacing="-2"
-                            filter="url(#glow-intense)">Portfolio</text>
-                        <text x="0" y="160" font-family="'Fira Code', monospace" font-size="24" fill="#38BDF8"
-                            text-anchor="middle" letter-spacing="4">THE AI PORTFOLIO CHALLENGE</text>
+                    <!-- Main Title - Left to Right Reading Order -->
+                    <g transform="translate(600, 120)">
+                        <!-- "Prompt2" on left, "Portfolio" on right -->
+                        <text x="-220" y="0" font-family="'Outfit', sans-serif" font-weight="900" font-size="80"
+                            fill="url(#promptGradient)" text-anchor="end" letter-spacing="-2" filter="url(#glow)">
+                            Prompt2
+                        </text>
+                        <text x="-10" y="0" font-family="'Outfit', sans-serif" font-weight="900" font-size="80"
+                            fill="url(#xGradient)" text-anchor="start" letter-spacing="-2" filter="url(#glow-intense)">
+                            Portfolio
+                        </text>
+                        <!-- Subtitle centered below -->
+                        <text x="0" y="50" font-family="'Fira Code', monospace" font-size="20" fill="#38BDF8"
+                            text-anchor="middle" letter-spacing="5" font-weight="600">
+                            THE AI PORTFOLIO CHALLENGE
+                        </text>
                     </g>
+
+                    <!-- Decorative Line -->
+                    <line x1="280" y1="240" x2="380" y2="240" stroke="#F43F5E" stroke-width="2" opacity="0.4" />
+                    <line x1="820" y1="240" x2="920" y2="240" stroke="#3B82F6" stroke-width="2" opacity="0.4" />
 
                     <!-- Bottom Details -->
                     <g transform="translate(40, 580)">
-                        <text x="0" y="0" font-family="'Fira Code', monospace" font-size="12" fill="#475569">v1.0.26 |
-                            MODE=AI_ASSISTED</text>
+                        <text x="0" y="0" font-family="'Fira Code', monospace" font-size="12" fill="#475569"
+                            letter-spacing="0.5">
+                            v1.0.26 | MODE=AI_ASSISTED
+                        </text>
                     </g>
-                    <g transform="translate(1000, 560)">
-                        <text x="0" y="15" font-family="'Fira Code', monospace" font-size="12" fill="#64748B"
-                            text-anchor="end">SKILL AURA 2026</text>
+
+                    <g transform="translate(1160, 580)">
+                        <text x="0" y="0" font-family="'Fira Code', monospace" font-size="12" fill="#475569"
+                            text-anchor="end" letter-spacing="0.5">
+                            SKILL AURA 2026
+                        </text>
                     </g>
+
+                    <!-- Status Dot -->
+                    <circle cx="1030" cy="575" r="4" fill="#22C55E" />
+                    <circle cx="1030" cy="575" r="8" fill="#22C55E" opacity="0.3" />
                 </svg>
             </div>
             <p><strong>Prompt2Portfolio</strong> is a 45-minute AI-powered portfolio-building challenge conducted as
@@ -773,24 +825,67 @@
             console.log('Certificate Landing Page Loaded');
 
             try {
-                const response = await fetch('data.json');
-                const data = await response.json();
+                // Resilient data loading strategy for nested paths
+                let data = null;
+                const dataLocations = [
+                    'data.json',
+                    '../data.json',
+                    '../../data.json',
+                    '/skill-aura-2026/31-08-2026/certificates/data.json',
+                    'https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/main/31-08-2026/certificates/data.json'
+                ];
+                for (const loc of dataLocations) {
+                    try {
+                        const res = await fetch(loc);
+                        if (res.ok) {
+                            data = await res.json();
+                            break;
+                        }
+                    } catch (e) {}
+                }
+                if (!data) throw new Error("Could not load data.json");
 
-                // Get Participant ID from URL
-                const urlParams = new URLSearchParams(window.location.search);
-                const participantId = urlParams.get('id');
+                // Extract team name from pathname (e.g. /team/flamigos/ or /team/team-blitz/)
+                const pathname = window.location.pathname || '';
+                const pathTeamMatch = pathname.match(/\/team\/([^/]+)/i);
+                let teamId = pathTeamMatch ? pathTeamMatch[1] : '';
+
+                // Extract participant ID and team ID from URL search string
+                const searchStr = window.location.search || '';
+                const hrefStr = window.location.href || '';
+                const urlParams = new URLSearchParams(searchStr);
+                
+                let participantId = urlParams.get('id') || urlParams.get('member') || urlParams.get('name') || urlParams.get('participant') || '';
+                if (!teamId) {
+                    teamId = urlParams.get('team') || urlParams.get('teamName') || urlParams.get('team_name') || '';
+                }
+
+                // Handle composite query formats if any
+                if (!participantId || participantId.includes('/')) {
+                    const fullStr = decodeURIComponent(searchStr + '&' + hrefStr);
+                    const match = fullStr.match(/[?&]id=([^/&#?]+)(?:\/\?id=|\/|&team=|\?id=|\/team=)?([^/&#?]*)/i);
+                    if (match) {
+                        if (!participantId) participantId = match[1];
+                        if (!teamId && match[2]) teamId = match[2];
+                    }
+                }
+
+                participantId = participantId.replace(/^(\?id=|id=|member=|name=)/i, '').trim();
+                teamId = teamId.replace(/^(\?id=|id=|team=|teamName=)/i, '').trim();
 
                 let foundParticipant = null;
                 let foundTeam = null;
                 const allParticipants = [];
 
-                // Support data.teams structure or flat data.participants structure
+                // Match participant and team against data.json
                 if (data.teams && Array.isArray(data.teams)) {
                     for (const team of data.teams) {
                         if (team.participants && Array.isArray(team.participants)) {
                             team.participants.forEach(p => {
                                 allParticipants.push({ ...p, teamName: team.teamName, projectUrl: team.projectUrl });
-                                if (participantId && p.id && p.id.toLowerCase() === participantId.toLowerCase()) {
+                                const matchParticipant = p.id && (p.id.toLowerCase() === participantId.toLowerCase() || p.name.toLowerCase().includes(participantId.toLowerCase()));
+                                const matchTeam = !teamId || (team.teamName && team.teamName.toLowerCase() === teamId.toLowerCase());
+                                if (matchParticipant && matchTeam && !foundParticipant) {
                                     foundParticipant = p;
                                     foundTeam = team;
                                 }
@@ -807,20 +902,36 @@
                     });
                 }
 
-                // If no ID or invalid ID, redirect to 404 page
-                if (!participantId || !foundParticipant) {
-                    window.location.href = 'http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/certificates/404';
+                // Default to first participant if no ID provided in query
+                if (!participantId && allParticipants.length > 0) {
+                    foundParticipant = allParticipants[0];
+                    foundTeam = data.teams.find(t => t.teamName === foundParticipant.teamName) || data.teams[0];
+                } else if (!participantId || !foundParticipant) {
+                    window.location.href = 'https://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/certificates/404';
                     return;
                 }
 
-                // Update Participant and Team Details
+                // Update Participant, Team, and Project URL Details
                 const nameEl = document.getElementById('participant-name');
                 const teamNameEl = document.getElementById('team-name');
                 const projectBtn = document.getElementById('projectBtn');
+                const projectUrlCertEl = document.getElementById('project-url-cert');
+                const projectUrlLinkEl = document.getElementById('project-url-link');
+                const projectUrlDisplayEl = document.getElementById('project-url-display');
 
                 if (nameEl) nameEl.textContent = foundParticipant.name;
                 if (teamNameEl && foundTeam) teamNameEl.textContent = foundTeam.teamName;
-                if (projectBtn && foundTeam && foundTeam.projectUrl) projectBtn.href = foundTeam.projectUrl;
+                if (foundTeam && foundTeam.projectUrl) {
+                    if (projectBtn) projectBtn.href = foundTeam.projectUrl;
+                    if (projectUrlCertEl) projectUrlCertEl.textContent = foundTeam.projectUrl;
+                    if (projectUrlLinkEl) {
+                        projectUrlLinkEl.setAttribute('href', foundTeam.projectUrl);
+                        projectUrlLinkEl.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', foundTeam.projectUrl);
+                    }
+                    if (projectUrlDisplayEl) {
+                        projectUrlDisplayEl.innerHTML = `<a href="${foundTeam.projectUrl}" target="_blank" style="color: inherit; text-decoration: underline;">${foundTeam.projectUrl}</a>`;
+                    }
+                }
 
                 document.title = `Certificate of Participation - ${foundParticipant.name} | Prompt2Portfolio 2026`;
 
@@ -828,7 +939,7 @@
                 console.log("--- Certificate Generation URLs ---");
                 const baseUrl = "https://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/certificates/";
                 allParticipants.forEach(p => {
-                    console.log(`${p.name} (${p.teamName}): ${baseUrl}?id=${p.id}`);
+                    console.log(`${p.name} (${p.teamName}): ${baseUrl}team/${p.teamName}/?id=${p.id}`);
                 });
                 console.log("-----------------------------------");
 
@@ -879,8 +990,22 @@
         // Share on LinkedIn
         function shareLinkedIn(e) {
             e.preventDefault();
-            const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(window.location.href)}`;
-            window.open(linkedInUrl, '_blank', 'width=600,height=400');
+            const projectBtn = document.getElementById('projectBtn');
+            const projectUrl = (projectBtn && projectBtn.href && projectBtn.href !== '#' && projectBtn.href !== window.location.href) 
+                ? projectBtn.href 
+                : 'https://bhuvanesh-m-dev.github.io/skill-aura-2026';
+            const certUrl = window.location.href;
+
+            const linkedInMessage = `I’m excited to share that I participated in Prompt2Portfolio, an AI-powered portfolio-building challenge conducted as part of SkillAura 2026 by the Innovation Club on 31st August 2026.\n\nThe challenge gave me an opportunity to explore prompt engineering, AI-assisted development, UI/UX design, and rapid prototyping by transforming a given student profile into a professional portfolio within a limited time.\n\n🔗 Project: ${projectUrl}\n📜 Certificate: ${certUrl}\n\nA great experience of learning, building, experimenting with AI, and turning ideas into reality. 🚀\n\n#SkillAura2026 #Prompt2Portfolio #AI #PromptEngineering #VibeCoding #Portfolio #Innovation #WebDevelopment #AIassistedDevelopment`;
+
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(linkedInMessage).then(() => {
+                    showToast('LinkedIn post text copied to clipboard!');
+                }).catch(() => {});
+            }
+
+            const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certUrl)}`;
+            window.open(linkedInUrl, '_blank', 'width=600,height=600');
         }
 
         // Show Toast Notification
@@ -925,8 +1050,11 @@
 
             participants.forEach(p => {
                 const row = document.createElement('div');
-                const link = `${baseUrl}?id=${p.id}`;
-                row.innerHTML = `<strong>${p.name}</strong> (${p.teamName || 'Team'}): <br><a href="${link}" target="_blank" style="color:blue; word-break: break-all;">${link}</a>`;
+                const pathLink = `${baseUrl}team/${p.teamName}/?id=${p.id}`;
+                const shortLink = `${baseUrl}?id=${p.id}`;
+                row.innerHTML = `<strong>${p.name}</strong> (${p.teamName}): <br>
+                <a href="${pathLink}" target="_blank" style="color:blue; word-break: break-all;">${pathLink}</a><br>
+                <span style="font-size: 11px; color: #666;">Query Link: <a href="${shortLink}" target="_blank" style="color:#555;">${shortLink}</a></span>`;
                 row.style.borderBottom = '1px solid #eee';
                 row.style.paddingBottom = '10px';
                 list.appendChild(row);
@@ -945,8 +1073,6 @@
             document.body.appendChild(container);
         }
     </script>
-    <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev-day11&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto"
-        width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
 </body>
 
 </html>
