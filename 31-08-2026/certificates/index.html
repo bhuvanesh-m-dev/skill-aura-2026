@@ -845,33 +845,38 @@
                 }
                 if (!data) throw new Error("Could not load data.json");
 
-                // Extract team name from pathname (e.g. /team/flamigos/ or /team/team-blitz/)
-                const pathname = window.location.pathname || '';
-                const pathTeamMatch = pathname.match(/\/team\/([^/]+)/i);
-                let teamId = pathTeamMatch ? pathTeamMatch[1] : '';
+                // Extract participant ID and team ID from URL (supporting ?team=destroyer/?id=jemil, ?id=jemil, path routing, etc.)
+                const fullUrl = decodeURIComponent(window.location.href || '');
+                const urlParams = new URLSearchParams(window.location.search || '');
 
-                // Extract participant ID and team ID from URL search string
-                const searchStr = window.location.search || '';
-                const hrefStr = window.location.href || '';
-                const urlParams = new URLSearchParams(searchStr);
-                
-                let participantId = urlParams.get('id') || urlParams.get('member') || urlParams.get('name') || urlParams.get('participant') || '';
+                let participantId = '';
+                let teamId = '';
+
+                // Extract team from query or path
+                const teamQueryMatch = fullUrl.match(/[?&]team=([^/?&#]+)/i);
+                if (teamQueryMatch) {
+                    teamId = teamQueryMatch[1];
+                } else {
+                    const pathTeamMatch = (window.location.pathname || '').match(/\/team\/([^/]+)/i);
+                    if (pathTeamMatch) teamId = pathTeamMatch[1];
+                }
+
+                // Extract participant ID from query
+                const idQueryMatch = fullUrl.match(/[?&]id=([^/?&#]+)/i);
+                if (idQueryMatch) {
+                    participantId = idQueryMatch[1];
+                }
+
+                // Fallback parameter checks
+                if (!participantId) {
+                    participantId = urlParams.get('id') || urlParams.get('member') || urlParams.get('name') || urlParams.get('participant') || '';
+                }
                 if (!teamId) {
                     teamId = urlParams.get('team') || urlParams.get('teamName') || urlParams.get('team_name') || '';
                 }
 
-                // Handle composite query formats if any
-                if (!participantId || participantId.includes('/')) {
-                    const fullStr = decodeURIComponent(searchStr + '&' + hrefStr);
-                    const match = fullStr.match(/[?&]id=([^/&#?]+)(?:\/\?id=|\/|&team=|\?id=|\/team=)?([^/&#?]*)/i);
-                    if (match) {
-                        if (!participantId) participantId = match[1];
-                        if (!teamId && match[2]) teamId = match[2];
-                    }
-                }
-
-                participantId = participantId.replace(/^(\?id=|id=|member=|name=)/i, '').trim();
-                teamId = teamId.replace(/^(\?id=|id=|team=|teamName=)/i, '').trim();
+                if (participantId) participantId = participantId.replace(/^(\?id=|id=|member=|name=)/i, '').trim();
+                if (teamId) teamId = teamId.replace(/^(\?id=|id=|team=|teamName=)/i, '').trim();
 
                 let foundParticipant = null;
                 let foundTeam = null;
@@ -939,7 +944,7 @@
                 console.log("--- Certificate Generation URLs ---");
                 const baseUrl = "https://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/certificates/";
                 allParticipants.forEach(p => {
-                    console.log(`${p.name} (${p.teamName}): ${baseUrl}team/${p.teamName}/?id=${p.id}`);
+                    console.log(`${p.name} (${p.teamName}): ${baseUrl}?team=${p.teamName}/?id=${p.id}`);
                 });
                 console.log("-----------------------------------");
 
@@ -1050,7 +1055,7 @@
 
             participants.forEach(p => {
                 const row = document.createElement('div');
-                const pathLink = `${baseUrl}team/${p.teamName}/?id=${p.id}`;
+                const pathLink = `${baseUrl}?team=${p.teamName}/?id=${p.id}`;
                 const shortLink = `${baseUrl}?id=${p.id}`;
                 row.innerHTML = `<strong>${p.name}</strong> (${p.teamName}): <br>
                 <a href="${pathLink}" target="_blank" style="color:blue; word-break: break-all;">${pathLink}</a><br>
