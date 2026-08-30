@@ -1,68 +1,420 @@
 {
   "teams": [
     {
-      "teamName": "biospark",
-      "projectUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/biospark",
+      "teamName": "AVENGERS",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/avengers.html",
       "participants": [
         {
-          "id": "kanimozhi",
-          "name": "S.Kanimozhi"
+          "id": "sriram",
+          "name": "Sriram"
         },
         {
-          "id": "raghavi",
-          "name": "S.Raghavi Babysha"
+          "id": "shanjai",
+          "name": "Shanjai"
         },
         {
-          "id": "jenifer",
-          "name": "J.Arockia Jenifer"
-        },
-        {
-          "id": "niraimathi",
-          "name": "S.Niraimathi"
+          "id": "santhoshu",
+          "name": "Santhosh U"
         }
       ]
     },
     {
-      "teamName": "destroyer",
-      "projectUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/destroyer",
+      "teamName": "B.sanjeethaa",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/b-sanjeethaa.html",
       "participants": [
         {
-          "id": "mohan",
-          "name": "Mohan Kumar S"
+          "id": "sanjeetha",
+          "name": "B. Sanjeetha"
         },
+        {
+          "id": "swetha",
+          "name": "K. Swetha"
+        },
+        {
+          "id": "sangeetha",
+          "name": "Sangeetha M."
+        }
+      ]
+    },
+    {
+      "teamName": "Beffyzz squad",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/beffyzz-squad.html",
+      "participants": [
+        {
+          "id": "ezhiloviya",
+          "name": "Ezhil Oviya"
+        },
+        {
+          "id": "abishiya",
+          "name": "Abishiya"
+        },
+        {
+          "id": "janani",
+          "name": "Janani"
+        }
+      ]
+    },
+    {
+      "teamName": "Copy cats",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/copy-cats.html",
+      "participants": [
+        {
+          "id": "harish",
+          "name": "Harish"
+        },
+        {
+          "id": "kevin",
+          "name": "Kevin P. P."
+        },
+        {
+          "id": "deepakroshan",
+          "name": "Deepak Roshan"
+        }
+      ]
+    },
+    {
+      "teamName": "CSE-B",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/cse-b.html",
+      "participants": [
+        {
+          "id": "sona",
+          "name": "D. Sona"
+        },
+        {
+          "id": "sakthisangavi",
+          "name": "Sakthisangavi"
+        },
+        {
+          "id": "sweena",
+          "name": "Sweena"
+        }
+      ]
+    },
+    {
+      "teamName": "Divya Squad",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/divya-squad.html",
+      "participants": [
+        {
+          "id": "keziah",
+          "name": "Keziah Dorothy A G"
+        },
+        {
+          "id": "divyashree",
+          "name": "Divya Shree V"
+        },
+        {
+          "id": "elakkiya",
+          "name": "Elakkiya S"
+        }
+      ]
+    },
+    {
+      "teamName": "Elite girls",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/elite-girls.html",
+      "participants": [
+        {
+          "id": "saranya",
+          "name": "Saranya B."
+        },
+        {
+          "id": "vandhana",
+          "name": "Vandhana R."
+        },
+        {
+          "id": "subiksha",
+          "name": "Subiksha E."
+        }
+      ]
+    },
+    {
+      "teamName": "JOILY BOYS",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/joily-boys.html",
+      "participants": [
+        {
+          "id": "santhoshr",
+          "name": "Santhosh R."
+        },
+        {
+          "id": "prashant",
+          "name": "Prashant Kumar S."
+        },
+        {
+          "id": "sriramr",
+          "name": "Sriram R."
+        }
+      ]
+    },
+    {
+      "teamName": "Malpractice",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/malpractice.html",
+      "participants": [
+        {
+          "id": "dharanikumar",
+          "name": "Dharani Kumar"
+        },
+        {
+          "id": "arun",
+          "name": "A. Arun"
+        },
+        {
+          "id": "dineshkarthik",
+          "name": "G. Dinesh Karthik"
+        }
+      ]
+    },
+    {
+      "teamName": "Naveena",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/naveena.html",
+      "participants": [
+        {
+          "id": "vijayalakshmi",
+          "name": "Vijayalakshmi"
+        },
+        {
+          "id": "yuvasri",
+          "name": "Yuvasri"
+        },
+        {
+          "id": "naveena",
+          "name": "Naveena"
+        }
+      ]
+    },
+    {
+      "teamName": "No Rules Squad",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/no-rules-squad.html",
+      "participants": [
+        {
+          "id": "lokesh",
+          "name": "Lokesh R"
+        },
+        {
+          "id": "aaron",
+          "name": "Aaron J. H. Kennady"
+        },
+        {
+          "id": "shyam",
+          "name": "Shyam K."
+        }
+      ]
+    },
+    {
+      "teamName": "Odysseus",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/odysseus.html",
+      "participants": [
+        {
+          "id": "sreeshanth",
+          "name": "Sreeshanth P. K."
+        },
+        {
+          "id": "praveenkumar",
+          "name": "Praveen Kumar R"
+        },
+        {
+          "id": "samjeffrin",
+          "name": "Sam Jeffrin"
+        }
+      ]
+    },
+    {
+      "teamName": "Sam team",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/sam-team.html",
+      "participants": [
+        {
+          "id": "pradeepraj",
+          "name": "Pradeep Raj"
+        },
+        {
+          "id": "samspurgen",
+          "name": "Sam Spurgen"
+        },
+        {
+          "id": "vishal",
+          "name": "Vishal"
+        }
+      ]
+    },
+    {
+      "teamName": "Singam payaluga",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/singam-payaluga.html",
+      "participants": [
+        {
+          "id": "ranjeet",
+          "name": "Ranjeet"
+        },
+        {
+          "id": "amos",
+          "name": "Amos"
+        },
+        {
+          "id": "rajalingam",
+          "name": "Rajalingam"
+        }
+      ]
+    },
+    {
+      "teamName": "Sp payalugaaa",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/sp-payalugaaa.html",
+      "participants": [
+        {
+          "id": "surya",
+          "name": "Surya"
+        },
+        {
+          "id": "moses",
+          "name": "Moses"
+        },
+        {
+          "id": "sudalaikannu",
+          "name": "Sudalai Kannu"
+        }
+      ]
+    },
+    {
+      "teamName": "Star queens",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/star-queens.html",
+      "participants": [
+        {
+          "id": "dillipriya",
+          "name": "Dilli Priya R"
+        },
+        {
+          "id": "evanjalin",
+          "name": "Evanjalin Angel J"
+        },
+        {
+          "id": "lekha",
+          "name": "P. Lekha"
+        }
+      ]
+    },
+    {
+      "teamName": "Team Singam",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/team-singam.html",
+      "participants": [
+        {
+          "id": "jegadeesh",
+          "name": "Jegadeesh S"
+        },
+        {
+          "id": "josephleensraj",
+          "name": "Joseph Leensraj"
+        },
+        {
+          "id": "mathesh",
+          "name": "M. Mathesh Gobi"
+        }
+      ]
+    },
+    {
+      "teamName": "Thazhal",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/thazhal.html",
+      "participants": [
+        {
+          "id": "pratibha",
+          "name": "Pratibha S"
+        },
+        {
+          "id": "varshitha",
+          "name": "Varshitha"
+        },
+        {
+          "id": "preethikumari",
+          "name": "Preethi Kumari R"
+        },
+        {
+          "id": "sharonrose",
+          "name": "Sharon Rose C"
+        }
+      ]
+    },
+    {
+      "teamName": "THE NEIGHBORHOOD",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/the-neighborhood.html",
+      "participants": [
+        {
+          "id": "shanjai",
+          "name": "Shanjai"
+        },
+        {
+          "id": "naresh",
+          "name": "Naresh"
+        },
+        {
+          "id": "santoshkumar",
+          "name": "Santosh Kumar"
+        }
+      ]
+    },
+    {
+      "teamName": "TRI 3",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/tri-3.html",
+      "participants": [
+        {
+          "id": "sujinfelix",
+          "name": "Sujin Felix S. J."
+        },
+        {
+          "id": "vishnuprasath",
+          "name": "Vishnu Prasath S."
+        },
+        {
+          "id": "sriramr",
+          "name": "Sriram R."
+        }
+      ]
+    },
+    {
+      "teamName": "Triple Threats",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/triple-threats.html",
+      "participants": [
+        {
+          "id": "princy",
+          "name": "B. Princy"
+        },
+        {
+          "id": "pooja",
+          "name": "S. Pooja"
+        },
+        {
+          "id": "swathi",
+          "name": "S. Swathi"
+        }
+      ]
+    },
+    {
+      "teamName": "vibe coder",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/vibe-coder.html",
+      "participants": [
         {
           "id": "gokul",
           "name": "Gokul G"
         },
         {
-          "id": "jemil",
-          "name": "Jemil Sheron S B"
+          "id": "saajid",
+          "name": "Mohamed Mohideen Saajid S"
         },
         {
-          "id": "saajid",
-          "name": "Mohammed Moheideen Saajid S"
+          "id": "mohan",
+          "name": "Mohan Kumar S"
         }
       ]
     },
     {
-      "teamName": "flamigos",
-      "projectUrl": "https://bhuvanesh-m-dev.github.io/skill-aura-2026/team/flamigos",
+      "teamName": "We3",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/we3.html",
       "participants": [
         {
-          "id": "nithyashree",
-          "name": "Nithyashree N"
+          "id": "umabharathi",
+          "name": "Umabharathi D"
         },
         {
-          "id": "nithyasri",
-          "name": "Nithyasri A"
+          "id": "ragavi",
+          "name": "Ragavi D"
         },
         {
-          "id": "nithyavani",
-          "name": "Nithyavani S"
-        },
-        {
-          "id": "tharani",
-          "name": "Tharani S"
+          "id": "srivarthini",
+          "name": "Srivarthini V"
         }
       ]
     }
