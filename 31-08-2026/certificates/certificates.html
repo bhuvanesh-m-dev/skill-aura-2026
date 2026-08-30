@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt2Portfolio 2026 - Participant Certificates Directory | SkillAura 2026</title>
+    <meta name="description" content="Explore and verify official Certificates of Participation for all teams and participants of Prompt2Portfolio - SkillAura 2026, Kings Engineering College.">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #07090e;
+            --bg-card: rgba(15, 23, 42, 0.65);
+            --bg-card-hover: rgba(30, 41, 59, 0.8);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-hover: rgba(56, 189, 248, 0.4);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-cyan: #38bdf8;
+            --accent-purple: #8b5cf6;
+            --accent-pink: #f43f5e;
+            --accent-gold: #f59e0b;
+            --accent-green: #10b981;
+            --gradient-title: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #38bdf8 100%);
+            --gradient-accent: linear-gradient(135deg, #f43f5e 0%, #8b5cf6 50%, #38bdf8 100%);
+            --gradient-card-border: linear-gradient(135deg, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0.02));
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            line-height: 1.5;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.06) 0%, transparent 60%);
+            background-attachment: fixed;
+        }
+
+        /* Glass Container */
+        .page-container {
+            max-width: 1320px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Header Styling */
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px;
+            border-radius: 30px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: var(--accent-cyan);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 16px;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.15);
+        }
+
+        .brand-badge::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--accent-cyan);
+            box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 42px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            background: var(--gradient-title);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 16px;
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        /* Stats Bar */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.cyan { background: rgba(56, 189, 248, 0.15); color: var(--accent-cyan); }
+        .stat-icon.purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+        .stat-icon.pink { background: rgba(244, 63, 94, 0.15); color: var(--accent-pink); }
+        .stat-icon.gold { background: rgba(245, 158, 11, 0.15); color: var(--accent-gold); }
+
+        .stat-info .stat-value {
+            font-family: 'Outfit', sans-serif;
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--text-primary);
+        }
+
+        .stat-info .stat-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        /* Search & Control Panel */
+        .controls-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            position: relative;
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            width: 20px;
+            height: 20px;
+            transition: color 0.3s;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .search-box input:focus + svg {
+            color: var(--accent-cyan);
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .select-filter {
+            padding: 14px 18px;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 14px;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 180px;
+        }
+
+        .select-filter:focus, .select-filter:hover {
+            border-color: var(--accent-purple);
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.15);
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: var(--gradient-accent);
+            color: #ffffff;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.45);
+            transform: translateY(-2px);
+        }
+
+        /* Certificate Cards Grid */
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 0 4px;
+        }
+
+        .results-count {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .results-count span {
+            color: var(--accent-cyan);
+            font-weight: 700;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 24px;
+        }
+
+        .cert-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(16px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .cert-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-accent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .cert-card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
+            border-color: var(--border-hover);
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .cert-card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .avatar-box {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(139, 92, 246, 0.2));
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Outfit', sans-serif;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--accent-cyan);
+            flex-shrink: 0;
+        }
+
+        .participant-meta h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 19px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+
+        .team-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(139, 92, 246, 0.15);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            color: #c084fc;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .id-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-family: 'Fira Code', monospace;
+            font-size: 11px;
+        }
+
+        /* URL Display Box */
+        .url-box {
+            background: rgba(7, 9, 14, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 12px;
+            margin: 16px 0;
+        }
+
+        .url-box .url-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+
+        .url-box .url-text {
+            font-family: 'Fira Code', monospace;
+            font-size: 11.5px;
+            color: var(--accent-cyan);
+            word-break: break-all;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+
+        /* Card Actions Footer */
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn-card {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            border: 1px solid transparent;
+        }
+
+        .btn-view-cert {
+            background: rgba(56, 189, 248, 0.12);
+            border-color: rgba(56, 189, 248, 0.3);
+            color: var(--accent-cyan);
+            grid-column: span 2;
+        }
+
+        .btn-view-cert:hover {
+            background: var(--accent-cyan);
+            color: #07090e;
+            box-shadow: 0 4px 16px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-copy-link {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .btn-copy-link:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+        }
+
+        .btn-project {
+            background: rgba(244, 63, 94, 0.1);
+            border-color: rgba(244, 63, 94, 0.25);
+            color: var(--accent-pink);
+        }
+
+        .btn-project:hover {
+            background: var(--accent-pink);
+            color: #ffffff;
+        }
+
+        /* Empty State */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--bg-card);
+            border: 1px dashed var(--border-color);
+            border-radius: 16px;
+        }
+
+        .empty-state svg {
+            width: 56px;
+            height: 56px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            font-size: 14px;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: #ffffff;
+            color: #07090e;
+            padding: 14px 22px;
+            border-radius: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%) translateY(0); opacity: 0; }
+            to { transform: translateX(0) translateY(0); opacity: 1; }
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        footer a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 768px) {
+            h1 { font-size: 32px; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .controls-card { flex-direction: column; align-items: stretch; }
+            .select-filter { width: 100%; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container">
+        <!-- Header -->
+        <header>
+            <div class="brand-badge">Kings Engineering College • SkillAura 2026</div>
+            <h1>Prompt2Portfolio Certificate Directory</h1>
+            <p class="subtitle">Search, verify, and access official Certificates of Participation for all event participants.</p>
+        </header>
+
+        <!-- Stats Bar -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon cyan">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-participants">0</div>
+                    <div class="stat-label">Total Participants</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-teams">0</div>
+                    <div class="stat-label">Project Teams</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon pink">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"></circle><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"></polyline></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value" id="stat-certificates">0</div>
+                    <div class="stat-label">Verified Certificates</div>
+                </div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon gold">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-value">31 AUG 2026</div>
+                    <div class="stat-label">Event Date</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls / Search Bar -->
+        <div class="controls-card">
+            <div class="search-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="search-input" placeholder="Search by participant name, team name, or ID..." autocomplete="off">
+            </div>
+
+            <div class="filter-group">
+                <select id="team-filter" class="select-filter">
+                    <option value="">All Teams (23)</option>
+                </select>
+
+                <button class="btn-action btn-secondary" onclick="resetFilters()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path></svg>
+                    Reset
+                </button>
+
+                <button class="btn-action btn-primary" onclick="copyAllLinks()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                    Copy All Links
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Header -->
+        <div class="results-header">
+            <div class="results-count">Showing <span id="visible-count">0</span> of <span id="total-count">0</span> participants</div>
+        </div>
+
+        <!-- Cards Grid Container -->
+        <div class="cards-grid" id="cards-container">
+            <!-- Cards rendered dynamically via JS -->
+        </div>
+
+        <!-- Footer -->
+        <footer>
+            <p>Prompt2Portfolio 2026 • Certificate Verification Portal</p>
+            <p style="margin-top: 6px;">Innovation Hub • Department of CSE • Kings Engineering College</p>
+        </footer>
+    </div>
+
+    <!-- Toast Notifications Container -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <script>
+        const BASE_CERT_URL = "https://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/certificates/";
+
+        let allData = { teams: [] };
+        let flatParticipants = [];
+
+        // Main Loader
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadData();
+            initUI();
+        });
+
+        // Fetch data.json with fallback
+        async function loadData() {
+            try {
+                const res = await fetch('data.json');
+                if (res.ok) {
+                    allData = await res.json();
+                } else {
+                    throw new Error('Failed to fetch data.json');
+                }
+            } catch (err) {
+                console.warn('Fallback: loading local dataset inline due to fetch restrictions.');
+                allData = getFallbackData();
+            }
+
+            // Flatten participant items for easy search and filtering
+            flatParticipants = [];
+            if (allData.teams && Array.isArray(allData.teams)) {
+                allData.teams.forEach(team => {
+                    if (team.participants && Array.isArray(team.participants)) {
+                        team.participants.forEach(p => {
+                            // Construct standard certificate URL as requested
+                            const certUrl = `${BASE_CERT_URL}?team=${encodeURIComponent(team.teamName)}/?id=${encodeURIComponent(p.id)}`;
+                            flatParticipants.push({
+                                id: p.id,
+                                name: p.name,
+                                teamName: team.teamName,
+                                projectUrl: team.projectUrl,
+                                certUrl: certUrl
+                            });
+                        });
+                    }
+                });
+            }
+        }
+
+        // Initialize UI components and populate dropdowns
+        function initUI() {
+            // Update stats
+            document.getElementById('stat-participants').textContent = flatParticipants.length;
+            document.getElementById('stat-teams').textContent = allData.teams ? allData.teams.length : 0;
+            document.getElementById('stat-certificates').textContent = flatParticipants.length;
+            document.getElementById('total-count').textContent = flatParticipants.length;
+
+            // Populate Team Filter Dropdown
+            const teamSelect = document.getElementById('team-filter');
+            teamSelect.innerHTML = `<option value="">All Teams (${allData.teams ? allData.teams.length : 0})</option>`;
+            
+            if (allData.teams) {
+                allData.teams.forEach(t => {
+                    const opt = document.createElement('option');
+                    opt.value = t.teamName.toLowerCase();
+                    opt.textContent = `${t.teamName} (${t.participants ? t.participants.length : 0})`;
+                    teamSelect.appendChild(opt);
+                });
+            }
+
+            // Event Listeners
+            document.getElementById('search-input').addEventListener('input', renderCards);
+            document.getElementById('team-filter').addEventListener('change', renderCards);
+
+            // Initial Render
+            renderCards();
+        }
+
+        // Filter and Render Cards Grid
+        function renderCards() {
+            const container = document.getElementById('cards-container');
+            const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+            const teamFilterVal = document.getElementById('team-filter').value.toLowerCase();
+
+            const filtered = flatParticipants.filter(p => {
+                const matchesSearch = 
+                    p.name.toLowerCase().includes(searchVal) ||
+                    p.id.toLowerCase().includes(searchVal) ||
+                    p.teamName.toLowerCase().includes(searchVal) ||
+                    p.certUrl.toLowerCase().includes(searchVal);
+
+                const matchesTeam = !teamFilterVal || p.teamName.toLowerCase() === teamFilterVal;
+
+                return matchesSearch && matchesTeam;
+            });
+
+            document.getElementById('visible-count').textContent = filtered.length;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                        <h3>No participants found</h3>
+                        <p>Try searching for a different participant name, team name, or clear your filters.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(p => {
+                const initial = p.name.charAt(0).toUpperCase();
+                return `
+                    <div class="cert-card">
+                        <div>
+                            <div class="card-header">
+                                <div class="avatar-box">${initial}</div>
+                                <div class="participant-meta">
+                                    <h3>${escapeHtml(p.name)}</h3>
+                                    <div style="display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-top: 4px;">
+                                        <span class="team-badge">
+                                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle></svg>
+                                            ${escapeHtml(p.teamName)}
+                                        </span>
+                                        <span class="id-badge">id: ${escapeHtml(p.id)}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="url-box">
+                                <div class="url-label">Certificate URL</div>
+                                <div class="url-text">${escapeHtml(p.certUrl)}</div>
+                            </div>
+                        </div>
+
+                        <div class="card-actions">
+                            <a href="${escapeHtml(p.certUrl)}" target="_blank" rel="noopener noreferrer" class="btn-card btn-view-cert">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                                View Certificate
+                            </a>
+
+                            <button onclick="copyToClipboard('${escapeJsString(p.certUrl)}', 'Certificate link for ${escapeJsString(p.name)} copied!')" class="btn-card btn-copy-link">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                Copy Link
+                            </button>
+
+                            <a href="${escapeHtml(p.projectUrl)}" target="_blank" rel="noopener noreferrer" class="btn-card btn-project">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                                View Project
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Reset Filter Controls
+        function resetFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('team-filter').value = '';
+            renderCards();
+            showToast('Filters cleared');
+        }
+
+        // Copy All Certificate Links
+        function copyAllLinks() {
+            if (flatParticipants.length === 0) return;
+            const text = flatParticipants.map(p => `${p.name} (${p.teamName}): ${p.certUrl}`).join('\n');
+            copyToClipboard(text, `Copied all ${flatParticipants.length} certificate links to clipboard!`);
+        }
+
+        // Generic Copy Helper
+        function copyToClipboard(text, successMsg) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(successMsg);
+            }).catch(() => {
+                const ta = document.createElement('textarea');
+                ta.value = text;
+                document.body.appendChild(ta);
+                ta.select();
+                document.execCommand('copy');
+                document.body.removeChild(ta);
+                showToast(successMsg);
+            });
+        }
+
+        // Show Toast Notification
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                <span>${escapeHtml(message)}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+
+        function escapeJsString(str) {
+            if (!str) return '';
+            return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '\\"');
+        }
+
+        // Local Fallback Data generator if data.json is fetched directly via file://
+        function getFallbackData() {
+            return {
+  "teams": [
+    {
+      "teamName": "AVENGERS",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/avengers.html",
+      "participants": [
+        { "id": "sriram", "name": "Sriram" },
+        { "id": "shanjai", "name": "Shanjai" },
+        { "id": "santhoshu", "name": "Santhosh U" }
+      ]
+    },
+    {
+      "teamName": "B.sanjeethaa",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/b-sanjeethaa.html",
+      "participants": [
+        { "id": "sanjeetha", "name": "B. Sanjeetha" },
+        { "id": "swetha", "name": "K. Swetha" },
+        { "id": "sangeetha", "name": "Sangeetha M." }
+      ]
+    },
+    {
+      "teamName": "Beffyzz squad",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/beffyzz-squad.html",
+      "participants": [
+        { "id": "ezhiloviya", "name": "Ezhil Oviya" },
+        { "id": "abishiya", "name": "Abishiya" },
+        { "id": "janani", "name": "Janani" }
+      ]
+    },
+    {
+      "teamName": "Copy cats",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/copy-cats.html",
+      "participants": [
+        { "id": "harish", "name": "Harish" },
+        { "id": "kevin", "name": "Kevin P. P." },
+        { "id": "deepakroshan", "name": "Deepak Roshan" }
+      ]
+    },
+    {
+      "teamName": "CSE-B",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/cse-b.html",
+      "participants": [
+        { "id": "sona", "name": "D. Sona" },
+        { "id": "sakthisangavi", "name": "Sakthisangavi" },
+        { "id": "sweena", "name": "Sweena" }
+      ]
+    },
+    {
+      "teamName": "Divya Squad",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/divya-squad.html",
+      "participants": [
+        { "id": "keziah", "name": "Keziah Dorothy A G" },
+        { "id": "divyashree", "name": "Divya Shree V" },
+        { "id": "elakkiya", "name": "Elakkiya S" }
+      ]
+    },
+    {
+      "teamName": "Elite girls",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/elite-girls.html",
+      "participants": [
+        { "id": "saranya", "name": "Saranya B." },
+        { "id": "vandhana", "name": "Vandhana R." },
+        { "id": "subiksha", "name": "Subiksha E." }
+      ]
+    },
+    {
+      "teamName": "JOILY BOYS",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/joily-boys.html",
+      "participants": [
+        { "id": "santhoshr", "name": "Santhosh R." },
+        { "id": "prashant", "name": "Prashant Kumar S." },
+        { "id": "sriramr", "name": "Sriram R." }
+      ]
+    },
+    {
+      "teamName": "Malpractice",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/malpractice.html",
+      "participants": [
+        { "id": "dharanikumar", "name": "Dharani Kumar" },
+        { "id": "arun", "name": "A. Arun" },
+        { "id": "dineshkarthik", "name": "G. Dinesh Karthik" }
+      ]
+    },
+    {
+      "teamName": "Naveena",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/naveena.html",
+      "participants": [
+        { "id": "vijayalakshmi", "name": "Vijayalakshmi" },
+        { "id": "yuvasri", "name": "Yuvasri" },
+        { "id": "naveena", "name": "Naveena" }
+      ]
+    },
+    {
+      "teamName": "No Rules Squad",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/no-rules-squad.html",
+      "participants": [
+        { "id": "lokesh", "name": "Lokesh R" },
+        { "id": "aaron", "name": "Aaron J. H. Kennady" },
+        { "id": "shyam", "name": "Shyam K." }
+      ]
+    },
+    {
+      "teamName": "Odysseus",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/odysseus.html",
+      "participants": [
+        { "id": "sreeshanth", "name": "Sreeshanth P. K." },
+        { "id": "praveenkumar", "name": "Praveen Kumar R" },
+        { "id": "samjeffrin", "name": "Sam Jeffrin" }
+      ]
+    },
+    {
+      "teamName": "Sam team",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/sam-team.html",
+      "participants": [
+        { "id": "pradeepraj", "name": "Pradeep Raj" },
+        { "id": "samspurgen", "name": "Sam Spurgen" },
+        { "id": "vishal", "name": "Vishal" }
+      ]
+    },
+    {
+      "teamName": "Singam payaluga",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/singam-payaluga.html",
+      "participants": [
+        { "id": "ranjeet", "name": "Ranjeet" },
+        { "id": "amos", "name": "Amos" },
+        { "id": "rajalingam", "name": "Rajalingam" }
+      ]
+    },
+    {
+      "teamName": "Sp payalugaaa",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/sp-payalugaaa.html",
+      "participants": [
+        { "id": "surya", "name": "Surya" },
+        { "id": "moses", "name": "Moses" },
+        { "id": "sudalaikannu", "name": "Sudalai Kannu" }
+      ]
+    },
+    {
+      "teamName": "Star queens",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/star-queens.html",
+      "participants": [
+        { "id": "dillipriya", "name": "Dilli Priya R" },
+        { "id": "evanjalin", "name": "Evanjalin Angel J" },
+        { "id": "lekha", "name": "P. Lekha" }
+      ]
+    },
+    {
+      "teamName": "Team Singam",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/team-singam.html",
+      "participants": [
+        { "id": "jegadeesh", "name": "Jegadeesh S" },
+        { "id": "josephleensraj", "name": "Joseph Leensraj" },
+        { "id": "mathesh", "name": "M. Mathesh Gobi" }
+      ]
+    },
+    {
+      "teamName": "Thazhal",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/thazhal.html",
+      "participants": [
+        { "id": "pratibha", "name": "Pratibha S" },
+        { "id": "varshitha", "name": "Varshitha" },
+        { "id": "preethikumari", "name": "Preethi Kumari R" },
+        { "id": "sharonrose", "name": "Sharon Rose C" }
+      ]
+    },
+    {
+      "teamName": "THE NEIGHBORHOOD",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/the-neighborhood.html",
+      "participants": [
+        { "id": "shanjai", "name": "Shanjai" },
+        { "id": "naresh", "name": "Naresh" },
+        { "id": "santoshkumar", "name": "Santosh Kumar" }
+      ]
+    },
+    {
+      "teamName": "TRI 3",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/tri-3.html",
+      "participants": [
+        { "id": "sujinfelix", "name": "Sujin Felix S. J." },
+        { "id": "vishnuprasath", "name": "Vishnu Prasath S." },
+        { "id": "sriramr", "name": "Sriram R." }
+      ]
+    },
+    {
+      "teamName": "Triple Threats",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/triple-threats.html",
+      "participants": [
+        { "id": "princy", "name": "B. Princy" },
+        { "id": "pooja", "name": "S. Pooja" },
+        { "id": "swathi", "name": "S. Swathi" }
+      ]
+    },
+    {
+      "teamName": "vibe coder",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/vibe-coder.html",
+      "participants": [
+        { "id": "gokul", "name": "Gokul G" },
+        { "id": "saajid", "name": "Mohamed Mohideen Saajid S" },
+        { "id": "mohan", "name": "Mohan Kumar S" }
+      ]
+    },
+    {
+      "teamName": "We3",
+      "projectUrl": "http://bhuvanesh-m-dev.github.io/skill-aura-2026/31-08-2026/projects/we3.html",
+      "participants": [
+        { "id": "umabharathi", "name": "Umabharathi D" },
+        { "id": "ragavi", "name": "Ragavi D" },
+        { "id": "srivarthini", "name": "Srivarthini V" }
+      ]
+    }
+  ]
+};
+        }
+    </script>
+</body>
+
+</html>
