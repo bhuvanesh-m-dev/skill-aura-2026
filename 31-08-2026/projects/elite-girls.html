@@ -1,163 +1,604 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Elite Girls | AI & Technology Creative Portfolio</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-color: #050508;
-            --navy-blue: #0F172A;
-            --electric-blue: #2563EB;
-            --neon-accent: #38BDF8;
-            --text-primary: #FFFFFF;
-            --text-secondary: #CBD5E1;
-            --card-bg: rgba(15, 23, 42, 0.75);
-            --border-glow: rgba(56, 189, 248, 0.2);
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Saranya Krishnan · Creative Portfolio</title>
+
+  <!-- Tailwind + Lucide + Font Awesome + Google Fonts -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Tailwind custom config (inlined) -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0B132B',
+              purple: '#5E2CA5',
+              brown: '#4A2E2B',
+              accent: '#8B5CF6',
+              softBg: '#F8FAFC',
+              cardBg: '#FFFFFF',
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            heading: ['"Space Grotesk"', 'sans-serif'],
+          },
+          backgroundImage: {
+            'gradient-primary': 'linear-gradient(135deg, #0B132B 0%, #5E2CA5 50%, #4A2E2B 100%)',
+            'gradient-soft': 'linear-gradient(135deg, rgba(11, 19, 43, 0.05) 0%, rgba(94, 44, 165, 0.08) 50%, rgba(74, 46, 43, 0.05) 100%)',
+            'gradient-card': 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
+            'gradient-text': 'linear-gradient(135deg, #0B132B 0%, #5E2CA5 50%, #8B5CF6 100%)',
+          }
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: var(--bg-color);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
-                radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.12) 0%, transparent 45%);
-        }
-        nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 100;
-            padding: 20px 8%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(5, 5, 8, 0.8);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-glow);
-        }
-        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
-        .logo span { color: var(--neon-accent); }
-        .nav-links { display: flex; gap: 30px; list-style: none; }
-        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s; }
-        .nav-links a:hover { color: var(--neon-accent); }
-        
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 120px 20px 60px;
-        }
-        .tag {
-            padding: 8px 20px;
-            background: rgba(37, 99, 235, 0.15);
-            border: 1px solid var(--neon-accent);
-            border-radius: 50px;
-            color: var(--neon-accent);
-            font-size: 0.9rem;
-            font-weight: 600;
-            margin-bottom: 24px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 4rem;
-            font-weight: 700;
-            line-height: 1.1;
-            margin-bottom: 20px;
-            background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .hero p { max-width: 650px; color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 40px; }
-        
-        .section { padding: 80px 8%; }
-        .section-title { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; margin-bottom: 40px; text-align: center; }
-        
-        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
-        .team-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-glow);
-            border-radius: 20px;
-            padding: 32px;
-            transition: transform 0.3s, border-color 0.3s;
-            backdrop-filter: blur(12px);
-        }
-        .team-card:hover { transform: translateY(-8px); border-color: var(--neon-accent); }
-        .team-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; color: var(--neon-accent); margin-bottom: 8px; }
-        .team-card .role { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px; }
-        
-        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
-        .skill-box {
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid var(--border-glow);
-            padding: 20px;
-            border-radius: 14px;
-            text-align: center;
-            font-weight: 600;
-            color: var(--text-secondary);
-        }
-    </style>
+      }
+    }
+  </script>
+
+  <style>
+    /* base reset & custom glow */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior: smooth; }
+
+    @keyframes gradientGlow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .animated-gradient {
+      background: linear-gradient(-45deg, #0B132B, #5E2CA5, #4A2E2B, #7C3AED);
+      background-size: 400% 400%;
+      animation: gradientGlow 12s ease infinite;
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #0B132B 0%, #5E2CA5 50%, #4A2E2B 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* tilt-card 3D base */
+    .tilt-card {
+      transform-style: preserve-3d;
+      transition: transform 0.25s ease-out, box-shadow 0.3s ease-out;
+    }
+    .tilt-card:hover {
+      box-shadow: 0 20px 40px -15px rgba(94, 44, 165, 0.25);
+    }
+    .tilt-child {
+      transform: translateZ(30px);
+    }
+
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 10px; }
+    ::-webkit-scrollbar-track { background: #F8FAFC; }
+    ::-webkit-scrollbar-thumb { background: #5E2CA5; border-radius: 5px; }
+    ::-webkit-scrollbar-thumb:hover { background: #0B132B; }
+
+    body {
+      background-color: #F8FAFC;
+      color: #1e293b;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+  </style>
 </head>
-<body>
-    <nav>
-        <div class="logo">ELITE <span>GIRLS</span></div>
-        <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#skills">Skills</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#contact">Contact</a></li>
-        </ul>
-    </nav>
 
-    <section class="hero">
-        <div class="tag">SkillAura 2026 • Neon Dark Portfolio</div>
-        <h1>ELITE GIRLS</h1>
-        <p>AI & Technology Creative Portfolio designed with a futuristic visual identity, combining neon-dark atmosphere with professional navy and electric-blue accents.</p>
-    </section>
+<body class="bg-brand-softBg text-slate-800 font-sans antialiased selection:bg-brand-purple selection:text-white relative overflow-x-hidden">
 
-    <section class="section" id="about">
-        <h2 class="section-title">Team Members</h2>
-        <div class="team-grid">
-            <div class="team-card">
-                <h3>Vandhana R.</h3>
-                <div class="role">2nd Year B.E. CSE</div>
-                <p style="color:var(--text-secondary)">Specializing in web technologies, frontend layout design, and AI application integration.</p>
-            </div>
-            <div class="team-card">
-                <h3>Subiksha E.</h3>
-                <div class="role">2nd Year B.E. CSE</div>
-                <p style="color:var(--text-secondary)">Focused on software engineering, database management, and interactive UI logic.</p>
-            </div>
-            <div class="team-card">
-                <h3>Saranya B.</h3>
-                <div class="role">2nd Year B.E. CSE</div>
-                <p style="color:var(--text-secondary)">Passionate about artificial intelligence, modern web standards, and creative problem solving.</p>
-            </div>
+  <!-- Background decorative orbs -->
+  <div class="fixed top-0 left-1/4 w-96 h-96 bg-purple-300/30 rounded-full blur-3xl pointer-events-none -z-10 animate-pulse"></div>
+  <div class="fixed bottom-10 right-10 w-96 h-96 bg-amber-900/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+  <div class="fixed top-1/2 right-1/4 w-80 h-80 bg-blue-900/10 rounded-full blur-3xl pointer-events-none -z-10"></div>
+
+  <!-- ===== NAVIGATION ===== -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100 transition-all duration-300">
+    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="#hero" class="text-2xl font-bold font-heading text-gradient tracking-tight">
+        SK<span class="text-brand-purple">.</span>
+      </a>
+
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+        <a href="#about" class="hover:text-brand-purple transition-colors">About</a>
+        <a href="#education" class="hover:text-brand-purple transition-colors">Education</a>
+        <a href="#skills" class="hover:text-brand-purple transition-colors">Skills</a>
+        <a href="#projects" class="hover:text-brand-purple transition-colors">Projects</a>
+        <a href="#certifications" class="hover:text-brand-purple transition-colors">Certifications</a>
+        <a href="#contact" class="hover:text-brand-purple transition-colors">Contact</a>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <a href="#contact" class="px-5 py-2.5 rounded-full text-sm font-semibold text-white bg-gradient-primary hover:shadow-lg hover:shadow-purple-500/25 transition-all transform hover:-translate-y-0.5">
+          Get in Touch
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden p-2 text-slate-600 focus:outline-none">
+          <i data-lucide="menu" class="w-6 h-6"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile drawer -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-slate-200 px-6 py-4 space-y-3">
+      <a href="#about" class="block text-slate-700 font-medium hover:text-brand-purple">About</a>
+      <a href="#education" class="block text-slate-700 font-medium hover:text-brand-purple">Education</a>
+      <a href="#skills" class="block text-slate-700 font-medium hover:text-brand-purple">Skills</a>
+      <a href="#projects" class="block text-slate-700 font-medium hover:text-brand-purple">Projects</a>
+      <a href="#certifications" class="block text-slate-700 font-medium hover:text-brand-purple">Certifications</a>
+      <a href="#contact" class="block text-slate-700 font-medium hover:text-brand-purple">Contact</a>
+    </div>
+  </header>
+
+  <!-- ===== HERO ===== -->
+  <section id="hero" class="pt-32 pb-20 md:pt-40 md:pb-28 max-w-7xl mx-auto px-6">
+    <div class="grid md:grid-cols-12 gap-12 items-center">
+      
+      <!-- text content -->
+      <div class="md:col-span-7 space-y-6">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-50 border border-purple-200 text-brand-purple font-medium text-sm">
+          <span class="w-2 h-2 rounded-full bg-green-500 animate-ping"></span>
+          2nd Year Student · Kings Engineering College
         </div>
-    </section>
 
-    <section class="section" id="skills">
-        <h2 class="section-title">Technical Skills</h2>
-        <div class="skills-grid">
-            <div class="skill-box">Python & C</div>
-            <div class="skill-box">HTML5 & CSS3</div>
-            <div class="skill-box">JavaScript (ES6+)</div>
-            <div class="skill-box">React Development</div>
-            <div class="skill-box">MySQL & MongoDB</div>
-            <div class="skill-box">Git & GitHub</div>
+        <h1 class="text-4xl sm:text-6xl font-extrabold font-heading text-slate-900 leading-tight">
+          Hi, I'm <span class="text-gradient">Saranya Krishnan</span>
+        </h1>
+
+        <p class="text-xl sm:text-2xl font-heading text-brand-purple font-semibold tracking-wide">
+          “Turning Ideas into digital Experiences”
+        </p>
+
+        <p class="text-slate-600 text-lg leading-relaxed max-w-xl">
+          Computer Science & Engineering student passionate about software development, artificial intelligence, and building modern, user-centric web applications.
+        </p>
+
+        <div class="flex flex-wrap gap-4 pt-4">
+          <a href="#projects" class="px-7 py-3.5 rounded-xl font-semibold text-white bg-gradient-primary hover:shadow-xl hover:shadow-purple-500/30 transition-all transform hover:-translate-y-1 flex items-center gap-2">
+            Explore Projects <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </a>
+          <a href="#contact" class="px-7 py-3.5 rounded-xl font-semibold text-slate-800 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center gap-2">
+            Contact Me
+          </a>
         </div>
-    </section>
+
+        <!-- stats -->
+        <div class="grid grid-cols-3 gap-6 pt-8 border-t border-slate-200/80">
+          <div><div class="text-2xl font-bold font-heading text-brand-navy">8.4</div><div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Current CGPA</div></div>
+          <div><div class="text-2xl font-bold font-heading text-brand-purple">04+</div><div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Projects Built</div></div>
+          <div><div class="text-2xl font-bold font-heading text-brand-brown">05+</div><div class="text-xs text-slate-500 font-medium uppercase tracking-wider">Certifications</div></div>
+        </div>
+      </div>
+
+      <!-- hero visual / standing character -->
+      <div class="md:col-span-5 flex justify-center">
+        <div class="tilt-card relative w-full max-w-md bg-gradient-soft border border-white/60 rounded-3xl p-6 shadow-2xl backdrop-blur-xl group">
+          <div class="absolute -top-6 -right-6 w-24 h-24 bg-gradient-primary rounded-2xl rotate-12 opacity-20 group-hover:rotate-45 transition-transform duration-500"></div>
+          <div class="relative z-10 flex flex-col items-center">
+            <img 
+              src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-082026/img/Saranya-standing.png" 
+              alt="Saranya Krishnan Standing" 
+              class="w-full h-auto object-contain max-h-[480px] drop-shadow-xl tilt-child"
+            />
+            <div class="mt-4 text-center tilt-child">
+              <span class="px-4 py-1.5 rounded-full bg-white/90 border border-slate-200 text-xs font-semibold text-brand-navy shadow-sm">
+                Software Engineer Aspirant
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===== ABOUT ===== -->
+  <section id="about" class="py-20 bg-white border-y border-slate-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-bold text-brand-purple tracking-widest mb-2">About Me</h2>
+        <h3 class="text-3xl md:text-4xl font-bold font-heading text-slate-900">Driven by Passion, Defined by Code</h3>
+      </div>
+
+      <div class="grid md:grid-cols-12 gap-12 items-center">
+        <!-- portrait -->
+        <div class="md:col-span-5">
+          <div class="tilt-card relative rounded-2xl overflow-hidden shadow-xl border-4 border-white bg-gradient-to-br from-brand-navy to-brand-purple p-2">
+            <img 
+              src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-082026/img/Saranya.png" 
+              alt="Saranya Krishnan Portrait" 
+              class="w-full h-auto rounded-xl object-cover tilt-child"
+            />
+          </div>
+        </div>
+
+        <!-- bio -->
+        <div class="md:col-span-7 space-y-6">
+          <p class="text-slate-600 leading-relaxed text-lg">
+            Saranya Krishnan is a Computer Science and Engineering student with a strong interest in software development, artificial intelligence, and modern web technologies. She enjoys learning new technologies, participating in technical events, solving programming problems, and building practical projects.
+          </p>
+          <p class="text-slate-600 leading-relaxed text-lg">
+            She is currently developing her technical skills and aims to build a strong professional profile for future internships and placement opportunities.
+          </p>
+
+          <div class="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 relative">
+            <div class="flex items-start gap-4">
+              <div class="p-3 bg-brand-purple/10 text-brand-purple rounded-xl">
+                <i data-lucide="target" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h4 class="font-bold text-slate-900 font-heading mb-1">Career Goal</h4>
+                <p class="text-slate-700 italic font-medium">“To become a skilled software engineer and build innovative technology that solves real-world problems.”</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4 pt-2">
+            <div class="flex items-center gap-3"><i data-lucide="map-pin" class="w-5 h-5 text-brand-purple"></i><span class="text-slate-700 font-medium">Chennai, Tamil Nadu</span></div>
+            <div class="flex items-center gap-3"><i data-lucide="graduation-cap" class="w-5 h-5 text-brand-purple"></i><span class="text-slate-700 font-medium">B.E. CSE (2024–2028)</span></div>
+            <div class="flex items-center gap-3"><i data-lucide="mail" class="w-5 h-5 text-brand-purple"></i><span class="text-slate-700 font-medium">saranya.krishnan@example.com</span></div>
+            <div class="flex items-center gap-3"><i data-lucide="book-open" class="w-5 h-5 text-brand-purple"></i><span class="text-slate-700 font-medium">Kings Engineering College</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== EDUCATION ===== -->
+  <section id="education" class="py-20 max-w-7xl mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-xs uppercase font-bold text-brand-purple tracking-widest mb-2">Academic Profile</h2>
+      <h3 class="text-3xl md:text-4xl font-bold font-heading text-slate-900">Education Journey</h3>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+      <div class="tilt-card bg-white p-8 md:p-10 rounded-3xl border border-slate-200/80 shadow-lg relative overflow-hidden">
+        <div class="absolute top-0 right-0 w-32 h-32 bg-purple-100 rounded-bl-full -z-0"></div>
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div class="space-y-3">
+            <div class="inline-block px-3 py-1 bg-purple-100 text-brand-purple text-xs font-bold rounded-full">Batch: 2024 – 2028 (2nd Year)</div>
+            <h4 class="text-2xl font-bold font-heading text-slate-900">Bachelor of Engineering</h4>
+            <p class="text-brand-purple font-semibold text-lg">Computer Science and Engineering</p>
+            <p class="text-slate-600 flex items-center gap-2"><i data-lucide="building-2" class="w-4 h-4"></i> Kings Engineering College, Chennai</p>
+          </div>
+          <div class="bg-gradient-soft px-6 py-4 rounded-2xl border border-purple-200 text-center flex-shrink-0">
+            <span class="block text-xs uppercase text-slate-500 font-semibold tracking-wider">Academic Record</span>
+            <span class="text-3xl font-extrabold font-heading text-brand-navy">8.4</span>
+            <span class="text-slate-500 text-sm font-medium"> / 10 CGPA</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SKILLS ===== -->
+  <section id="skills" class="py-20 bg-white border-y border-slate-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-xs uppercase font-bold text-brand-purple tracking-widest mb-2">Technical Toolkit</h2>
+        <h3 class="text-3xl md:text-4xl font-bold font-heading text-slate-900">Skills & Expertise</h3>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <!-- programming -->
+        <div class="tilt-card bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-brand-purple transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-purple-100 text-brand-purple flex items-center justify-center mb-6"><i data-lucide="code" class="w-6 h-6"></i></div>
+          <h4 class="text-lg font-bold font-heading text-slate-900 mb-4">Programming</h4>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">C</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">Python</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">Java</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">JavaScript</span>
+          </div>
+        </div>
+        <!-- web -->
+        <div class="tilt-card bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-brand-purple transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center mb-6"><i data-lucide="layout" class="w-6 h-6"></i></div>
+          <h4 class="text-lg font-bold font-heading text-slate-900 mb-4">Web Development</h4>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">HTML</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">CSS</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">JavaScript</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">React</span>
+          </div>
+        </div>
+        <!-- database -->
+        <div class="tilt-card bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-brand-purple transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center mb-6"><i data-lucide="database" class="w-6 h-6"></i></div>
+          <h4 class="text-lg font-bold font-heading text-slate-900 mb-4">Database & Tools</h4>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">MySQL</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">MongoDB</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">Git / GitHub</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">REST APIs</span>
+          </div>
+        </div>
+        <!-- interests -->
+        <div class="tilt-card bg-slate-50 p-6 rounded-2xl border border-slate-200 hover:border-brand-purple transition-colors">
+          <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-6"><i data-lucide="cpu" class="w-6 h-6"></i></div>
+          <h4 class="text-lg font-bold font-heading text-slate-900 mb-4">Areas of Interest</h4>
+          <div class="flex flex-wrap gap-2">
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">Artificial Intelligence</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">Web Apps</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">Software Dev</span>
+            <span class="px-3 py-1.5 bg-white text-slate-700 text-sm font-semibold rounded-lg border border-slate-200">Problem Solving</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROJECTS ===== -->
+  <section id="projects" class="py-20 max-w-7xl mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-xs uppercase font-bold text-brand-purple tracking-widest mb-2">Portfolio Showcase</h2>
+      <h3 class="text-3xl md:text-4xl font-bold font-heading text-slate-900">Featured Projects</h3>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- project 1 -->
+      <div class="tilt-card bg-white rounded-3xl p-8 border border-slate-200 shadow-md flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-purple">Project 01</span>
+            <div class="p-2 bg-purple-50 text-brand-purple rounded-lg"><i data-lucide="users" class="w-5 h-5"></i></div>
+          </div>
+          <h4 class="text-2xl font-bold font-heading text-slate-900 mb-3">CampusConnect</h4>
+          <p class="text-slate-600 mb-6 leading-relaxed">A student-focused platform designed to help students discover and participate in college events seamlessly.</p>
+          <h5 class="text-xs font-bold uppercase text-slate-400 mb-3 tracking-wider">Key Features</h5>
+          <ul class="space-y-2 mb-6 text-sm text-slate-700">
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Event listing & search functionality</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Event registration system</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Student dashboard & Admin management</li>
+          </ul>
+        </div>
+        <div class="pt-4 border-t border-slate-100 flex flex-wrap gap-2">
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">HTML</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">CSS</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">JavaScript</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-purple-100 text-brand-purple rounded-md">React</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">Node.js</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-emerald-100 text-emerald-800 rounded-md">MongoDB</span>
+        </div>
+      </div>
+
+      <!-- project 2 -->
+      <div class="tilt-card bg-white rounded-3xl p-8 border border-slate-200 shadow-md flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-purple">Project 02</span>
+            <div class="p-2 bg-blue-50 text-blue-600 rounded-lg"><i data-lucide="wallet" class="w-5 h-5"></i></div>
+          </div>
+          <h4 class="text-2xl font-bold font-heading text-slate-900 mb-3">Smart Expense Tracker</h4>
+          <p class="text-slate-600 mb-6 leading-relaxed">A practical web application that helps students record and monitor their daily expenses with dynamic visual analytics.</p>
+          <h5 class="text-xs font-bold uppercase text-slate-400 mb-3 tracking-wider">Key Features</h5>
+          <ul class="space-y-2 mb-6 text-sm text-slate-700">
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Add and categorize daily expenses</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Monthly expense summary reports</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Spending analysis & Data visualization</li>
+          </ul>
+        </div>
+        <div class="pt-4 border-t border-slate-100 flex flex-wrap gap-2">
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">HTML</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">CSS</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">JavaScript</span>
+        </div>
+      </div>
+
+      <!-- project 3 -->
+      <div class="tilt-card bg-white rounded-3xl p-8 border border-slate-200 shadow-md flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-purple">Project 03</span>
+            <div class="p-2 bg-amber-50 text-amber-700 rounded-lg"><i data-lucide="bot" class="w-5 h-5"></i></div>
+          </div>
+          <h4 class="text-2xl font-bold font-heading text-slate-900 mb-3">AI Study Assistant</h4>
+          <p class="text-slate-600 mb-6 leading-relaxed">An AI-powered study assistant designed to help students organize their learning and study more effectively.</p>
+          <h5 class="text-xs font-bold uppercase text-slate-400 mb-3 tracking-wider">Key Features</h5>
+          <ul class="space-y-2 mb-6 text-sm text-slate-700">
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Generate automated topic summaries</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Auto-generate interactive quiz questions</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Study suggestions & AI assistance</li>
+          </ul>
+        </div>
+        <div class="pt-4 border-t border-slate-100 flex flex-wrap gap-2">
+          <span class="px-2.5 py-1 text-xs font-semibold bg-amber-100 text-amber-800 rounded-md">Python</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-purple-100 text-brand-purple rounded-md">AI API</span>
+        </div>
+      </div>
+
+      <!-- project 4 -->
+      <div class="tilt-card bg-white rounded-3xl p-8 border border-slate-200 shadow-md flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="text-xs font-bold uppercase tracking-wider text-brand-purple">Project 04</span>
+            <div class="p-2 bg-emerald-50 text-emerald-700 rounded-lg"><i data-lucide="briefcase" class="w-5 h-5"></i></div>
+          </div>
+          <h4 class="text-2xl font-bold font-heading text-slate-900 mb-3">Personal Portfolio</h4>
+          <p class="text-slate-600 mb-6 leading-relaxed">A sleek, modern personal portfolio created to showcase academic achievements, technical skills, and project experience.</p>
+          <h5 class="text-xs font-bold uppercase text-slate-400 mb-3 tracking-wider">Key Features</h5>
+          <ul class="space-y-2 mb-6 text-sm text-slate-700">
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Interactive 3D component showcases</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Fully responsive layout & custom theme</li>
+            <li class="flex items-center gap-2"><i data-lucide="check-circle2" class="w-4 h-4 text-brand-purple"></i> Professional academic overview</li>
+          </ul>
+        </div>
+        <div class="pt-4 border-t border-slate-100 flex flex-wrap gap-2">
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">HTML</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">CSS</span>
+          <span class="px-2.5 py-1 text-xs font-semibold bg-slate-100 text-slate-700 rounded-md">JavaScript</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CERTIFICATIONS & ACHIEVEMENTS ===== -->
+  <section id="certifications" class="py-20 bg-white border-y border-slate-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-2 gap-12">
+        <!-- certs -->
+        <div>
+          <div class="flex items-center gap-3 mb-8">
+            <div class="p-3 bg-purple-100 text-brand-purple rounded-xl"><i data-lucide="award" class="w-6 h-6"></i></div>
+            <div><h3 class="text-2xl font-bold font-heading text-slate-900">Certifications</h3><p class="text-sm text-slate-500">Continuous technical upskilling</p></div>
+          </div>
+          <div class="space-y-4">
+            <div class="tilt-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"><span class="font-semibold text-slate-800">Python Programming Fundamentals</span><i data-lucide="badge-check" class="w-5 h-5 text-brand-purple"></i></div>
+            <div class="tilt-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"><span class="font-semibold text-slate-800">Web Development Fundamentals</span><i data-lucide="badge-check" class="w-5 h-5 text-brand-purple"></i></div>
+            <div class="tilt-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"><span class="font-semibold text-slate-800">Introduction to Generative AI</span><i data-lucide="badge-check" class="w-5 h-5 text-brand-purple"></i></div>
+            <div class="tilt-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"><span class="font-semibold text-slate-800">Git & GitHub Fundamentals</span><i data-lucide="badge-check" class="w-5 h-5 text-brand-purple"></i></div>
+            <div class="tilt-card p-4 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-between"><span class="font-semibold text-slate-800">Introduction to Machine Learning</span><i data-lucide="badge-check" class="w-5 h-5 text-brand-purple"></i></div>
+          </div>
+        </div>
+        <!-- achievements -->
+        <div>
+          <div class="flex items-center gap-3 mb-8">
+            <div class="p-3 bg-blue-100 text-blue-600 rounded-xl"><i data-lucide="trophy" class="w-6 h-6"></i></div>
+            <div><h3 class="text-2xl font-bold font-heading text-slate-900">Achievements</h3><p class="text-sm text-slate-500">Events & technical activities</p></div>
+          </div>
+          <div class="space-y-4">
+            <div class="tilt-card p-5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-4">
+              <i data-lucide="star" class="w-5 h-5 text-amber-500 mt-1 flex-shrink-0"></i>
+              <div><h4 class="font-bold text-slate-800">College-level Hackathons</h4><p class="text-sm text-slate-600">Active participant in collaborative problem-solving events.</p></div>
+            </div>
+            <div class="tilt-card p-5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-4">
+              <i data-lucide="star" class="w-5 h-5 text-amber-500 mt-1 flex-shrink-0"></i>
+              <div><h4 class="font-bold text-slate-800">Inter-college Technical Competitions</h4><p class="text-sm text-slate-600">Engaged in regional competitive technical symposiums.</p></div>
+            </div>
+            <div class="tilt-card p-5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-4">
+              <i data-lucide="star" class="w-5 h-5 text-amber-500 mt-1 flex-shrink-0"></i>
+              <div><h4 class="font-bold text-slate-800">Coding Challenges & Workshops</h4><p class="text-sm text-slate-600">Regular participations in competitive programming & hands-on workshops.</p></div>
+            </div>
+            <div class="tilt-card p-5 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-4">
+              <i data-lucide="users" class="w-5 h-5 text-brand-purple mt-1 flex-shrink-0"></i>
+              <div><h4 class="font-bold text-slate-800">College Technical Community</h4><p class="text-sm text-slate-600">Active member participating in peer technical learning groups.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== INTERESTS ===== -->
+  <section class="py-20 max-w-7xl mx-auto px-6">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <h2 class="text-xs uppercase font-bold text-brand-purple tracking-widest mb-2">Beyond Academics</h2>
+      <h3 class="text-3xl font-bold font-heading text-slate-900">Personal Interests</h3>
+    </div>
+    <div class="flex flex-wrap justify-center gap-4 max-w-3xl mx-auto">
+      <div class="px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm font-medium text-slate-700 flex items-center gap-2 hover:border-brand-purple transition-colors"><i data-lucide="code-2" class="w-4 h-4 text-brand-purple"></i> Coding</div>
+      <div class="px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm font-medium text-slate-700 flex items-center gap-2 hover:border-brand-purple transition-colors"><i data-lucide="sparkles" class="w-4 h-4 text-brand-purple"></i> Artificial Intelligence</div>
+      <div class="px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm font-medium text-slate-700 flex items-center gap-2 hover:border-brand-purple transition-colors"><i data-lucide="globe" class="w-4 h-4 text-brand-purple"></i> Web Development</div>
+      <div class="px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm font-medium text-slate-700 flex items-center gap-2 hover:border-brand-purple transition-colors"><i data-lucide="gamepad-2" class="w-4 h-4 text-brand-purple"></i> Gaming</div>
+      <div class="px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm font-medium text-slate-700 flex items-center gap-2 hover:border-brand-purple transition-colors"><i data-lucide="cpu" class="w-4 h-4 text-brand-purple"></i> Technology</div>
+      <div class="px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm font-medium text-slate-700 flex items-center gap-2 hover:border-brand-purple transition-colors"><i data-lucide="git-branch" class="w-4 h-4 text-brand-purple"></i> Open Source</div>
+      <div class="px-6 py-3 rounded-2xl bg-white border border-slate-200 shadow-sm font-medium text-slate-700 flex items-center gap-2 hover:border-brand-purple transition-colors"><i data-lucide="rocket" class="w-4 h-4 text-brand-purple"></i> Learning New Technologies</div>
+    </div>
+  </section>
+
+  <!-- ===== CONTACT ===== -->
+  <section id="contact" class="py-20 bg-white border-t border-slate-100">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="bg-gradient-primary rounded-3xl p-8 md:p-14 text-white shadow-2xl relative overflow-hidden">
+        <div class="grid md:grid-cols-2 gap-8 items-center relative z-10">
+          <div>
+            <span class="text-xs uppercase font-bold tracking-widest text-purple-300">Let's Connect</span>
+            <h3 class="text-3xl md:text-5xl font-bold font-heading mt-2 mb-4">Ready to Collaborate & Innovate</h3>
+            <p class="text-slate-300 text-lg mb-6">I am currently seeking software engineering internship opportunities. Feel free to reach out to discuss potential projects or roles.</p>
+            <div class="space-y-4">
+              <div class="flex items-center gap-4">
+                <div class="p-3 bg-white/10 rounded-xl"><i data-lucide="mail" class="w-6 h-6 text-purple-300"></i></div>
+                <div><span class="block text-xs text-slate-400">Email Address</span><a href="mailto:saranya.krishnan@example.com" class="text-white font-semibold hover:underline">saranya.krishnan@example.com</a></div>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="p-3 bg-white/10 rounded-xl"><i data-lucide="map-pin" class="w-6 h-6 text-purple-300"></i></div>
+                <div><span class="block text-xs text-slate-400">Location</span><span class="text-white font-semibold">Chennai, Tamil Nadu</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md p-6 md:p-8 rounded-2xl border border-white/10">
+            <form class="space-y-4" onsubmit="event.preventDefault(); alert('Thank you for reaching out! This is a demo submission.');">
+              <div><label class="block text-xs font-semibold text-purple-200 uppercase mb-1">Your Name</label><input type="text" placeholder="John Doe" required class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/20 text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-400" /></div>
+              <div><label class="block text-xs font-semibold text-purple-200 uppercase mb-1">Your Email</label><input type="email" placeholder="john@example.com" required class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/20 text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-400" /></div>
+              <div><label class="block text-xs font-semibold text-purple-200 uppercase mb-1">Message</label><textarea rows="3" placeholder="Hello Saranya..." required class="w-full px-4 py-3 rounded-xl bg-white/20 border border-white/20 text-white placeholder-slate-300 focus:outline-none focus:ring-2 focus:ring-purple-400"></textarea></div>
+              <button type="submit" class="w-full py-3.5 rounded-xl font-bold bg-white text-brand-navy hover:bg-purple-50 transition-colors shadow-lg">Send Message</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="bg-brand-navy text-white pt-16 pb-8 border-t border-slate-800">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid md:grid-cols-12 gap-8 items-center pb-12 border-b border-slate-800">
+        <div class="md:col-span-8 space-y-4">
+          <p class="text-xl font-heading font-semibold text-purple-300">“Built with creativity. Crafted with AI. Remembered as a milestone.”</p>
+          <div class="text-slate-400 text-sm space-y-1">
+            <p><span class="font-bold text-white">TEAM NAME:</span> Elite girls</p>
+            <p><span class="font-bold text-white">TEAM MEMBERS:</span> Vandhana R · Subiksha E · Saranya B</p>
+            <p><span class="font-bold text-white">YEAR OF STUDY:</span> 2nd Year · B.E. Computer Science & Engineering</p>
+            <p><span class="font-bold text-white">EVENT:</span> SkillAura 2026 — Prompt2Portfolio (31 August 2026)</p>
+            <p><span class="font-bold text-white">COLLEGE:</span> Kings Engineering College, Chennai</p>
+          </div>
+        </div>
+        <div class="md:col-span-4 flex flex-col items-start md:items-end justify-center">
+          <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-082026/footer/logo.png" alt="SkillAura Logo" class="h-16 w-auto object-contain mb-2" />
+          <span class="text-xs uppercase tracking-widest text-slate-400 font-bold">SkillAura 2026 Official Logo</span>
+        </div>
+      </div>
+      <div class="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
+        <div class="font-mono tracking-widest uppercase text-purple-400 font-bold">BUILD SKILLS • IGNITE IDEAS • LEAVE YOUR AURA</div>
+        <div>© 2026 Saranya Krishnan. Created for SkillAura Challenge.</div>
+      </div>
+      <!-- mandatory visitor counter pixel -->
+      <img src="https://count.getloli.com/@bhuvaneshm-dev?name=bhuvanesh-m-dev-day10&theme=ai1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+    </div>
+  </footer>
+
+  <!-- ===== SCRIPTS ===== -->
+  <script>
+    // Lucide icons
+    lucide.createIcons();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    menuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // 3D Tilt effect
+    document.querySelectorAll('.tilt-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const rotateX = (y - centerY) / 15;
+        const rotateY = (centerX - x) / 15;
+        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+      });
+    });
+
+    // Time display (from script.js functionality)
+    function showTime() {
+      const el = document.getElementById('currentTime');
+      if (el) el.innerHTML = new Date().toUTCString();
+    }
+    showTime();
+    setInterval(showTime, 1000);
+  </script>
 </body>
 </html>
