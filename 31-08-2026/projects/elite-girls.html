@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Girls | AI & Technology Creative Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #050508;
+            --navy-blue: #0F172A;
+            --electric-blue: #2563EB;
+            --neon-accent: #38BDF8;
+            --text-primary: #FFFFFF;
+            --text-secondary: #CBD5E1;
+            --card-bg: rgba(15, 23, 42, 0.75);
+            --border-glow: rgba(56, 189, 248, 0.2);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(37, 99, 235, 0.15) 0%, transparent 45%),
+                radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.12) 0%, transparent 45%);
+        }
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 20px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 5, 8, 0.8);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-glow);
+        }
+        .logo { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; font-weight: 700; color: var(--text-primary); }
+        .logo span { color: var(--neon-accent); }
+        .nav-links { display: flex; gap: 30px; list-style: none; }
+        .nav-links a { color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: var(--neon-accent); }
+        
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 20px 60px;
+        }
+        .tag {
+            padding: 8px 20px;
+            background: rgba(37, 99, 235, 0.15);
+            border: 1px solid var(--neon-accent);
+            border-radius: 50px;
+            color: var(--neon-accent);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 24px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p { max-width: 650px; color: var(--text-secondary); font-size: 1.2rem; margin-bottom: 40px; }
+        
+        .section { padding: 80px 8%; }
+        .section-title { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; margin-bottom: 40px; text-align: center; }
+        
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .team-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-glow);
+            border-radius: 20px;
+            padding: 32px;
+            transition: transform 0.3s, border-color 0.3s;
+            backdrop-filter: blur(12px);
+        }
+        .team-card:hover { transform: translateY(-8px); border-color: var(--neon-accent); }
+        .team-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; color: var(--neon-accent); margin-bottom: 8px; }
+        .team-card .role { color: var(--text-secondary); font-size: 0.95rem; margin-bottom: 16px; }
+        
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .skill-box {
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border-glow);
+            padding: 20px;
+            border-radius: 14px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">ELITE <span>GIRLS</span></div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section class="hero">
+        <div class="tag">SkillAura 2026 • Neon Dark Portfolio</div>
+        <h1>ELITE GIRLS</h1>
+        <p>AI & Technology Creative Portfolio designed with a futuristic visual identity, combining neon-dark atmosphere with professional navy and electric-blue accents.</p>
+    </section>
+
+    <section class="section" id="about">
+        <h2 class="section-title">Team Members</h2>
+        <div class="team-grid">
+            <div class="team-card">
+                <h3>Vandhana R.</h3>
+                <div class="role">2nd Year B.E. CSE</div>
+                <p style="color:var(--text-secondary)">Specializing in web technologies, frontend layout design, and AI application integration.</p>
+            </div>
+            <div class="team-card">
+                <h3>Subiksha E.</h3>
+                <div class="role">2nd Year B.E. CSE</div>
+                <p style="color:var(--text-secondary)">Focused on software engineering, database management, and interactive UI logic.</p>
+            </div>
+            <div class="team-card">
+                <h3>Saranya B.</h3>
+                <div class="role">2nd Year B.E. CSE</div>
+                <p style="color:var(--text-secondary)">Passionate about artificial intelligence, modern web standards, and creative problem solving.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="skills">
+        <h2 class="section-title">Technical Skills</h2>
+        <div class="skills-grid">
+            <div class="skill-box">Python & C</div>
+            <div class="skill-box">HTML5 & CSS3</div>
+            <div class="skill-box">JavaScript (ES6+)</div>
+            <div class="skill-box">React Development</div>
+            <div class="skill-box">MySQL & MongoDB</div>
+            <div class="skill-box">Git & GitHub</div>
+        </div>
+    </section>
+</body>
+</html>

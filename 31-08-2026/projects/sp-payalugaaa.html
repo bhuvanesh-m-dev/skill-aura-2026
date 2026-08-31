@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Saran Krishnan | Nion</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:Arial,Helvetica,sans-serif;background:#050505;color:#fff;overflow-x:hidden}
+body:before{content:"";position:fixed;inset:0;z-index:-3;background:radial-gradient(circle at 15% 20%,#3d280080,transparent 30%),radial-gradient(circle at 85% 70%,#b8860b33,transparent 28%),#050505}
+body:after{content:"";position:fixed;inset:0;pointer-events:none;z-index:20;background:linear-gradient(transparent 50%,rgba(255,215,90,.018) 50%);background-size:100% 4px;opacity:.25}
+a{color:inherit;text-decoration:none}
+.nav{position:fixed;top:0;width:100%;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:20px 7%;background:#050505b8;backdrop-filter:blur(18px);border-bottom:1px solid #d4af3740}
+.logo{font-size:25px;font-weight:900;color:#d4af37}.logo span{color:white}
+.links{display:flex;gap:25px;font-size:13px;color:#ccc}.links a:hover{color:#d4af37}
+.hero{min-height:100vh;display:grid;grid-template-columns:1.1fr .9fr;align-items:center;padding:120px 9% 70px;position:relative}
+.eyebrow{color:#d4af37;letter-spacing:4px;font-size:11px;font-weight:bold;margin-bottom:18px}
+h1{font-size:clamp(65px,10vw,145px);line-height:.82;letter-spacing:-7px;margin-bottom:30px;animation:reveal 1.2s ease both}
+h1 span,h2 span{color:#d4af37}
+.hero p:not(.eyebrow){max-width:600px;color:#aaa;line-height:1.8;font-size:18px}
+.buttons{display:flex;gap:12px;margin-top:30px}.btn{padding:14px 24px;border:1px solid #d4af37;color:#d4af37;transition:.3s}.btn:hover{background:#d4af37;color:#050505;transform:translateY(-4px)}
+.orb{width:380px;height:380px;border-radius:50%;justify-self:center;display:grid;place-items:center;position:relative;background:radial-gradient(circle,#f5d76e 0 2%,#8d6b13 3% 9%,#17130a 30%,#050505 68%);box-shadow:0 0 80px #d4af3733;animation:float 5s ease-in-out infinite}
+.orb:before,.orb:after{content:"";position:absolute;border:1px solid #d4af3780;border-radius:50%}.orb:before{inset:-25px;animation:spin 12s linear infinite}.orb:after{inset:25px;animation:spin 8s linear reverse infinite;border-style:dashed}
+.orb b{color:#d4af37;letter-spacing:8px;font-size:28px}
+.section{padding:110px 9%;border-top:1px solid #ffffff12}
+.section h2{font-size:clamp(40px,6vw,80px);letter-spacing:-3px;margin:10px 0 45px}
+.about{display:grid;grid-template-columns:300px 1fr;gap:70px;align-items:center}
+.portrait{padding:10px;border:1px solid #d4af3766;background:#0b0b0b}.portrait img{width:100%;display:block}
+.text{color:#aaa;line-height:1.85;max-width:800px;margin-bottom:14px}
+.stats{display:flex;gap:55px;margin-top:35px}.stats b{display:block;font-size:30px;color:#d4af37}.stats small{color:#777}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.card{padding:30px;border:1px solid #d4af3730;background:linear-gradient(145deg,#11100c,#080808);transition:.4s;position:relative;overflow:hidden}
+.card:before{content:"";position:absolute;width:80px;height:80px;background:#d4af37;filter:blur(55px);opacity:0;transition:.4s}
+.card:hover{transform:translateY(-9px) rotateX(2deg);border-color:#d4af37;box-shadow:0 20px 50px #d4af3714}.card:hover:before{opacity:.25}
+.card h3{color:#d4af37;font-size:24px;margin:12px 0}.card p{color:#aaa;line-height:1.7}.card small{color:#777}
+.project button{margin-top:20px;background:transparent;border:1px solid #d4af37;color:#d4af37;padding:9px 15px;cursor:pointer}
+.project button:hover{background:#d4af37;color:#000}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:70px}
+li{color:#aaa;margin:15px 0}.chips{display:flex;flex-wrap:wrap;gap:10px}.chips span{padding:11px;border:1px solid #d4af3755;color:#cdbd85}
+.goal{background:radial-gradient(circle at 50% 0,#d4af3710,transparent 55%)}.goal h2{max-width:1100px;color:#ddd}
+.contact p{color:#aaa;font-size:18px;margin:12px 0}
+footer{text-align:center;padding:65px 20px;border-top:1px solid #d4af3740;color:#777;line-height:1.9}footer img{width:110px;margin-bottom:20px}footer strong,.tag{color:#d4af37;letter-spacing:3px}
+.modal{display:none;position:fixed;inset:0;background:#000c;z-index:30;place-items:center;padding:20px}.modal.show{display:grid}
+.modalbox{background:#0d0d0b;border:1px solid #d4af37;padding:35px;max-width:550px;position:relative}.modalbox h2{color:#d4af37;margin-bottom:15px}.modalbox p{color:#aaa;line-height:1.7}.close{position:absolute;right:12px;top:5px;background:none;border:0;color:#d4af37;font-size:30px;cursor:pointer}
+.cursor{position:fixed;width:20px;height:20px;border:1px solid #d4af37;border-radius:50%;pointer-events:none;z-index:50;transform:translate(-50%,-50%);transition:width .15s,height .15s;box-shadow:0 0 20px #d4af37}
+@keyframes float{50%{transform:translateY(-20px) rotate(2deg)}}@keyframes spin{to{transform:rotate(360deg)}}@keyframes reveal{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@media(max-width:800px){.links{display:none}.hero{grid-template-columns:1fr;padding-top:140px}.orb{width:260px;height:260px;margin-top:70px}.about,.split,.grid{grid-template-columns:1fr}.about{gap:35px}.stats{gap:25px}.section{padding:80px 7%}}
+</style>
+</head>
+<body>
+<div class="cursor"></div>
+<nav class="nav"><div class="logo">SK<span>.</span></div><div class="links"><a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#contact">Contact</a></div></nav>
+
+<header class="hero">
+<div><p class="eyebrow">SKILLAURA 2026 • PROMPT2PORTFOLIO</p><h1>Saran<br><span>Krishnan</span></h1><p>Computer Science & Engineering student exploring software development, artificial intelligence and modern web technologies.</p><div class="buttons"><a class="btn" href="#projects">Explore Projects</a><a class="btn" href="#contact">Connect</a></div></div>
+<div class="orb"><b>NION</b></div>
+</header>
+
+<section id="about" class="section about">
+<div class="portrait"><img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saran.png" alt="Saran Krishnan"></div>
+<div><p class="eyebrow">01 / ABOUT</p><h2>Ideas into <span>technology.</span></h2><p class="text">Saran Krishnan is a Computer Science and Engineering student with a strong interest in software development, artificial intelligence, and modern web technologies. He enjoys learning new technologies, participating in technical events, solving programming problems, and building practical projects.</p><p class="text">He is currently developing his technical skills and wants to build a strong professional profile for future internships and placements.</p><div class="stats"><div><b>8.4</b><small>CGPA / 10</small></div><div><b>2024–28</b><small>B.E. CSE</small></div><div><b>3rd</b><small>YEAR</small></div></div></div>
+</section>
+
+<section id="skills" class="section"><p class="eyebrow">02 / SKILLS</p><h2>Technical <span>arsenal.</span></h2><div class="grid">
+<div class="card"><h3>Programming</h3><p>C · Python · Java · JavaScript</p></div><div class="card"><h3>Web Development</h3><p>HTML · CSS · JavaScript · React</p></div><div class="card"><h3>Database</h3><p>MySQL · MongoDB</p></div><div class="card"><h3>Tools & Technologies</h3><p>Git · GitHub · VS Code · REST APIs</p></div><div class="card"><h3>Areas of Interest</h3><p>Artificial Intelligence · Web Development · Software Development · Problem Solving</p></div></div></section>
+
+<section id="projects" class="section"><p class="eyebrow">03 / PROJECTS</p><h2>Selected <span>work.</span></h2><div class="grid">
+<div class="card project"><small>01</small><h3>CampusConnect</h3><p>Student-focused platform designed to help students discover and participate in college events.</p><small>HTML • CSS • JavaScript • React • Node.js • MongoDB</small><br><button onclick="show('CampusConnect','Event listing, event registration, student dashboard, event search and admin event management.')">VIEW PROJECT</button></div>
+<div class="card project"><small>02</small><h3>Smart Expense Tracker</h3><p>Web application that helps students record and monitor their daily expenses.</p><small>HTML • CSS • JavaScript</small><br><button onclick="show('Smart Expense Tracker','Add expenses, categorize expenses, monthly expense summary, spending analysis and data visualization.')">VIEW PROJECT</button></div>
+<div class="card project"><small>03</small><h3>AI Study Assistant</h3><p>AI-powered study assistant designed to help students organize their learning.</p><small>Python • AI API</small><br><button onclick="show('AI Study Assistant','Generate topic summaries, quiz questions, study suggestions and interactive AI assistance.')">VIEW PROJECT</button></div>
+<div class="card project"><small>04</small><h3>Personal Portfolio</h3><p>A personal portfolio created to showcase academic information, skills, projects and achievements.</p><small>HTML • CSS • JavaScript</small><br><button onclick="show('Personal Portfolio','Showcases academic information, technical skills, projects and achievements.')">VIEW PROJECT</button></div>
+</div></section>
+
+<section class="section split"><div><p class="eyebrow">04 / ACHIEVEMENTS</p><h2>Learning by <span>doing.</span></h2><ul><li>Participated in college-level hackathons</li><li>Participated in inter-college technical competitions</li><li>Participated in coding challenges</li><li>Active participant in technical workshops</li><li>Member of the college technical community</li></ul></div><div><p class="eyebrow">CERTIFICATIONS</p><div class="chips"><span>Python Programming Fundamentals</span><span>Web Development Fundamentals</span><span>Introduction to Generative AI</span><span>Git & GitHub Fundamentals</span><span>Introduction to Machine Learning</span></div></div></section>
+
+<section class="section goal"><p class="eyebrow">05 / CAREER GOAL</p><h2>“To become a skilled software engineer and build innovative technology that solves real-world problems.”</h2></section>
+<section id="contact" class="section contact"><p class="eyebrow">06 / CONTACT</p><h2>Let's <span>connect.</span></h2><p>Email: saran.krishnan@example.com</p><p>Location: Chennai, Tamil Nadu</p></section>
+
+<footer><img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/footer/logo.png" alt="SkillAura logo"><p>Built with creativity. Crafted with AI. Remembered as a milestone.</p><strong>VANTHACHI</strong><br>Alex · Jeberson · Madhan<br>3rd Year · B.E. Computer Science & Engineering<br>SkillAura 2026 — Prompt2Portfolio · 31 August 2026 · Kings Engineering College, Chennai<p class="tag">BUILD SKILLS • IGNITE IDEAS • LEAVE YOUR AURA</p></footer>
+
+<div id="modal" class="modal" onclick="closeModal()"><div class="modalbox" onclick="event.stopPropagation()"><button class="close" onclick="closeModal()">×</button><h2 id="mt"></h2><p id="md"></p></div></div>
+<script>
+const cursor=document.querySelector('.cursor');
+document.addEventListener('mousemove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px'});
+document.querySelectorAll('a,button,.card').forEach(el=>{el.addEventListener('mouseenter',()=>{cursor.style.width='36px';cursor.style.height='36px'});el.addEventListener('mouseleave',()=>{cursor.style.width='20px';cursor.style.height='20px'})});
+function show(t,d){document.getElementById('mt').textContent=t;document.getElementById('md').textContent=d;document.getElementById('modal').classList.add('show')}
+function closeModal(){document.getElementById('modal').classList.remove('show')}
+</script>
+</body>
+</html>

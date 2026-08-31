@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="description" content="Saran Krishnan — B.E. Computer Science and Engineering portfolio. SkillAura 2026 Prompt2Portfolio." />
+<title>Saran Krishnan | Developer Portfolio</title>
+<style>
+  :root{--bg:#070707;--panel:#101010;--panel2:#151515;--red:#ff2b2b;--red2:#b30000;--text:#f5f5f5;--muted:#a3a3a3;--line:#292929;--max:1180px;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:radial-gradient(circle at 85% 0%,#3b0000 0,transparent 28%),var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+  a{color:inherit;text-decoration:none}
+  .container{width:min(100% - 32px,var(--max));margin:auto}
+  nav{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:50;width:min(calc(100% - 28px),1050px);display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border:1px solid #303030;background:rgba(7,7,7,.72);backdrop-filter:blur(16px);border-radius:18px;box-shadow:0 10px 40px #0008}
+  .brand{font-weight:900;letter-spacing:.09em}.brand span{color:var(--red)}
+  nav ul{display:flex;gap:18px;list-style:none;font-size:.86rem;color:#d2d2d2}nav a:hover{color:#fff}
+  .hero{min-height:100vh;padding:120px 0 70px;display:grid;place-items:center;position:relative}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+  .eyebrow{color:#ff6969;text-transform:uppercase;letter-spacing:.2em;font-size:.76rem;font-weight:800;margin-bottom:18px}
+  h1{font-size:clamp(3.2rem,9vw,7.5rem);line-height:.88;letter-spacing:-.07em;text-transform:uppercase}
+  h1 .accent{color:var(--red);text-shadow:0 0 40px #ff1e1e55}
+  .hero p{margin:26px 0;color:#c5c5c5;max-width:670px;font-size:1.08rem}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}.btn{padding:12px 17px;border-radius:12px;border:1px solid #383838;background:#111;font-weight:800;transition:.25s}.btn.primary{background:var(--red);border-color:var(--red);color:#fff}.btn:hover{transform:translateY(-3px);box-shadow:0 14px 30px #0008}.btn.ghost:hover{border-color:var(--red)}
+  .portrait-wrap{position:relative;min-height:510px;display:grid;place-items:center}.portrait-wrap:before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,#ff202040,transparent 65%);filter:blur(10px)}
+  .portrait{position:relative;width:min(100%,420px);max-height:570px;object-fit:contain;filter:drop-shadow(0 24px 32px #000);animation:float 5s ease-in-out infinite}
+  @keyframes float{50%{transform:translateY(-12px)}}
+  .chip{position:absolute;bottom:28px;left:10%;background:#141414;border:1px solid var(--line);padding:10px 14px;border-radius:14px;box-shadow:0 12px 35px #0008;font-size:.84rem}.chip b{color:var(--red)}
+  section{padding:92px 0;border-top:1px solid #1f1f1f}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:34px}.kicker{color:var(--red);font-weight:900;letter-spacing:.16em;font-size:.75rem;text-transform:uppercase}.section-title{font-size:clamp(2rem,5vw,3.6rem);line-height:1;letter-spacing:-.045em}.section-note{max-width:470px;color:var(--muted)}
+  .about{display:grid;grid-template-columns:.72fr 1.28fr;gap:36px;align-items:center}.about img{width:100%;border-radius:28px;border:1px solid #2c2c2c;background:#111}.about-card{padding:30px;border:1px solid #242424;background:linear-gradient(145deg,#131313,#0b0b0b);border-radius:28px}.facts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:24px}.fact{padding:15px;border:1px solid #262626;border-radius:15px;background:#0e0e0e}.fact small{color:#777;display:block}.fact strong{display:block;margin-top:3px}
+  .skills{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.skill{padding:20px;border-radius:20px;border:1px solid #262626;background:#0e0e0e;min-height:175px}.skill h3{margin:12px 0 8px}.skill p{color:#aaa;font-size:.92rem}.icon{font-size:1.3rem;color:var(--red)}
+  .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}.project{position:relative;padding:26px;border:1px solid #292929;border-radius:24px;background:linear-gradient(150deg,#151515,#0c0c0c);overflow:hidden}.project:after{content:attr(data-num);position:absolute;right:18px;top:8px;font-size:5.5rem;color:#fff06;opacity:.04;font-weight:900}.project h3{font-size:1.45rem}.project .stack{color:#ff6c6c;font-size:.78rem;text-transform:uppercase;letter-spacing:.11em;margin:7px 0 14px;font-weight:800}.project p{color:#b9b9b9}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:18px}.tag{font-size:.74rem;border:1px solid #333;border-radius:999px;padding:6px 9px;color:#d2d2d2;background:#101010}
+  .timeline{display:grid;gap:12px}.row{display:grid;grid-template-columns:160px 1fr;gap:20px;padding:20px;border-bottom:1px solid #242424}.row span{color:#ff6a6a;font-weight:800}.row p{color:#b6b6b6}
+  .interactive{padding:30px;border:1px solid #3b1111;background:radial-gradient(circle at 80% 30%,#5b000028,transparent 40%),#0d0d0d;border-radius:28px;display:grid;grid-template-columns:1fr .8fr;gap:28px;align-items:center}.terminal{border:1px solid #333;background:#080808;border-radius:18px;padding:18px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#e6e6e6;box-shadow:inset 0 0 0 1px #000}.terminal .red{color:#ff4b4b}.terminal p{margin:8px 0;color:#b9b9b9}.cmds{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.cmd{border:1px solid #292929;background:#111;padding:10px;border-radius:9px;color:#eee;cursor:pointer}.cmd:hover{border-color:var(--red);color:#fff}.output{min-height:110px;margin-top:14px;padding:12px;border-radius:10px;background:#111;border:1px solid #242424;color:#aaa}
+  .contact{display:grid;grid-template-columns:1fr 1fr;gap:18px}.contact-card{padding:24px;border:1px solid #292929;border-radius:22px;background:#0e0e0e}.contact-card a:hover{color:var(--red)}
+  footer{padding:50px 0 80px;border-top:1px solid #242424;background:#090909}.footer-box{display:flex;justify-content:space-between;gap:20px;align-items:end}.footer-box p{color:#969696;font-size:.9rem}.logo{height:42px;width:auto;opacity:.92}
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}.reveal.show{opacity:1;transform:none}
+  .cursor{position:fixed;pointer-events:none;inset:auto auto 0 0;width:18px;height:18px;border:1px solid #ff4444;border-radius:50%;z-index:100;mix-blend-mode:difference;transform:translate(-50%,-50%);transition:width .2s,height .2s;display:none}
+  @media (pointer:fine){.cursor{display:block}}
+  @media(max-width:900px){.hero-grid,.about,.interactive,.contact{grid-template-columns:1fr}.skills{grid-template-columns:repeat(2,1fr)}.portrait-wrap{min-height:390px}.projects{grid-template-columns:1fr}.section-head{display:block}.section-note{margin-top:12px}.row{grid-template-columns:1fr;gap:5px}}
+  @media(max-width:620px){nav ul{display:none}.container{width:min(100% - 22px,var(--max))}.hero{padding-top:110px}.skills{grid-template-columns:1fr}.facts{grid-template-columns:1fr}.portrait{max-height:440px}.hero p{font-size:1rem}.section-title{font-size:2.4rem}.cmds{grid-template-columns:1fr}.footer-box{display:block}.footer-box>div+div{margin-top:20px}}
+</style>
+</head>
+<body>
+<div class="cursor" id="cursor"></div>
+<nav>
+  <a href="#home" class="brand">SARAN<span>.</span></a>
+  <ul><li><a href="#about">About</a></li><li><a href="#skills">Skills</a></li><li><a href="#projects">Projects</a></li><li><a href="#contact">Contact</a></li></ul>
+</nav>
+
+<main id="home">
+<section class="hero">
+  <div class="container hero-grid">
+    <div class="reveal">
+      <div class="eyebrow">B.E. Computer Science & Engineering · Developer</div>
+      <h1>BUILD.<br><span class="accent">LEARN.</span><br>CREATE.</h1>
+      <p>I'm <strong>Saran Krishnan</strong>, a CSE student focused on software development, artificial intelligence, modern web technologies, and solving practical problems through code.</p>
+      <div class="cta"><a class="btn primary" href="#projects">Explore Projects</a><a class="btn ghost" href="#contact">Contact</a></div>
+    </div>
+    <div class="portrait-wrap reveal">
+      <img class="portrait" src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saran-standing.png" alt="Saran standing character" />
+      <div class="chip"><b>SKILLAURA 2026</b> · Prompt2Portfolio</div>
+    </div>
+  </div>
+</section>
+
+<section id="about"><div class="container">
+  <div class="section-head reveal"><div><div class="kicker">01 — Profile</div><h2 class="section-title">A developer in progress.</h2></div><p class="section-note">Focused on building a strong professional profile for future internships and placements.</p></div>
+  <div class="about">
+    <img class="reveal" src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saran.png" alt="Saran portrait" />
+    <div class="about-card reveal"><p>Saran enjoys learning new technologies, participating in technical events, solving programming problems, and building practical projects. His interests span AI, web development, software development, and problem solving.</p><div class="facts"><div class="fact"><small>College</small><strong>Kings Engineering College, Chennai</strong></div><div class="fact"><small>Batch</small><strong>2024 – 2028</strong></div><div class="fact"><small>CGPA</small><strong>8.4 / 10</strong></div><div class="fact"><small>Career Goal</small><strong>Skilled Software Engineer</strong></div></div></div>
+  </div>
+</div></section>
+
+<section id="skills"><div class="container">
+  <div class="section-head reveal"><div><div class="kicker">02 — Toolkit</div><h2 class="section-title">Built to learn fast.</h2></div><p class="section-note">The technical foundation listed in the candidate profile.</p></div>
+  <div class="skills">
+    <div class="skill reveal"><div class="icon">01</div><h3>Programming</h3><p>C · Python · Java · JavaScript</p></div>
+    <div class="skill reveal"><div class="icon">02</div><h3>Web Development</h3><p>HTML · CSS · JavaScript · React</p></div>
+    <div class="skill reveal"><div class="icon">03</div><h3>Database</h3><p>MySQL · MongoDB</p></div>
+    <div class="skill reveal"><div class="icon">04</div><h3>Tools</h3><p>Git · GitHub · VS Code · REST APIs</p></div>
+  </div>
+</div></section>
+
+<section id="projects"><div class="container">
+  <div class="section-head reveal"><div><div class="kicker">03 — Work</div><h2 class="section-title">Projects with purpose.</h2></div><p class="section-note">Four projects that demonstrate practical development across web, AI, data, and personal branding.</p></div>
+  <div class="projects">
+    <article class="project reveal" data-num="01"><h3>CampusConnect</h3><div class="stack">React · Node.js · MongoDB</div><p>A student-focused platform designed to help students discover and participate in college events.</p><div class="tags"><span class="tag">Event listing</span><span class="tag">Registration</span><span class="tag">Dashboard</span><span class="tag">Search</span><span class="tag">Admin management</span></div></article>
+    <article class="project reveal" data-num="02"><h3>Smart Expense Tracker</h3><div class="stack">HTML · CSS · JavaScript</div><p>A web application that helps students record and monitor their daily expenses.</p><div class="tags"><span class="tag">Categories</span><span class="tag">Monthly summary</span><span class="tag">Spending analysis</span><span class="tag">Data visualization</span></div></article>
+    <article class="project reveal" data-num="03"><h3>AI Study Assistant</h3><div class="stack">Python · AI API</div><p>An AI-powered study assistant designed to help students organize their learning and study more effectively.</p><div class="tags"><span class="tag">Topic summaries</span><span class="tag">Quizzes</span><span class="tag">Study suggestions</span><span class="tag">Interactive AI</span></div></article>
+    <article class="project reveal" data-num="04"><h3>Personal Portfolio</h3><div class="stack">HTML · CSS · JavaScript</div><p>A personal portfolio project created to showcase academic information, technical skills, projects, and achievements.</p><div class="tags"><span class="tag">Responsive</span><span class="tag">Branding</span><span class="tag">Projects</span><span class="tag">Achievements</span></div></article>
+  </div>
+</div></section>
+
+<section><div class="container"><div class="section-head reveal"><div><div class="kicker">04 — Journey</div><h2 class="section-title">Credentials & momentum.</h2></div><p class="section-note">Achievements, certifications, and interests provided in the candidate profile.</p></div>
+  <div class="timeline reveal">
+    <div class="row"><span>ACHIEVEMENTS</span><p>College-level hackathons · Inter-college technical competitions · Coding challenges · Technical workshops · College technical community</p></div>
+    <div class="row"><span>CERTIFICATIONS</span><p>Python Programming Fundamentals · Web Development Fundamentals · Introduction to Generative AI · Git & GitHub Fundamentals · Introduction to Machine Learning</p></div>
+    <div class="row"><span>INTERESTS</span><p>Coding · Artificial Intelligence · Web Development · Gaming · Technology · Open Source · Learning New Technologies</p></div>
+  </div>
+</div></section>
+
+<section><div class="container"><div class="interactive reveal"><div><div class="kicker">05 — Interactive Lab</div><h2 class="section-title">Developer mode.</h2><p style="color:#aaa;margin-top:14px">A small interactive portfolio feature for exploring Saran's focus areas. This is a portfolio experience, not a payment service.</p></div><div class="terminal"><div><span class="red">●</span> saran@portfolio:~$</div><p>Choose a command:</p><div class="cmds"><button class="cmd" data-cmd="skills">/skills</button><button class="cmd" data-cmd="projects">/projects</button><button class="cmd" data-cmd="goal">/goal</button><button class="cmd" data-cmd="about">/about</button></div><div class="output" id="output">Ready. Pick a command.</div></div></div></div></section>
+
+<section id="contact"><div class="container"><div class="section-head reveal"><div><div class="kicker">06 — Contact</div><h2 class="section-title">Let's connect.</h2></div><p class="section-note">For professional opportunities, internships, placements, or project conversations.</p></div>
+  <div class="contact"><div class="contact-card reveal"><small style="color:#777">EMAIL</small><h3 style="margin-top:5px"><a href="mailto:saran.krishnan@example.com">saran.krishnan@example.com</a></h3></div><div class="contact-card reveal"><small style="color:#777">LOCATION</small><h3 style="margin-top:5px">Chennai, Tamil Nadu</h3></div></div>
+</div></section>
+</main>
+
+<footer><div class="container footer-box"><div><img class="logo" src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/footer/logo.png" alt="SkillAura logo" /><p style="margin-top:14px">Built with creativity. Crafted with AI. Remembered as a milestone.</p><p>JOLLY BOYS · SANTHOSH.R · PRASANTH KUMAR S · NAGARAJ.S</p><p>2nd Year · B.E. Computer Science & Engineering</p><p>SkillAura 2026 — Prompt2Portfolio · 31 August 2026 · Kings Engineering College, Chennai</p></div><div><strong style="color:#ff3a3a">BUILD SKILLS • IGNITE IDEAS • LEAVE YOUR AURA</strong></div></div></footer>
+
+<script>
+  const observer = new IntersectionObserver(entries => entries.forEach(e => e.isIntersecting && e.target.classList.add('show')), {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+
+  const output=document.getElementById('output');
+  const responses={
+    skills:'Core stack → C, Python, Java, JavaScript, React, MySQL, MongoDB, Git, GitHub, VS Code, REST APIs.',
+    projects:'Projects → CampusConnect · Smart Expense Tracker · AI Study Assistant · Personal Portfolio.',
+    goal:'Career goal → Become a skilled software engineer and build innovative technology that solves real-world problems.',
+    about:'About → CSE student interested in software development, AI, modern web technologies, technical events, programming, and practical projects.'
+  };
+  document.querySelectorAll('.cmd').forEach(btn=>btn.addEventListener('click',()=>{output.textContent=responses[btn.dataset.cmd];output.animate([{opacity:.2,transform:'translateY(6px)'},{opacity:1,transform:'translateY(0)'}],{duration:300,easing:'ease-out'});}));
+
+  const cursor=document.getElementById('cursor');
+  window.addEventListener('pointermove',e=>{cursor.style.left=e.clientX+'px';cursor.style.top=e.clientY+'px';});
+  document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('mouseenter',()=>{cursor.style.width='28px';cursor.style.height='28px'});el.addEventListener('mouseleave',()=>{cursor.style.width='18px';cursor.style.height='18px'});});
+</script>
+</body>
+</html>

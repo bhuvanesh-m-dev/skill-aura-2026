@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saranya Krishnan | Neo-Futuristic Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        obsidian: '#08090E',
+                        'obsidian-light': '#0F111A',
+                        'violet-glow': '#8B5CF6',
+                        'cyan-aurora': '#06B6D4',
+                        'magenta-accent': '#EC4899',
+                        'silver-soft': '#E2E8F0',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    animation: {
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 3s ease-in-out infinite',
+                        'orbit': 'orbit 20s linear infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-15px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.05)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(8, 9, 14, 0.9);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(to bottom, #8B5CF6, #06B6D4);
+            border-radius: 4px;
+        }
+
+        /* Glassmorphism Styles */
+        .glass-panel {
+            background: rgba(15, 17, 26, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .light .glass-panel {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(20, 24, 38, 0.5);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(139, 92, 246, 0.15);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .light .glass-card {
+            background: rgba(248, 250, 252, 0.85);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+        }
+        .glass-card:hover {
+            border-color: rgba(6, 182, 212, 0.5);
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px -10px rgba(6, 182, 212, 0.25);
+        }
+
+        /* Ambient Glow Background Gradients */
+        .aurora-bg {
+            background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.18) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 60%, rgba(6, 182, 212, 0.15) 0%, transparent 45%),
+                        radial-gradient(circle at 50% 90%, rgba(236, 73, 153, 0.12) 0%, transparent 50%);
+        }
+        .light .aurora-bg {
+            background: radial-gradient(circle at 20% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
+                        radial-gradient(circle at 80% 60%, rgba(6, 182, 212, 0.08) 0%, transparent 45%),
+                        radial-gradient(circle at 50% 90%, rgba(236, 73, 153, 0.06) 0%, transparent 50%);
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(135deg, #8B5CF6 0%, #06B6D4 50%, #EC4899 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #06B6D4 0%, #3B82F6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Constellation Node Animation */
+        .node-pulse {
+            box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.6);
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring {
+            0% {
+                box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.6);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(6, 182, 212, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(6, 182, 212, 0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-obsidian text-silver-soft font-sans transition-colors duration-500 min-h-screen relative overflow-x-hidden dark">
+
+    <div class="fixed inset-0 pointer-events-none z-0 aurora-bg"></div>
+    <canvas id="starsCanvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <header class="fixed top-4 inset-x-0 z-50 flex justify-center px-4">
+        <nav class="w-full max-w-6xl glass-panel rounded-full px-6 py-3 flex items-center justify-between shadow-2xl transition-all duration-300">
+            <!-- Brand Logo -->
+            <a href="#hero" class="flex items-center gap-2 group">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-violet-glow via-cyan-aurora to-magenta-accent flex items-center justify-center text-white text-xs font-bold font-display shadow-lg group-hover:scale-110 transition-transform">
+                    SK
+                </div>
+                <span class="font-display font-bold text-lg tracking-wider text-white dark:text-white light:text-slate-900">
+                    SARANYA<span class="text-gradient">.AI</span>
+                </span>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <ul class="hidden md:flex items-center gap-8 text-sm font-medium tracking-wide">
+                <li><a href="#about" class="hover:text-cyan-aurora transition-colors duration-200">About</a></li>
+                <li><a href="#constellation" class="text-cyan-aurora font-semibold hover:text-violet-glow transition-colors duration-200">Constellation</a></li>
+                <li><a href="#skills" class="hover:text-cyan-aurora transition-colors duration-200">Skills</a></li>
+                <li><a href="#projects" class="hover:text-cyan-aurora transition-colors duration-200">Projects</a></li>
+                <li><a href="#achievements" class="hover:text-cyan-aurora transition-colors duration-200">Achievements</a></li>
+                <li><a href="#contact" class="hover:text-cyan-aurora transition-colors duration-200">Contact</a></li>
+            </ul>
+
+            <!-- Controls & Call-to-action -->
+            <div class="flex items-center gap-4">
+                <button id="themeToggleBtn" onclick="toggleTheme()" class="w-10 h-10 rounded-full glass-card flex items-center justify-center text-yellow-400 hover:text-yellow-300 hover:scale-110 transition-all">
+                    <i class="fa-solid fa-moon text-lg dark:inline hidden"></i>
+                    <i class="fa-solid fa-sun text-lg dark:hidden text-amber-500"></i>
+                </button>
+                <a href="#contact" class="hidden sm:inline-flex items-center justify-center px-5 py-2 text-xs font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-violet-glow to-cyan-aurora text-white shadow-lg shadow-violet-500/25 hover:shadow-cyan-500/40 hover:scale-105 transition-all">
+                    Let's Connect
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="relative z-10 pt-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32">
+
+        <section id="hero" class="min-h-[85vh] flex flex-col lg:flex-row items-center justify-between gap-12 pt-8">
+            <!-- Hero Left Content -->
+            <div class="flex-1 space-y-6 text-center lg:text-left">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card border-violet-500/30 text-xs font-semibold tracking-widest text-cyan-aurora uppercase">
+                    <span class="w-2 h-2 rounded-full bg-cyan-aurora animate-ping"></span>
+                    SkillAura 2026 • CSE Engineer
+                </div>
+
+                <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-none text-white dark:text-white light:text-slate-900">
+                    Architecting <br/>
+                    <span class="text-gradient">Intelligent Digital</span> <br/>
+                    Experiences.
+                </h1>
+
+                <p class="text-base sm:text-lg text-slate-400 dark:text-slate-400 light:text-slate-600 max-w-2xl font-light leading-relaxed">
+                    Hello, I'm <strong class="text-white dark:text-white light:text-slate-900 font-semibold">Saranya Krishnan</strong>. A 3rd Year B.E. Computer Science student at Kings Engineering College specializing in modern web technology, software engineering, and artificial intelligence.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                    <a href="#constellation" class="px-8 py-4 rounded-full bg-gradient-to-r from-violet-glow via-cyan-aurora to-magenta-accent text-white font-bold text-sm tracking-wide shadow-xl shadow-violet-500/20 hover:shadow-cyan-500/40 hover:scale-105 transition-all flex items-center gap-3">
+                        <span>Explore Constellation</span>
+                        <i class="fa-solid fa-compass text-xs"></i>
+                    </a>
+                    <a href="#projects" class="px-8 py-4 rounded-full glass-card text-white dark:text-white light:text-slate-900 font-semibold text-sm tracking-wide hover:bg-white/10 transition-all flex items-center gap-2">
+                        <span>View Work</span>
+                        <i class="fa-solid fa-arrow-down text-xs"></i>
+                    </a>
+                </div>
+
+                <!-- Metrics Strip -->
+                <div class="grid grid-cols-3 gap-4 pt-8 border-t border-white/10 max-w-md mx-auto lg:mx-0">
+                    <div>
+                        <div class="font-display text-2xl font-bold text-cyan-aurora">8.4 / 10</div>
+                        <div class="text-xs text-slate-400 uppercase tracking-wider">Academic CGPA</div>
+                    </div>
+                    <div>
+                        <div class="font-display text-2xl font-bold text-violet-glow">04+</div>
+                        <div class="text-xs text-slate-400 uppercase tracking-wider">Core Projects</div>
+                    </div>
+                    <div>
+                        <div class="font-display text-2xl font-bold text-magenta-accent">2024-28</div>
+                        <div class="text-xs text-slate-400 uppercase tracking-wider">CSE Batch</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Right Character Visual -->
+            <div class="flex-1 relative flex justify-center items-center">
+                <!-- Glowing Orbital Ring Background -->
+                <div class="absolute w-72 h-72 sm:w-96 sm:h-96 rounded-full bg-gradient-to-tr from-violet-glow/30 to-cyan-aurora/30 blur-3xl pointer-events-none"></div>
+                
+                <div class="relative z-10 glass-card p-4 rounded-3xl border border-white/10 shadow-2xl max-w-md group">
+                    <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saranya-standing.png" 
+                         alt="Saranya Krishnan Standing Character" 
+                         class="w-full h-auto max-h-[500px] object-contain rounded-2xl animate-float-slow filter drop-shadow-[0_15px_25px_rgba(139,92,246,0.3)]">
+                    
+                    <!-- Floating Badge -->
+                    <div class="absolute -bottom-4 -left-4 glass-panel px-4 py-3 rounded-2xl flex items-center gap-3 border border-cyan-aurora/40 shadow-xl">
+                        <div class="w-10 h-10 rounded-xl bg-cyan-aurora/20 flex items-center justify-center text-cyan-aurora">
+                            <i class="fa-solid fa-code text-lg"></i>
+                        </div>
+                        <div>
+                            <div class="text-xs font-bold text-white dark:text-white light:text-slate-900">Developer & AI Enthusiast</div>
+                            <div class="text-[10px] text-slate-400">Kings Engineering College</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="constellation" class="scroll-mt-32">
+            <div class="text-center space-y-4 mb-12">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full glass-card text-xs font-bold text-magenta-accent uppercase tracking-widest">
+                    Signature Interactive Experience
+                </div>
+                <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white dark:text-white light:text-slate-900">
+                    ⚡ The Digital <span class="text-gradient">Constellation</span>
+                </h2>
+                <p class="text-slate-400 max-w-2xl mx-auto text-sm sm:text-base">
+                    Hover or click on the interactive nodes below to seamlessly map Saranya's profile, technical skillsets, projects, and future vision.
+                </p>
+            </div>
+
+            <!-- Constellation Container Canvas Box -->
+            <div class="relative w-full min-h-[500px] glass-panel rounded-3xl p-6 border border-white/10 overflow-hidden flex items-center justify-center">
+                <!-- SVG Canvas for connecting nodes -->
+                <svg id="constellationSvg" class="absolute inset-0 w-full h-full pointer-events-none">
+                    <line id="line-1" x1="20%" y1="30%" x2="50%" y2="20%" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2" stroke-dasharray="6 4"/>
+                    <line id="line-2" x1="50%" y1="20%" x2="80%" y2="30%" stroke="rgba(6, 182, 212, 0.4)" stroke-width="2" stroke-dasharray="6 4"/>
+                    <line id="line-3" x1="20%" y1="30%" x2="30%" y2="75%" stroke="rgba(236, 73, 153, 0.4)" stroke-width="2" stroke-dasharray="6 4"/>
+                    <line id="line-4" x1="50%" y1="20%" x2="50%" y2="70%" stroke="rgba(139, 92, 246, 0.4)" stroke-width="2"/>
+                    <line id="line-5" x1="80%" y1="30%" x2="70%" y2="75%" stroke="rgba(6, 182, 212, 0.4)" stroke-width="2" stroke-dasharray="6 4"/>
+                    <line id="line-6" x1="30%" y1="75%" x2="70%" y2="75%" stroke="rgba(236, 73, 153, 0.4)" stroke-width="2"/>
+                </svg>
+
+                <!-- Interactive Nodes Grid Positioning -->
+                <div class="relative z-10 w-full h-full min-h-[420px] grid grid-cols-2 md:grid-cols-3 gap-8 items-center justify-items-center p-4">
+                    
+                    <!-- Node 1: PROFILE -->
+                    <a href="#about" onclick="previewNodeInfo('PROFILE')" class="group constellation-node flex flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-violet-glow/40 hover:border-violet-glow transition-all duration-300 w-36 h-36 justify-center text-center cursor-pointer">
+                        <div class="w-12 h-12 rounded-full bg-violet-glow/20 flex items-center justify-center text-violet-glow group-hover:scale-110 transition-transform node-pulse">
+                            <i class="fa-solid fa-user-astronaut text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold tracking-widest text-white uppercase">PROFILE</span>
+                            <span class="text-[10px] text-slate-400">Identity & Bio</span>
+                        </div>
+                    </a>
+
+                    <!-- Node 2: SKILLS -->
+                    <a href="#skills" onclick="previewNodeInfo('SKILLS')" class="group constellation-node flex flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-cyan-aurora/40 hover:border-cyan-aurora transition-all duration-300 w-36 h-36 justify-center text-center cursor-pointer">
+                        <div class="w-12 h-12 rounded-full bg-cyan-aurora/20 flex items-center justify-center text-cyan-aurora group-hover:scale-110 transition-transform node-pulse">
+                            <i class="fa-solid fa-layer-group text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold tracking-widest text-white uppercase">SKILLS</span>
+                            <span class="text-[10px] text-slate-400">Tech Stack</span>
+                        </div>
+                    </a>
+
+                    <!-- Node 3: PROJECTS -->
+                    <a href="#projects" onclick="previewNodeInfo('PROJECTS')" class="group constellation-node flex flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-magenta-accent/40 hover:border-magenta-accent transition-all duration-300 w-36 h-36 justify-center text-center cursor-pointer">
+                        <div class="w-12 h-12 rounded-full bg-magenta-accent/20 flex items-center justify-center text-magenta-accent group-hover:scale-110 transition-transform node-pulse">
+                            <i class="fa-solid fa-cubes text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold tracking-widest text-white uppercase">PROJECTS</span>
+                            <span class="text-[10px] text-slate-400">4 Applications</span>
+                        </div>
+                    </a>
+
+                    <!-- Node 4: AI LAB -->
+                    <a href="#projects" onclick="previewNodeInfo('AI LAB')" class="group constellation-node flex flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-violet-glow/40 hover:border-violet-glow transition-all duration-300 w-36 h-36 justify-center text-center cursor-pointer">
+                        <div class="w-12 h-12 rounded-full bg-violet-glow/20 flex items-center justify-center text-violet-glow group-hover:scale-110 transition-transform node-pulse">
+                            <i class="fa-solid fa-brain text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold tracking-widest text-white uppercase">AI LAB</span>
+                            <span class="text-[10px] text-slate-400">AI Study Assistant</span>
+                        </div>
+                    </a>
+
+                    <!-- Node 5: ACHIEVEMENTS -->
+                    <a href="#achievements" onclick="previewNodeInfo('ACHIEVEMENTS')" class="group constellation-node flex flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-cyan-aurora/40 hover:border-cyan-aurora transition-all duration-300 w-36 h-36 justify-center text-center cursor-pointer">
+                        <div class="w-12 h-12 rounded-full bg-cyan-aurora/20 flex items-center justify-center text-cyan-aurora group-hover:scale-110 transition-transform node-pulse">
+                            <i class="fa-solid fa-trophy text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold tracking-widest text-white uppercase">HONORS</span>
+                            <span class="text-[10px] text-slate-400">Hackathons & Certs</span>
+                        </div>
+                    </a>
+
+                    <!-- Node 6: FUTURE -->
+                    <a href="#goal" onclick="previewNodeInfo('FUTURE')" class="group constellation-node flex flex-col items-center gap-3 p-4 rounded-2xl glass-card border border-magenta-accent/40 hover:border-magenta-accent transition-all duration-300 w-36 h-36 justify-center text-center cursor-pointer">
+                        <div class="w-12 h-12 rounded-full bg-magenta-accent/20 flex items-center justify-center text-magenta-accent group-hover:scale-110 transition-transform node-pulse">
+                            <i class="fa-solid fa-rocket text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="block text-xs font-bold tracking-widest text-white uppercase">FUTURE</span>
+                            <span class="text-[10px] text-slate-400">Career Goal</span>
+                        </div>
+                    </a>
+
+                </div>
+
+                <!-- Dynamic Dynamic Node Live Preview Box -->
+                <div id="constellationPreview" class="absolute bottom-4 inset-x-4 md:inset-x-auto md:right-4 max-w-sm glass-panel p-4 rounded-2xl border border-cyan-aurora/30 hidden transition-all duration-300">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-circle-info text-cyan-aurora"></i>
+                        <div class="text-xs">
+                            <strong id="nodeTitle" class="text-white block font-bold">Node Selected</strong>
+                            <span id="nodeDesc" class="text-slate-400">Click node to jump straight to that section.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="scroll-mt-32">
+            <div class="glass-panel rounded-3xl p-8 lg:p-12 border border-white/10">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Portrait Image -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative group max-w-xs sm:max-w-sm">
+                            <div class="absolute inset-0 bg-gradient-to-r from-violet-glow to-cyan-aurora rounded-3xl blur-xl opacity-50 group-hover:opacity-80 transition-opacity"></div>
+                            <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saranya.png" 
+                                 alt="Saranya Krishnan Portrait" 
+                                 class="relative z-10 w-full h-auto rounded-3xl border border-white/20 shadow-2xl object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Storytelling Text & Details -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="inline-flex items-center gap-2 text-xs font-bold text-violet-glow uppercase tracking-widest">
+                            <i class="fa-solid fa-user"></i> Factual Profile
+                        </div>
+                        
+                        <h2 class="font-display text-3xl sm:text-4xl font-bold text-white dark:text-white light:text-slate-900">
+                            Engineering Purpose with <span class="text-gradient">Code & Innovation</span>
+                        </h2>
+
+                        <p class="text-slate-300 dark:text-slate-300 light:text-slate-600 text-sm sm:text-base leading-relaxed">
+                            Saranya Krishnan is a Computer Science and Engineering student with a strong interest in software development, artificial intelligence, and modern web technologies. She enjoys learning new technologies, participating in technical events, solving programming problems, and building practical projects.
+                        </p>
+
+                        <p class="text-slate-400 text-sm leading-relaxed">
+                            Currently developing her technical skills at Kings Engineering College, Chennai, Saranya is actively preparing for future internships and placements by creating clean, scalable software applications.
+                        </p>
+
+                        <!-- Story Journey Roadmap -->
+                        <div class="pt-4 border-t border-white/10">
+                            <span class="block text-xs font-bold uppercase tracking-widest text-slate-400 mb-4">Engineering Journey</span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-4 py-2 rounded-xl bg-violet-glow/20 border border-violet-glow/40 text-xs font-bold text-violet-300">1. EXPLORE</span>
+                                <span class="px-4 py-2 rounded-xl bg-cyan-aurora/20 border border-cyan-aurora/40 text-xs font-bold text-cyan-300">2. LEARN</span>
+                                <span class="px-4 py-2 rounded-xl bg-magenta-accent/20 border border-magenta-accent/40 text-xs font-bold text-pink-300">3. BUILD</span>
+                                <span class="px-4 py-2 rounded-xl bg-blue-500/20 border border-blue-500/40 text-xs font-bold text-blue-300">4. INNOVATE</span>
+                                <span class="px-4 py-2 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-xs font-bold text-emerald-300">5. EVOLVE</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="skills" class="scroll-mt-32">
+            <div class="text-center space-y-4 mb-16">
+                <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white dark:text-white light:text-slate-900">
+                    Education & <span class="text-gradient">Technical Arsenal</span>
+                </h2>
+                <p class="text-slate-400 max-w-xl mx-auto text-sm">
+                    Verified academic qualifications paired with practical development toolkits.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Education Card (Left) -->
+                <div class="lg:col-span-5 glass-card rounded-3xl p-8 flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-violet-glow/20 flex items-center justify-center text-violet-glow mb-6 text-xl">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-cyan-aurora">Academic Degree</span>
+                        <h3 class="font-display text-2xl font-bold text-white dark:text-white light:text-slate-900 mt-1">
+                            Bachelor of Engineering
+                        </h3>
+                        <p class="text-violet-400 font-semibold text-sm">Computer Science and Engineering</p>
+
+                        <div class="mt-6 space-y-3 text-sm text-slate-300">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-building-columns text-slate-500"></i>
+                                <span>Kings Engineering College, Chennai</span>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-calendar text-slate-500"></i>
+                                <span>Batch: 2024 - 2028 (3rd Year)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CGPA Badge -->
+                    <div class="mt-8 p-4 rounded-2xl bg-gradient-to-r from-violet-glow/20 to-cyan-aurora/20 border border-white/10 flex items-center justify-between">
+                        <div>
+                            <span class="text-xs uppercase tracking-wider text-slate-400 block">Cumulative GPA</span>
+                            <span class="font-display text-2xl font-black text-white">8.4 / 10</span>
+                        </div>
+                        <div class="w-10 h-10 rounded-full bg-cyan-aurora/30 flex items-center justify-center text-cyan-aurora">
+                            <i class="fa-solid fa-award text-lg"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technical Skills Matrix (Right) -->
+                <div class="lg:col-span-7 glass-card rounded-3xl p-8 space-y-8">
+                    <h3 class="font-display text-xl font-bold text-white dark:text-white light:text-slate-900 flex items-center gap-2">
+                        <i class="fa-solid fa-microchip text-cyan-aurora"></i> Core Skillsets
+                    </h3>
+
+                    <!-- Languages -->
+                    <div class="space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Programming Languages</span>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-violet-300 border border-violet-500/30">C</span>
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-cyan-300 border border-cyan-500/30">Python</span>
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-pink-300 border border-pink-500/30">Java</span>
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-yellow-300 border border-yellow-500/30">JavaScript</span>
+                        </div>
+                    </div>
+
+                    <!-- Web Dev Stack -->
+                    <div class="space-y-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Web Development Stack</span>
+                        <div class="flex flex-wrap gap-3">
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-orange-400 border border-orange-500/30">HTML5</span>
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-blue-400 border border-blue-500/30">CSS3</span>
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-yellow-300 border border-yellow-500/30">JavaScript ES6+</span>
+                            <span class="px-4 py-2 rounded-xl glass-panel text-sm font-semibold text-cyan-400 border border-cyan-500/30">React</span>
+                        </div>
+                    </div>
+
+                    <!-- Database & Tools -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Databases</span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1.5 rounded-lg bg-slate-800/80 text-xs font-medium text-slate-300">MySQL</span>
+                                <span class="px-3 py-1.5 rounded-lg bg-slate-800/80 text-xs font-medium text-slate-300">MongoDB</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <span class="text-xs font-bold uppercase tracking-wider text-slate-400">Tools & Protocols</span>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1.5 rounded-lg bg-slate-800/80 text-xs font-medium text-slate-300">Git & GitHub</span>
+                                <span class="px-3 py-1.5 rounded-lg bg-slate-800/80 text-xs font-medium text-slate-300">VS Code</span>
+                                <span class="px-3 py-1.5 rounded-lg bg-slate-800/80 text-xs font-medium text-slate-300">REST APIs</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <section id="projects" class="scroll-mt-32">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-2 text-xs font-bold text-cyan-aurora uppercase tracking-widest mb-2">
+                        Portfolio Portfolio
+                    </div>
+                    <h2 class="font-display text-3xl sm:text-5xl font-extrabold text-white dark:text-white light:text-slate-900">
+                        Featured <span class="text-gradient">Projects</span>
+                    </h2>
+                </div>
+                <p class="text-slate-400 text-sm max-w-xs">
+                    Practical applications built with React, Node.js, Python, and modern web frameworks.
+                </p>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+                <!-- Project 01: CampusConnect -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-violet-glow/20 text-xs font-bold text-violet-300 border border-violet-500/30">PROJECT 01</span>
+                            <i class="fa-solid fa-users text-violet-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-cyan-aurora transition-colors">CampusConnect</h3>
+                        <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                            A student-focused platform designed to help students discover and participate in college events efficiently.
+                        </p>
+                        
+                        <!-- Key Features Checklist -->
+                        <div class="mt-6 space-y-2">
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Event listing & search engine
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Event registration & Student dashboard
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Admin event management controls
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">HTML</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">CSS</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">React</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">Node.js</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">MongoDB</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 02: Smart Expense Tracker -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-cyan-aurora/20 text-xs font-bold text-cyan-300 border border-cyan-500/30">PROJECT 02</span>
+                            <i class="fa-solid fa-wallet text-cyan-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-cyan-aurora transition-colors">Smart Expense Tracker</h3>
+                        <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                            A web application that helps students record, monitor, and analyze their daily spending habits dynamically.
+                        </p>
+
+                        <!-- Key Features Checklist -->
+                        <div class="mt-6 space-y-2">
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Add & Categorize expenses
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Monthly expense summary reports
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Interactive spending data visualization
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">HTML</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">CSS</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Project 03: AI Study Assistant -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between group border-violet-glow/40">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-magenta-accent/20 text-xs font-bold text-pink-300 border border-pink-500/30">PROJECT 03</span>
+                            <i class="fa-solid fa-robot text-magenta-accent text-xl"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-cyan-aurora transition-colors">AI Study Assistant</h3>
+                        <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                            An AI-powered study assistant designed to help students organize learning materials and study more effectively.
+                        </p>
+
+                        <!-- Key Features Checklist -->
+                        <div class="mt-6 space-y-2">
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Generate topic summaries & quiz questions
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Personalized study plan suggestions
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Interactive AI study assistance
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">Python</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">AI API</span>
+                        </div>
+                        <button onclick="openAiModal()" class="text-xs font-bold text-cyan-aurora hover:underline flex items-center gap-1">
+                            Try Interactive Simulation <i class="fa-solid fa-bolt"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Project 04: Personal Portfolio -->
+                <div class="glass-card rounded-3xl p-8 flex flex-col justify-between group">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full bg-violet-glow/20 text-xs font-bold text-violet-300 border border-violet-500/30">PROJECT 04</span>
+                            <i class="fa-solid fa-laptop-code text-violet-400 text-xl"></i>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white group-hover:text-cyan-aurora transition-colors">Personal Portfolio</h3>
+                        <p class="text-slate-300 text-sm mt-3 leading-relaxed">
+                            A personal portfolio project created to showcase academic information, technical skills, projects, and achievements.
+                        </p>
+
+                        <!-- Key Features Checklist -->
+                        <div class="mt-6 space-y-2">
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Responsive neo-futuristic layout
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Interactive Digital Constellation feature
+                            </div>
+                            <div class="flex items-center gap-2 text-xs text-slate-400">
+                                <i class="fa-solid fa-check text-cyan-aurora"></i> Dark / Light mode dual themes
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 pt-6 border-t border-white/10 flex items-center justify-between">
+                        <div class="flex flex-wrap gap-2">
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">HTML</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">CSS</span>
+                            <span class="text-[10px] font-bold px-2.5 py-1 rounded-md bg-white/5 text-slate-300">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="achievements" class="scroll-mt-32">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                
+                <!-- Column 1: Achievements -->
+                <div class="space-y-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-violet-glow">Milestones</span>
+                        <h2 class="font-display text-3xl font-extrabold text-white dark:text-white light:text-slate-900 mt-1">
+                            Key Achievements
+                        </h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="glass-card p-5 rounded-2xl flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-violet-glow/20 flex items-center justify-center text-violet-glow shrink-0 mt-1">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">College-Level Hackathons</h4>
+                                <p class="text-xs text-slate-400 mt-1">Participated in intense time-bound hackathons developing innovative tech prototypes.</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5 rounded-2xl flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-cyan-aurora/20 flex items-center justify-center text-cyan-aurora shrink-0 mt-1">
+                                <i class="fa-solid fa-trophy"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Technical Competitions</h4>
+                                <p class="text-xs text-slate-400 mt-1">Active participant in inter-college technical events and coding challenges.</p>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-5 rounded-2xl flex items-start gap-4">
+                            <div class="w-10 h-10 rounded-xl bg-magenta-accent/20 flex items-center justify-center text-magenta-accent shrink-0 mt-1">
+                                <i class="fa-solid fa-users-gear"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-white text-base">Technical Community Member</h4>
+                                <p class="text-xs text-slate-400 mt-1">Active member of the college technical community & hands-on workshops participant.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Column 2: Certifications -->
+                <div class="space-y-6">
+                    <div>
+                        <span class="text-xs font-bold uppercase tracking-widest text-cyan-aurora">Verified Credentials</span>
+                        <h2 class="font-display text-3xl font-extrabold text-white dark:text-white light:text-slate-900 mt-1">
+                            Certifications
+                        </h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between">
+                            <i class="fa-brands fa-python text-amber-400 text-2xl mb-3"></i>
+                            <h4 class="font-bold text-white text-sm">Python Programming Fundamentals</h4>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between">
+                            <i class="fa-solid fa-globe text-cyan-400 text-2xl mb-3"></i>
+                            <h4 class="font-bold text-white text-sm">Web Development Fundamentals</h4>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between">
+                            <i class="fa-solid fa-brain text-pink-400 text-2xl mb-3"></i>
+                            <h4 class="font-bold text-white text-sm">Introduction to Generative AI</h4>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between">
+                            <i class="fa-brands fa-git-alt text-orange-500 text-2xl mb-3"></i>
+                            <h4 class="font-bold text-white text-sm">Git & GitHub Fundamentals</h4>
+                        </div>
+
+                        <div class="glass-card p-4 rounded-2xl flex flex-col justify-between sm:col-span-2">
+                            <div class="flex items-center gap-3">
+                                <i class="fa-solid fa-diagram-project text-violet-400 text-2xl"></i>
+                                <div>
+                                    <h4 class="font-bold text-white text-sm">Introduction to Machine Learning</h4>
+                                    <span class="text-[10px] text-slate-400">Foundational ML algorithms & data processing</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="goal" class="scroll-mt-32">
+            <div class="glass-panel rounded-3xl p-8 sm:p-12 text-center border border-white/10 relative overflow-hidden">
+                <div class="absolute -top-12 -left-12 w-40 h-40 bg-violet-glow/20 rounded-full blur-3xl"></div>
+                <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-cyan-aurora/20 rounded-full blur-3xl"></div>
+
+                <div class="relative z-10 space-y-6 max-w-3xl mx-auto">
+                    <span class="text-xs font-bold uppercase tracking-widest text-cyan-aurora">Vision & Statement</span>
+                    
+                    <h3 class="font-display text-2xl sm:text-3xl font-extrabold italic text-white leading-snug">
+                        "To become a skilled software engineer and build innovative technology that solves real-world problems."
+                    </h3>
+
+                    <div class="pt-6 border-t border-white/10">
+                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Areas of Interest</span>
+                        <div class="flex flex-wrap justify-center gap-3">
+                            <span class="px-4 py-2 rounded-full glass-card text-xs font-semibold text-slate-300">Coding</span>
+                            <span class="px-4 py-2 rounded-full glass-card text-xs font-semibold text-slate-300">Artificial Intelligence</span>
+                            <span class="px-4 py-2 rounded-full glass-card text-xs font-semibold text-slate-300">Web Development</span>
+                            <span class="px-4 py-2 rounded-full glass-card text-xs font-semibold text-slate-300">Gaming</span>
+                            <span class="px-4 py-2 rounded-full glass-card text-xs font-semibold text-slate-300">Technology</span>
+                            <span class="px-4 py-2 rounded-full glass-card text-xs font-semibold text-slate-300">Open Source</span>
+                            <span class="px-4 py-2 rounded-full glass-card text-xs font-semibold text-slate-300">Learning New Technologies</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="scroll-mt-32">
+            <div class="max-w-3xl mx-auto glass-card rounded-3xl p-8 sm:p-12 text-center space-y-8 border border-white/10">
+                <div class="space-y-2">
+                    <span class="text-xs font-bold uppercase tracking-widest text-magenta-accent">Initiate Connection</span>
+                    <h2 class="font-display text-3xl sm:text-4xl font-extrabold text-white">Let's Collaborate</h2>
+                    <p class="text-slate-400 text-sm">Open for internships, technical roles, and collaboration requests.</p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Email Card -->
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col items-center gap-3 border border-white/10">
+                        <div class="w-12 h-12 rounded-full bg-violet-glow/20 flex items-center justify-center text-violet-glow text-xl">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+                        <span class="text-xs text-slate-400 uppercase tracking-wider">Direct Email</span>
+                        <span class="font-mono text-sm font-semibold text-white">saranya.krishnan@example.com</span>
+                        <button onclick="copyToClipboard('saranya.krishnan@example.com')" class="text-xs text-cyan-aurora hover:underline font-bold mt-1">
+                            <i class="fa-solid fa-copy"></i> Copy Email
+                        </button>
+                    </div>
+
+                    <!-- Location Card -->
+                    <div class="glass-panel p-6 rounded-2xl flex flex-col items-center gap-3 border border-white/10">
+                        <div class="w-12 h-12 rounded-full bg-cyan-aurora/20 flex items-center justify-center text-cyan-aurora text-xl">
+                            <i class="fa-solid fa-location-dot"></i>
+                        </div>
+                        <span class="text-xs text-slate-400 uppercase tracking-wider">Current Location</span>
+                        <span class="font-semibold text-sm text-white">Chennai, Tamil Nadu</span>
+                        <span class="text-xs text-slate-400">Kings Engineering College</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="mt-32 border-t border-white/10 bg-obsidian-light/90 relative z-10 py-16 px-4">
+        <div class="max-w-5xl mx-auto text-center space-y-8">
+            
+            <!-- SkillAura Official Logo -->
+            <div class="flex justify-center">
+                <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/footer/logo.png" 
+                     alt="SkillAura 2026 Official Logo" 
+                     class="h-14 w-auto object-contain filter drop-shadow-[0_0_15px_rgba(139,92,246,0.4)]">
+            </div>
+
+            <!-- Mandatory Footer Event Memory Statement -->
+            <div class="space-y-4 max-w-2xl mx-auto">
+                <p class="font-display font-medium italic text-lg text-slate-200">
+                    "Built with creativity. Crafted with AI. Remembered as a milestone."
+                </p>
+
+                <div class="font-display font-extrabold text-2xl tracking-widest text-gradient uppercase">
+                    TRINEX
+                </div>
+
+                <div class="flex flex-wrap justify-center gap-4 text-sm font-bold text-cyan-aurora tracking-wide">
+                    <span>HARINI A</span>
+                    <span>•</span>
+                    <span>JANET MARIA J</span>
+                    <span>•</span>
+                    <span>MAHALAKSHMI M</span>
+                </div>
+
+                <div class="text-xs font-semibold text-slate-400 tracking-wider uppercase">
+                    3rd Year B.E. Computer Science & Engineering
+                </div>
+
+                <p class="text-xs text-slate-400 leading-relaxed">
+                    A portfolio created during <strong class="text-slate-200">SkillAura 2026 - Prompt2Portfolio</strong>,<br>
+                    31 August 2026, Kings Engineering College.
+                </p>
+
+                <div class="pt-4 font-display font-black text-xs tracking-[0.3em] text-violet-glow uppercase">
+                    BUILD SKILLS • IGNITE IDEAS • LEAVE YOUR AURA
+                </div>
+            </div>
+
+            <!-- Mandatory Invisible Counter Tag -->
+            <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev-day10&theme=ai-1&padding=0&offset=0&align=top&scale=0.18&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;" />
+        </div>
+    </footer>
+
+    <div id="aiModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="glass-panel max-w-lg w-full rounded-3xl p-6 border border-cyan-aurora/40 space-y-4">
+            <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-robot text-cyan-aurora"></i>
+                    <h3 class="font-bold text-white text-base">AI Study Assistant Demo</h3>
+                </div>
+                <button onclick="closeAiModal()" class="text-slate-400 hover:text-white text-lg">&times;</button>
+            </div>
+            
+            <div class="space-y-3 text-xs">
+                <div class="p-3 rounded-xl bg-violet-glow/10 border border-violet-glow/20 text-slate-200">
+                    <strong>AI Assistant:</strong> Hello Saranya! What topic would you like to review today?
+                </div>
+                <div class="p-3 rounded-xl bg-cyan-aurora/10 border border-cyan-aurora/20 text-slate-200">
+                    <strong>Topic Summary:</strong> Data Structures - Binary Search Trees allow logarithmic search efficiency O(log N) for balanced trees.
+                </div>
+                <div class="p-3 rounded-xl bg-white/5 border border-white/10 text-slate-300">
+                    <strong>Generated Quiz:</strong> What is the worst-case time complexity of an un-balanced BST? (Answer: O(N))
+                </div>
+            </div>
+
+            <button onclick="closeAiModal()" class="w-full py-2.5 rounded-xl bg-cyan-aurora text-slate-900 font-bold text-xs">
+                Close Simulation
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Dark / Light Theme Toggle Functionality
+        function toggleTheme() {
+            const htmlTag = document.documentElement;
+            if (htmlTag.classList.contains('dark')) {
+                htmlTag.classList.remove('dark');
+                htmlTag.classList.add('light');
+            } else {
+                htmlTag.classList.remove('light');
+                htmlTag.classList.add('dark');
+            }
+        }
+
+        // Constellation Interactive Preview Text
+        function previewNodeInfo(nodeName) {
+            const previewBox = document.getElementById('constellationPreview');
+            const title = document.getElementById('nodeTitle');
+            const desc = document.getElementById('nodeDesc');
+
+            const infoMap = {
+                'PROFILE': 'Saranya Krishnan - CSE Student at Kings Engineering College.',
+                'SKILLS': 'Proficient in Python, Java, C, React, REST APIs & Databases.',
+                'PROJECTS': 'CampusConnect, Smart Expense Tracker, AI Study Assistant & Portfolio.',
+                'AI LAB': 'AI Study Assistant - Topic Summarizer & Quiz Generator.',
+                'ACHIEVEMENTS': 'Hackathon participant, Coding Contests & 5 Certifications.',
+                'FUTURE': 'Goal: Software Engineer solving real-world challenges.'
+            };
+
+            title.innerText = nodeName + ' NODE';
+            desc.innerText = infoMap[nodeName] || 'Interactive node selected.';
+            previewBox.classList.remove('hidden');
+        }
+
+        // Copy Email Helper
+        function copyToClipboard(text) {
+            const tempInput = document.createElement('input');
+            tempInput.value = text;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempInput);
+            alert('Email copied to clipboard!');
+        }
+
+        // AI Modal Handlers
+        function openAiModal() {
+            document.getElementById('aiModal').classList.remove('hidden');
+        }
+        function closeAiModal() {
+            document.getElementById('aiModal').classList.add('hidden');
+        }
+
+        // Canvas Particle Background Generator
+        window.onload = function() {
+            const canvas = document.getElementById('starsCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            const stars = [];
+            for (let i = 0; i < 80; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.8 + 0.5,
+                    vx: (Math.random() - 0.5) * 0.3,
+                    vy: (Math.random() - 0.5) * 0.3,
+                    alpha: Math.random()
+                });
+            }
+
+            function animateStars() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#8B5CF6';
+
+                stars.forEach(star => {
+                    star.x += star.vx;
+                    star.y += star.vy;
+
+                    if (star.x < 0) star.x = canvas.width;
+                    if (star.x > canvas.width) star.x = 0;
+                    if (star.y < 0) star.y = canvas.height;
+                    if (star.y > canvas.height) star.y = 0;
+
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(139, 92, 246, ${star.alpha})`;
+                    ctx.fill();
+                });
+
+                requestAnimationFrame(animateStars);
+            }
+            animateStars();
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,3119 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Saranya Krishnan — Developer Portfolio</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   ROOT
+========================================================= */
+
+:root {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --surface-2: #ededeb;
+    --text: #090909;
+    --muted: #707070;
+    --line: #d7d7d3;
+    --dark: #050505;
+
+    --serif: "Playfair Display", serif;
+    --sans: "Inter", sans-serif;
+    --mono: "DM Mono", monospace;
+
+    --ease: cubic-bezier(.2,.8,.2,1);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+}
+
+body.lock {
+    overflow: hidden;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font-family: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* =========================================================
+   CUSTOM CURSOR
+========================================================= */
+
+.cursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: #000;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition:
+        width .25s ease,
+        height .25s ease,
+        background .25s ease;
+}
+
+.cursor-ring {
+    position: fixed;
+    width: 42px;
+    height: 42px;
+    border: 1px solid #000;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: .12s ease-out;
+}
+
+body.cursor-hover .cursor {
+    width: 7px;
+    height: 7px;
+}
+
+body.cursor-hover .cursor-ring {
+    width: 65px;
+    height: 65px;
+}
+
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+.loader {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    background: #050505;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity .8s var(--ease), visibility .8s;
+}
+
+.loader.hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-inner {
+    width: min(500px, 80%);
+}
+
+.loader-top {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    opacity: .55;
+}
+
+.loader-number {
+    font-family: var(--serif);
+    font-size: clamp(5rem, 14vw, 10rem);
+    line-height: .8;
+    margin: 30px 0;
+}
+
+.loader-bar {
+    width: 100%;
+    height: 1px;
+    background: #333;
+    overflow: hidden;
+}
+
+.loader-progress {
+    width: 0%;
+    height: 100%;
+    background: #fff;
+    transition: width .1s linear;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 5000;
+
+    padding: 26px 5%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    transition: .4s var(--ease);
+}
+
+.nav.scrolled {
+    padding: 15px 5%;
+    background: rgba(247,247,245,.88);
+    backdrop-filter: blur(18px);
+    border-bottom: 1px solid var(--line);
+}
+
+.brand {
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: -1px;
+}
+
+.brand span {
+    font-family: var(--serif);
+    font-weight: 500;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 32px;
+}
+
+.nav-links a {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 0;
+    height: 1px;
+    background: #000;
+    transition: .3s;
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+.nav-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.nav-btn {
+    width: 40px;
+    height: 40px;
+
+    border: 1px solid var(--line);
+    border-radius: 50%;
+
+    background: var(--surface);
+    cursor: pointer;
+
+    display: grid;
+    place-items: center;
+
+    transition: .3s;
+}
+
+.nav-btn:hover {
+    background: #000;
+    color: white;
+}
+
+.menu-btn {
+    display: none;
+}
+
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+.container {
+    width: min(1240px, 90%);
+    margin: auto;
+}
+
+section {
+    position: relative;
+    padding: 150px 0;
+}
+
+.section-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+
+    color: var(--muted);
+
+    margin-bottom: 45px;
+}
+
+.section-number {
+    color: var(--text);
+}
+
+.section-title {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: clamp(3.4rem, 8vw, 8rem);
+    line-height: .88;
+    letter-spacing: -5px;
+}
+
+.section-intro {
+    max-width: 600px;
+    margin-top: 30px;
+
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--muted);
+}
+
+
+/* =========================================================
+   REVEAL
+========================================================= */
+
+.reveal {
+    opacity: 0;
+    transform: translateY(50px);
+    transition:
+        opacity 1s var(--ease),
+        transform 1s var(--ease);
+}
+
+.reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero {
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 70px;
+
+    display: flex;
+    align-items: center;
+
+    overflow: hidden;
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1.15fr .85fr;
+    align-items: center;
+    gap: 70px;
+}
+
+.hero-kicker {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+
+    margin-bottom: 30px;
+}
+
+.hero-title {
+    font-size: clamp(5rem, 11vw, 11.5rem);
+    line-height: .76;
+    letter-spacing: -10px;
+    font-weight: 800;
+}
+
+.hero-title .serif {
+    font-family: var(--serif);
+    font-weight: 500;
+    font-style: italic;
+}
+
+.hero-subtitle {
+    margin-top: 42px;
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+.hero-subtitle::before {
+    content: "";
+    width: 45px;
+    height: 1px;
+    background: #000;
+}
+
+.hero-copy {
+    max-width: 560px;
+    margin-top: 24px;
+
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 35px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 15px 23px;
+
+    border: 1px solid #000;
+    border-radius: 100px;
+
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    transition: .4s var(--ease);
+}
+
+.btn-black {
+    background: #000;
+    color: white;
+}
+
+.btn:hover {
+    transform: translateY(-5px);
+}
+
+
+/* HERO IMAGE */
+
+.hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-frame {
+    width: min(420px, 100%);
+    aspect-ratio: .78;
+
+    background: #e8e8e6;
+
+    position: relative;
+    overflow: hidden;
+
+    border-radius: 220px 220px 18px 18px;
+}
+
+.hero-frame::before {
+    content: "";
+    position: absolute;
+    inset: 15px;
+
+    border: 1px solid rgba(0,0,0,.18);
+    border-radius: 210px 210px 12px 12px;
+
+    z-index: 2;
+    pointer-events: none;
+}
+
+.hero-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    filter: grayscale(100%);
+    transition: transform 1s var(--ease);
+}
+
+.hero-frame:hover img {
+    transform: scale(1.04);
+}
+
+.hero-index {
+    position: absolute;
+    right: -25px;
+    top: 45px;
+
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+
+    writing-mode: vertical-rl;
+}
+
+.hero-stamp {
+    position: absolute;
+    bottom: 25px;
+    left: -35px;
+
+    width: 95px;
+    height: 95px;
+
+    background: #000;
+    color: #fff;
+
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    text-align: center;
+
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1px;
+
+    animation: rotateStamp 12s linear infinite;
+}
+
+@keyframes rotateStamp {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* HERO FOOT */
+
+.hero-footer {
+    position: absolute;
+    bottom: 30px;
+    left: 5%;
+    right: 5%;
+
+    display: flex;
+    justify-content: space-between;
+
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   ABOUT
+========================================================= */
+
+.about {
+    background: #000;
+    color: #fff;
+}
+
+.about .section-number {
+    color: #fff;
+}
+
+.about .section-meta {
+    color: #888;
+}
+
+.about-grid {
+    display: grid;
+    grid-template-columns: .7fr 1.3fr;
+    gap: 100px;
+    align-items: start;
+}
+
+.about-portrait {
+    width: 100%;
+    aspect-ratio: .82;
+    overflow: hidden;
+    background: #151515;
+}
+
+.about-portrait img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: 1s var(--ease);
+}
+
+.about-portrait:hover img {
+    transform: scale(1.05);
+}
+
+.about-heading {
+    font-family: var(--serif);
+    font-size: clamp(2.5rem, 5vw, 5.3rem);
+    line-height: 1;
+    font-weight: 500;
+}
+
+.about-heading em {
+    color: #888;
+}
+
+.about-text {
+    margin-top: 35px;
+
+    max-width: 680px;
+
+    color: #aaa;
+    font-size: 15px;
+    line-height: 1.9;
+}
+
+.about-info {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 55px;
+
+    border-top: 1px solid #2d2d2d;
+}
+
+.info-item {
+    padding: 22px 0;
+    border-bottom: 1px solid #2d2d2d;
+}
+
+.info-item:nth-child(odd) {
+    margin-right: 30px;
+}
+
+.info-label {
+    display: block;
+
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #666;
+
+    margin-bottom: 8px;
+}
+
+.info-value {
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   EDUCATION
+========================================================= */
+
+.education-grid {
+    margin-top: 70px;
+
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.education-card {
+    border-top: 1px solid var(--line);
+
+    padding: 30px 0;
+
+    display: grid;
+    grid-template-columns: 130px 1fr auto;
+    align-items: center;
+    gap: 30px;
+
+    transition: .4s;
+}
+
+.education-card:last-child {
+    border-bottom: 1px solid var(--line);
+}
+
+.education-card:hover {
+    padding-left: 15px;
+    background: var(--surface);
+}
+
+.edu-year {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+}
+
+.edu-main h3 {
+    font-family: var(--serif);
+    font-size: 2rem;
+    font-weight: 500;
+}
+
+.edu-main p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-top: 8px;
+}
+
+.cgpa {
+    font-family: var(--serif);
+    font-size: 2.4rem;
+}
+
+
+/* =========================================================
+   SKILLS
+========================================================= */
+
+.skills {
+    background: var(--surface-2);
+}
+
+.skills-layout {
+    margin-top: 70px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+}
+
+.skill-category {
+    border-top: 1px solid #aaa;
+    padding-top: 20px;
+    margin-bottom: 45px;
+}
+
+.skill-category h3 {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 22px;
+}
+
+.skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 9px;
+}
+
+.skill-pill {
+    padding: 10px 15px;
+
+    border: 1px solid #bcbcb8;
+    border-radius: 100px;
+
+    background: #f7f7f5;
+
+    font-size: 12px;
+
+    transition: .35s;
+}
+
+.skill-pill:hover {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+    transform: translateY(-4px);
+}
+
+
+/* =========================================================
+   PROJECTS
+========================================================= */
+
+.projects-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    gap: 30px;
+}
+
+.projects-header .section-intro {
+    margin: 0;
+}
+
+.project-list {
+    margin-top: 80px;
+}
+
+.project-card {
+    border-top: 1px solid var(--line);
+    padding: 30px 0;
+
+    display: grid;
+    grid-template-columns: 100px 1fr 70px;
+    gap: 30px;
+
+    cursor: pointer;
+
+    transition: .4s var(--ease);
+}
+
+.project-card:last-child {
+    border-bottom: 1px solid var(--line);
+}
+
+.project-card:hover {
+    padding-left: 20px;
+    background: var(--surface);
+}
+
+.project-number {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+}
+
+.project-main h3 {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4vw, 4rem);
+    font-weight: 500;
+    line-height: 1;
+}
+
+.project-main p {
+    max-width: 620px;
+    margin-top: 15px;
+
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.project-tags {
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+.project-tag {
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1px;
+
+    padding: 7px 10px;
+
+    border: 1px solid var(--line);
+    border-radius: 100px;
+}
+
+.project-arrow {
+    width: 48px;
+    height: 48px;
+
+    border: 1px solid var(--line);
+    border-radius: 50%;
+
+    display: grid;
+    place-items: center;
+
+    transition: .4s;
+}
+
+.project-card:hover .project-arrow {
+    background: #000;
+    color: #fff;
+    transform: rotate(45deg);
+}
+
+
+/* =========================================================
+   ACHIEVEMENTS / CERTIFICATIONS
+========================================================= */
+
+.split-section {
+    background: #000;
+    color: #fff;
+}
+
+.split-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 100px;
+}
+
+.split-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: .9;
+    font-weight: 500;
+}
+
+.timeline {
+    margin-top: 55px;
+}
+
+.timeline-item {
+    border-top: 1px solid #292929;
+    padding: 22px 0;
+
+    display: flex;
+    gap: 20px;
+}
+
+.timeline-item:last-child {
+    border-bottom: 1px solid #292929;
+}
+
+.timeline-dot {
+    width: 7px;
+    height: 7px;
+    background: #fff;
+    border-radius: 50%;
+    margin-top: 7px;
+    flex-shrink: 0;
+}
+
+.timeline-text {
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   INTERESTS
+========================================================= */
+
+.interests {
+    overflow: hidden;
+}
+
+.interest-cloud {
+    margin-top: 70px;
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.interest {
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 3vw, 3.5rem);
+
+    border: 1px solid var(--line);
+    border-radius: 100px;
+
+    padding: 15px 25px;
+
+    transition: .4s var(--ease);
+}
+
+.interest:nth-child(even) {
+    font-style: italic;
+}
+
+.interest:hover {
+    background: #000;
+    color: #fff;
+    transform: rotate(-2deg) translateY(-5px);
+}
+
+
+/* =========================================================
+   CAREER GOAL
+========================================================= */
+
+.career {
+    padding: 180px 0;
+    background: var(--surface-2);
+}
+
+.career-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+
+.career-quote {
+    max-width: 1050px;
+    margin-top: 45px;
+
+    font-family: var(--serif);
+    font-size: clamp(2.8rem, 6vw, 7rem);
+    line-height: .98;
+    letter-spacing: -3px;
+}
+
+.quote-mark {
+    font-size: .55em;
+    vertical-align: top;
+}
+
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contact {
+    background: #f7f7f5;
+}
+
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    gap: 100px;
+}
+
+.contact-heading {
+    font-family: var(--serif);
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    line-height: .85;
+    font-weight: 500;
+    letter-spacing: -5px;
+}
+
+.contact-email {
+    display: inline-block;
+    margin-top: 45px;
+
+    font-family: var(--mono);
+    font-size: 13px;
+
+    border-bottom: 1px solid #000;
+    padding-bottom: 7px;
+}
+
+.contact-details {
+    align-self: end;
+}
+
+.contact-row {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+
+    font-size: 13px;
+}
+
+.contact-label {
+    display: block;
+
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+
+    margin-bottom: 8px;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer {
+    background: #000;
+    color: #fff;
+    padding: 100px 0 30px;
+}
+
+.footer-top {
+    display: grid;
+    grid-template-columns: 1fr .7fr;
+    gap: 100px;
+}
+
+.footer-brand {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 7rem);
+    line-height: .85;
+}
+
+.footer-text {
+    color: #777;
+    max-width: 500px;
+    line-height: 1.8;
+    margin-top: 30px;
+    font-size: 13px;
+}
+
+.footer-meta {
+    text-align: right;
+    color: #888;
+
+    font-family: var(--mono);
+    font-size: 9px;
+    line-height: 2.2;
+    letter-spacing: .5px;
+}
+
+.footer-logo {
+    width: 90px;
+    margin-left: auto;
+    margin-bottom: 30px;
+}
+
+.footer-bottom {
+    margin-top: 100px;
+    padding-top: 20px;
+
+    border-top: 1px solid #252525;
+
+    display: flex;
+    justify-content: space-between;
+
+    color: #555;
+
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   PROJECT MODAL
+========================================================= */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 8000;
+
+    background: rgba(0,0,0,.78);
+    backdrop-filter: blur(15px);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: .4s;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-box {
+    width: min(900px, 100%);
+    max-height: 90vh;
+    overflow-y: auto;
+
+    background: #f7f7f5;
+    color: #000;
+
+    padding: 55px;
+
+    position: relative;
+
+    transform: translateY(30px) scale(.96);
+
+    transition: .5s var(--ease);
+}
+
+.modal.active .modal-box {
+    transform: translateY(0) scale(1);
+}
+
+.modal-close {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+
+    width: 42px;
+    height: 42px;
+
+    border-radius: 50%;
+    border: 1px solid #ccc;
+
+    background: transparent;
+
+    cursor: pointer;
+
+    font-size: 20px;
+}
+
+.modal-number {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #777;
+}
+
+.modal-title {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 6vw, 6rem);
+    line-height: .9;
+    font-weight: 500;
+
+    margin: 25px 0;
+}
+
+.modal-description {
+    max-width: 650px;
+    color: #666;
+    line-height: 1.9;
+    font-size: 14px;
+}
+
+.modal-grid {
+    margin-top: 45px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    border-top: 1px solid #ccc;
+}
+
+.modal-info {
+    padding: 25px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.modal-info:nth-child(odd) {
+    margin-right: 30px;
+}
+
+.modal-label {
+    display: block;
+    font-family: var(--mono);
+    font-size: 8px;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 12px;
+}
+
+.modal-value {
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width: 950px) {
+
+    .cursor,
+    .cursor-ring {
+        display: none;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 80px;
+        right: 5%;
+
+        width: 230px;
+
+        background: var(--surface);
+        border: 1px solid var(--line);
+        padding: 25px;
+
+        flex-direction: column;
+        gap: 22px;
+
+        opacity: 0;
+        visibility: hidden;
+
+        transform: translateY(-15px);
+
+        transition: .3s;
+    }
+
+    .nav-links.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .menu-btn {
+        display: grid;
+    }
+
+    .hero-grid,
+    .about-grid,
+    .contact-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-visual {
+        order: -1;
+    }
+
+    .hero-frame {
+        width: 320px;
+    }
+
+    .hero-index {
+        right: 5%;
+    }
+
+    .about-grid {
+        gap: 60px;
+    }
+
+    .skills-layout,
+    .split-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+        gap: 50px;
+    }
+
+    .footer-meta {
+        text-align: left;
+    }
+
+    .footer-logo {
+        margin-left: 0;
+    }
+
+}
+
+
+@media(max-width: 600px) {
+
+    section {
+        padding: 90px 0;
+    }
+
+    .hero {
+        padding-top: 110px;
+    }
+
+    .hero-title {
+        font-size: 4.7rem;
+        letter-spacing: -5px;
+    }
+
+    .hero-frame {
+        width: 270px;
+    }
+
+    .hero-stamp {
+        left: -15px;
+        width: 75px;
+        height: 75px;
+        font-size: 7px;
+    }
+
+    .section-title {
+        letter-spacing: -3px;
+    }
+
+    .about-info {
+        grid-template-columns: 1fr;
+    }
+
+    .info-item:nth-child(odd) {
+        margin-right: 0;
+    }
+
+    .education-card {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .cgpa {
+        font-size: 2rem;
+    }
+
+    .project-card {
+        grid-template-columns: 55px 1fr 45px;
+        gap: 15px;
+    }
+
+    .project-card:hover {
+        padding-left: 8px;
+    }
+
+    .project-arrow {
+        width: 38px;
+        height: 38px;
+    }
+
+    .modal-box {
+        padding: 35px 23px;
+    }
+
+    .modal-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-info:nth-child(odd) {
+        margin-right: 0;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .hero-footer {
+        display: none;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<!-- =========================================================
+     CURSOR
+========================================================= -->
+
+<div class="cursor"></div>
+<div class="cursor-ring"></div>
+
+
+<!-- =========================================================
+     LOADER
+========================================================= -->
+
+<div class="loader" id="loader">
+
+    <div class="loader-inner">
+
+        <div class="loader-top">
+            <span>SKILLAURA 2026</span>
+            <span>PORTFOLIO</span>
+        </div>
+
+        <div class="loader-number" id="loaderNumber">
+            00
+        </div>
+
+        <div class="loader-bar">
+            <div class="loader-progress" id="loaderProgress"></div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     NAVIGATION
+========================================================= -->
+
+<header class="nav" id="nav">
+
+    <a href="#home" class="brand">
+        SARANYA<span>.</span>
+    </a>
+
+    <ul class="nav-links" id="navLinks">
+
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#journey">Journey</a></li>
+        <li><a href="#contact">Contact</a></li>
+
+    </ul>
+
+    <div class="nav-actions">
+
+        <button class="nav-btn menu-btn" id="menuBtn">
+            ☰
+        </button>
+
+        <button class="nav-btn" id="topBtn">
+            ↑
+        </button>
+
+    </div>
+
+</header>
+
+
+<!-- =========================================================
+     HERO
+========================================================= -->
+
+<main>
+
+<section class="hero" id="home">
+
+    <div class="container">
+
+        <div class="hero-grid">
+
+            <div class="hero-content reveal">
+
+                <div class="hero-kicker">
+                    B.E. Computer Science & Engineering
+                </div>
+
+                <h1 class="hero-title">
+
+                    SARANYA
+
+                    <br>
+
+                    <span class="serif">
+                        KRISHNAN
+                    </span>
+
+                </h1>
+
+                <div class="hero-subtitle">
+                    Developer · AI Enthusiast · Problem Solver
+                </div>
+
+                <p class="hero-copy">
+                    A Computer Science and Engineering student with a strong
+                    interest in software development, artificial intelligence,
+                    modern web technologies and building practical digital
+                    experiences.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="#projects" class="btn btn-black">
+                        Explore Projects →
+                    </a>
+
+                    <a href="#contact" class="btn">
+                        Let's Connect
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-visual reveal">
+
+                <div class="hero-frame">
+
+                    <img
+                        src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saranya-standing.png"
+                        alt="Saranya Krishnan"
+                    >
+
+                </div>
+
+                <div class="hero-index">
+                    01 / 09 — INTRODUCTION
+                </div>
+
+                <div class="hero-stamp">
+                    SK<br>
+                    2026<br>
+                    CREATE
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="hero-footer">
+
+        <span>
+            CHENNAI · INDIA
+        </span>
+
+        <span>
+            SCROLL TO EXPLORE ↓
+        </span>
+
+        <span>
+            2024 — 2028
+        </span>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ABOUT
+========================================================= -->
+
+<section class="about" id="about">
+
+    <div class="container">
+
+        <div class="section-meta reveal">
+
+            <span class="section-number">
+                02 / About
+            </span>
+
+            <span>
+                Profile
+            </span>
+
+        </div>
+
+
+        <div class="about-grid">
+
+            <div class="about-portrait reveal">
+
+                <img
+                    src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saranya.png"
+                    alt="Saranya Krishnan portrait"
+                >
+
+            </div>
+
+
+            <div class="reveal">
+
+                <h2 class="about-heading">
+
+                    Building a future
+                    <em>one idea</em>
+                    at a time.
+
+                </h2>
+
+                <p class="about-text">
+
+                    Saranya Krishnan is a Computer Science and Engineering
+                    student with a strong interest in software development,
+                    artificial intelligence and modern web technologies.
+
+                    She enjoys learning new technologies, participating in
+                    technical events, solving programming problems and
+                    building practical projects.
+
+                    She is currently developing her technical skills and
+                    working toward a strong professional profile for future
+                    internships and placements.
+
+                </p>
+
+
+                <div class="about-info">
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Full Name
+                        </span>
+
+                        <span class="info-value">
+                            Saranya Krishnan
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Course
+                        </span>
+
+                        <span class="info-value">
+                            B.E. Computer Science & Engineering
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            College
+                        </span>
+
+                        <span class="info-value">
+                            Kings Engineering College, Chennai
+                        </span>
+
+                    </div>
+
+
+                    <div class="info-item">
+
+                        <span class="info-label">
+                            Batch
+                        </span>
+
+                        <span class="info-value">
+                            2024 — 2028
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     EDUCATION
+========================================================= -->
+
+<section id="education">
+
+    <div class="container">
+
+        <div class="section-meta reveal">
+
+            <span class="section-number">
+                03 / Education
+            </span>
+
+            <span>
+                Academic Journey
+            </span>
+
+        </div>
+
+
+        <h2 class="section-title reveal">
+            Learning<br>
+            with purpose.
+        </h2>
+
+
+        <div class="education-grid reveal">
+
+            <div class="education-card">
+
+                <div class="edu-year">
+                    2024 — 2028
+                </div>
+
+                <div class="edu-main">
+
+                    <h3>
+                        Bachelor of Engineering
+                    </h3>
+
+                    <p>
+                        Computer Science and Engineering ·
+                        Kings Engineering College, Chennai
+                    </p>
+
+                </div>
+
+                <div class="cgpa">
+                    8.4
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SKILLS
+========================================================= -->
+
+<section class="skills" id="skills">
+
+    <div class="container">
+
+        <div class="section-meta reveal">
+
+            <span class="section-number">
+                04 / Skills
+            </span>
+
+            <span>
+                Technical Toolkit
+            </span>
+
+        </div>
+
+
+        <h2 class="section-title reveal">
+            Tools for<br>
+            tomorrow.
+        </h2>
+
+
+        <p class="section-intro reveal">
+
+            A growing technical foundation across programming,
+            web development, databases, development tools and
+            problem-solving domains.
+
+        </p>
+
+
+        <div class="skills-layout">
+
+
+            <div>
+
+                <div class="skill-category reveal">
+
+                    <h3>
+                        Programming
+                    </h3>
+
+                    <div class="skill-list">
+
+                        <span class="skill-pill">C</span>
+                        <span class="skill-pill">Python</span>
+                        <span class="skill-pill">Java</span>
+                        <span class="skill-pill">JavaScript</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-category reveal">
+
+                    <h3>
+                        Web Development
+                    </h3>
+
+                    <div class="skill-list">
+
+                        <span class="skill-pill">HTML</span>
+                        <span class="skill-pill">CSS</span>
+                        <span class="skill-pill">JavaScript</span>
+                        <span class="skill-pill">React</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div>
+
+                <div class="skill-category reveal">
+
+                    <h3>
+                        Database
+                    </h3>
+
+                    <div class="skill-list">
+
+                        <span class="skill-pill">MySQL</span>
+                        <span class="skill-pill">MongoDB</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-category reveal">
+
+                    <h3>
+                        Tools & Technologies
+                    </h3>
+
+                    <div class="skill-list">
+
+                        <span class="skill-pill">Git</span>
+                        <span class="skill-pill">GitHub</span>
+                        <span class="skill-pill">VS Code</span>
+                        <span class="skill-pill">REST APIs</span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="skill-category reveal">
+
+                    <h3>
+                        Areas of Interest
+                    </h3>
+
+                    <div class="skill-list">
+
+                        <span class="skill-pill">Artificial Intelligence</span>
+                        <span class="skill-pill">Web Development</span>
+                        <span class="skill-pill">Software Development</span>
+                        <span class="skill-pill">Problem Solving</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     PROJECTS
+========================================================= -->
+
+<section id="projects">
+
+    <div class="container">
+
+        <div class="section-meta reveal">
+
+            <span class="section-number">
+                05 / Projects
+            </span>
+
+            <span>
+                Interactive Project Explorer
+            </span>
+
+        </div>
+
+
+        <div class="projects-header">
+
+            <h2 class="section-title reveal">
+                Ideas into<br>
+                reality.
+            </h2>
+
+            <p class="section-intro reveal">
+
+                Explore the projects and the problems they are
+                designed to address. Click any project to reveal
+                its technology stack and key features.
+
+            </p>
+
+        </div>
+
+
+        <div class="project-list">
+
+
+            <!-- PROJECT 01 -->
+
+            <article
+                class="project-card reveal"
+                onclick="openProject(0)"
+            >
+
+                <div class="project-number">
+                    PROJECT 01
+                </div>
+
+                <div class="project-main">
+
+                    <h3>
+                        CampusConnect
+                    </h3>
+
+                    <p>
+                        A student-focused platform designed to help
+                        students discover and participate in college events.
+                    </p>
+
+                    <div class="project-tags">
+
+                        <span class="project-tag">
+                            HTML
+                        </span>
+
+                        <span class="project-tag">
+                            CSS
+                        </span>
+
+                        <span class="project-tag">
+                            JavaScript
+                        </span>
+
+                        <span class="project-tag">
+                            React
+                        </span>
+
+                        <span class="project-tag">
+                            Node.js
+                        </span>
+
+                        <span class="project-tag">
+                            MongoDB
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="project-arrow">
+                    ↗
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 02 -->
+
+            <article
+                class="project-card reveal"
+                onclick="openProject(1)"
+            >
+
+                <div class="project-number">
+                    PROJECT 02
+                </div>
+
+                <div class="project-main">
+
+                    <h3>
+                        Smart Expense Tracker
+                    </h3>
+
+                    <p>
+                        A web application that helps students record
+                        and monitor their daily expenses.
+                    </p>
+
+                    <div class="project-tags">
+
+                        <span class="project-tag">
+                            HTML
+                        </span>
+
+                        <span class="project-tag">
+                            CSS
+                        </span>
+
+                        <span class="project-tag">
+                            JavaScript
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="project-arrow">
+                    ↗
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 03 -->
+
+            <article
+                class="project-card reveal"
+                onclick="openProject(2)"
+            >
+
+                <div class="project-number">
+                    PROJECT 03
+                </div>
+
+                <div class="project-main">
+
+                    <h3>
+                        AI Study Assistant
+                    </h3>
+
+                    <p>
+                        An AI-powered study assistant designed to help
+                        students organize their learning and study more
+                        effectively.
+                    </p>
+
+                    <div class="project-tags">
+
+                        <span class="project-tag">
+                            Python
+                        </span>
+
+                        <span class="project-tag">
+                            AI API
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="project-arrow">
+                    ↗
+                </div>
+
+            </article>
+
+
+            <!-- PROJECT 04 -->
+
+            <article
+                class="project-card reveal"
+                onclick="openProject(3)"
+            >
+
+                <div class="project-number">
+                    PROJECT 04
+                </div>
+
+                <div class="project-main">
+
+                    <h3>
+                        Personal Portfolio
+                    </h3>
+
+                    <p>
+                        A personal portfolio project created to showcase
+                        academic information, technical skills, projects
+                        and achievements.
+                    </p>
+
+                    <div class="project-tags">
+
+                        <span class="project-tag">
+                            HTML
+                        </span>
+
+                        <span class="project-tag">
+                            CSS
+                        </span>
+
+                        <span class="project-tag">
+                            JavaScript
+                        </span>
+
+                    </div>
+
+                </div>
+
+                <div class="project-arrow">
+                    ↗
+                </div>
+
+            </article>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     ACHIEVEMENTS + CERTIFICATIONS
+========================================================= -->
+
+<section class="split-section" id="journey">
+
+    <div class="container">
+
+        <div class="section-meta reveal">
+
+            <span>
+                06 / Journey
+            </span>
+
+            <span>
+                Growth & Recognition
+            </span>
+
+        </div>
+
+
+        <div class="split-grid">
+
+
+            <!-- ACHIEVEMENTS -->
+
+            <div>
+
+                <h2 class="split-title reveal">
+                    Experience<br>
+                    in action.
+                </h2>
+
+
+                <div class="timeline">
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Participated in college-level hackathons.
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Participated in inter-college technical competitions.
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Participated in coding challenges.
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Active participant in technical workshops.
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Member of the college technical community.
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- CERTIFICATIONS -->
+
+            <div>
+
+                <h2 class="split-title reveal">
+                    Knowledge<br>
+                    collected.
+                </h2>
+
+
+                <div class="timeline">
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Python Programming Fundamentals
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Web Development Fundamentals
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Introduction to Generative AI
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Git & GitHub Fundamentals
+                        </div>
+
+                    </div>
+
+
+                    <div class="timeline-item reveal">
+
+                        <div class="timeline-dot"></div>
+
+                        <div class="timeline-text">
+                            Introduction to Machine Learning
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     INTERESTS
+========================================================= -->
+
+<section id="interests">
+
+    <div class="container">
+
+        <div class="section-meta reveal">
+
+            <span class="section-number">
+                07 / Interests
+            </span>
+
+            <span>
+                Beyond the Code
+            </span>
+
+        </div>
+
+
+        <h2 class="section-title reveal">
+            Curious by<br>
+            nature.
+        </h2>
+
+
+        <div class="interest-cloud">
+
+            <span class="interest reveal">
+                Coding
+            </span>
+
+            <span class="interest reveal">
+                Artificial Intelligence
+            </span>
+
+            <span class="interest reveal">
+                Web Development
+            </span>
+
+            <span class="interest reveal">
+                Gaming
+            </span>
+
+            <span class="interest reveal">
+                Technology
+            </span>
+
+            <span class="interest reveal">
+                Open Source
+            </span>
+
+            <span class="interest reveal">
+                Learning New Technologies
+            </span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CAREER GOAL
+========================================================= -->
+
+<section class="career">
+
+    <div class="container">
+
+        <div class="career-label reveal">
+            08 / Career Goal
+        </div>
+
+        <div class="career-quote reveal">
+
+            <span class="quote-mark">“</span>
+
+            To become a skilled software engineer
+            and build innovative technology that
+            solves real-world problems.
+
+            <span class="quote-mark">”</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     CONTACT
+========================================================= -->
+
+<section class="contact" id="contact">
+
+    <div class="container">
+
+        <div class="section-meta reveal">
+
+            <span class="section-number">
+                09 / Contact
+            </span>
+
+            <span>
+                Start a Conversation
+            </span>
+
+        </div>
+
+
+        <div class="contact-grid">
+
+            <div class="reveal">
+
+                <h2 class="contact-heading">
+                    Let's build<br>
+                    something.
+                </h2>
+
+                <a
+                    href="mailto:saranya.krishnan@example.com"
+                    class="contact-email"
+                >
+                    saranya.krishnan@example.com
+                </a>
+
+            </div>
+
+
+            <div class="contact-details reveal">
+
+                <div class="contact-row">
+
+                    <span class="contact-label">
+                        Email
+                    </span>
+
+                    saranya.krishnan@example.com
+
+                </div>
+
+
+                <div class="contact-row">
+
+                    <span class="contact-label">
+                        Location
+                    </span>
+
+                    Chennai, Tamil Nadu
+
+                </div>
+
+
+                <div class="contact-row">
+
+                    <span class="contact-label">
+                        Education
+                    </span>
+
+                    B.E. Computer Science and Engineering
+
+                </div>
+
+
+                <div class="contact-row">
+
+                    <span class="contact-label">
+                        Batch
+                    </span>
+
+                    2024 — 2028
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+</main>
+
+
+<!-- =========================================================
+     PROJECT MODAL
+========================================================= -->
+
+<div class="modal" id="projectModal">
+
+    <div class="modal-box">
+
+        <button
+            class="modal-close"
+            onclick="closeProject()"
+        >
+            ×
+        </button>
+
+
+        <div
+            class="modal-number"
+            id="modalNumber"
+        >
+            PROJECT 01
+        </div>
+
+
+        <h2
+            class="modal-title"
+            id="modalTitle"
+        >
+            CampusConnect
+        </h2>
+
+
+        <p
+            class="modal-description"
+            id="modalDescription"
+        ></p>
+
+
+        <div class="modal-grid">
+
+            <div class="modal-info">
+
+                <span class="modal-label">
+                    Technologies
+                </span>
+
+                <div
+                    class="modal-value"
+                    id="modalTech"
+                ></div>
+
+            </div>
+
+
+            <div class="modal-info">
+
+                <span class="modal-label">
+                    Key Features
+                </span>
+
+                <div
+                    class="modal-value"
+                    id="modalFeatures"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
+<footer>
+
+    <div class="container">
+
+        <div class="footer-top">
+
+            <div>
+
+                <div class="footer-brand">
+                    Built with<br>
+                    creativity.
+                </div>
+
+                <p class="footer-text">
+
+                    Crafted with AI. Remembered as a milestone.
+
+                    A portfolio created during SkillAura 2026 —
+                    Prompt2Portfolio.
+
+                </p>
+
+            </div>
+
+
+            <div class="footer-meta">
+
+                <img
+                    class="footer-logo"
+                    src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/footer/logo.png"
+                    alt="SkillAura 2026"
+                >
+
+                <div>
+                    SKILLAURA 2026 — PROMPT2PORTFOLIO
+                </div>
+
+                <div>
+                    SARANYA KRISHNAN
+                </div>
+
+                <div>
+                    B.E. COMPUTER SCIENCE & ENGINEERING
+                </div>
+
+                <div>
+                    2024 — 2028
+                </div>
+
+                <div>
+                    KINGS ENGINEERING COLLEGE, CHENNAI
+                </div>
+
+                <div>
+                    31 AUGUST 2026
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="footer-bottom">
+
+            <span>
+                BUILD SKILLS • IGNITE IDEAS • LEAVE YOUR AURA
+            </span>
+
+            <span>
+                © 2026 SARANYA KRISHNAN
+            </span>
+
+        </div>
+
+
+        <!-- SkillAura required footer code -->
+
+        <img
+            src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev-day10&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto"
+            width="1"
+            height="1"
+            alt=""
+            style="position:absolute;visibility:hidden;"
+        />
+
+    </div>
+
+</footer>
+
+
+<script>
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+let progress = 0;
+
+const loaderNumber =
+    document.getElementById("loaderNumber");
+
+const loaderProgress =
+    document.getElementById("loaderProgress");
+
+const loaderInterval =
+    setInterval(() => {
+
+        progress += Math.floor(Math.random() * 8) + 3;
+
+        if(progress >= 100) {
+
+            progress = 100;
+
+            clearInterval(loaderInterval);
+
+            setTimeout(() => {
+
+                document
+                    .getElementById("loader")
+                    .classList.add("hide");
+
+            }, 500);
+
+        }
+
+        loaderNumber.textContent =
+            String(progress).padStart(2, "0");
+
+        loaderProgress.style.width =
+            progress + "%";
+
+    }, 100);
+
+
+/* =========================================================
+   NAVBAR
+========================================================= */
+
+const nav =
+    document.getElementById("nav");
+
+window.addEventListener("scroll", () => {
+
+    if(window.scrollY > 60) {
+
+        nav.classList.add("scrolled");
+
+    } else {
+
+        nav.classList.remove("scrolled");
+
+    }
+
+});
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+const menuBtn =
+    document.getElementById("menuBtn");
+
+const navLinks =
+    document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => {
+
+    navLinks.classList.toggle("open");
+
+});
+
+document
+    .querySelectorAll(".nav-links a")
+    .forEach(link => {
+
+        link.addEventListener("click", () => {
+
+            navLinks.classList.remove("open");
+
+        });
+
+    });
+
+
+/* =========================================================
+   TOP BUTTON
+========================================================= */
+
+document
+    .getElementById("topBtn")
+    .addEventListener("click", () => {
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+
+/* =========================================================
+   SCROLL REVEAL
+========================================================= */
+
+const revealElements =
+    document.querySelectorAll(".reveal");
+
+const revealObserver =
+    new IntersectionObserver(
+        entries => {
+
+            entries.forEach(entry => {
+
+                if(entry.isIntersecting) {
+
+                    entry.target
+                        .classList
+                        .add("visible");
+
+                    revealObserver
+                        .unobserve(entry.target);
+
+                }
+
+            });
+
+        },
+        {
+            threshold: .12
+        }
+    );
+
+
+revealElements.forEach(element => {
+
+    revealObserver.observe(element);
+
+});
+
+
+/* =========================================================
+   CUSTOM CURSOR
+========================================================= */
+
+const cursor =
+    document.querySelector(".cursor");
+
+const ring =
+    document.querySelector(".cursor-ring");
+
+document.addEventListener("mousemove", event => {
+
+    cursor.style.left =
+        event.clientX + "px";
+
+    cursor.style.top =
+        event.clientY + "px";
+
+    ring.style.left =
+        event.clientX + "px";
+
+    ring.style.top =
+        event.clientY + "px";
+
+});
+
+
+document
+    .querySelectorAll("a, button, .project-card, .skill-pill, .interest")
+    .forEach(element => {
+
+        element.addEventListener("mouseenter", () => {
+
+            document.body
+                .classList
+                .add("cursor-hover");
+
+        });
+
+        element.addEventListener("mouseleave", () => {
+
+            document.body
+                .classList
+                .remove("cursor-hover");
+
+        });
+
+    });
+
+
+/* =========================================================
+   PROJECT DATA
+========================================================= */
+
+const projects = [
+
+    {
+
+        number: "PROJECT 01",
+
+        title: "CampusConnect",
+
+        description:
+        "A student-focused platform designed to help students discover and participate in college events.",
+
+        tech:
+        "HTML, CSS, JavaScript, React, Node.js, MongoDB",
+
+        features:
+        "Event listing · Event registration · Student dashboard · Event search · Admin event management"
+
+    },
+
+
+    {
+
+        number: "PROJECT 02",
+
+        title: "Smart Expense Tracker",
+
+        description:
+        "A web application that helps students record and monitor their daily expenses.",
+
+        tech:
+        "HTML, CSS, JavaScript",
+
+        features:
+        "Add expenses · Categorize expenses · Monthly expense summary · Spending analysis · Data visualization"
+
+    },
+
+
+    {
+
+        number: "PROJECT 03",
+
+        title: "AI Study Assistant",
+
+        description:
+        "An AI-powered study assistant designed to help students organize their learning and study more effectively.",
+
+        tech:
+        "Python, AI API",
+
+        features:
+        "Generate topic summaries · Generate quiz questions · Study suggestions · Interactive AI assistance"
+
+    },
+
+
+    {
+
+        number: "PROJECT 04",
+
+        title: "Personal Portfolio",
+
+        description:
+        "A personal portfolio project created to showcase academic information, technical skills, projects and achievements.",
+
+        tech:
+        "HTML, CSS, JavaScript",
+
+        features:
+        "Academic profile · Technical skills · Project showcase · Achievement presentation"
+
+    }
+
+];
+
+
+/* =========================================================
+   OPEN PROJECT
+========================================================= */
+
+function openProject(index) {
+
+    const project =
+        projects[index];
+
+    document
+        .getElementById("modalNumber")
+        .textContent =
+        project.number;
+
+    document
+        .getElementById("modalTitle")
+        .textContent =
+        project.title;
+
+    document
+        .getElementById("modalDescription")
+        .textContent =
+        project.description;
+
+    document
+        .getElementById("modalTech")
+        .textContent =
+        project.tech;
+
+    document
+        .getElementById("modalFeatures")
+        .textContent =
+        project.features;
+
+    document
+        .getElementById("projectModal")
+        .classList
+        .add("active");
+
+    document.body.classList.add("lock");
+
+}
+
+
+/* =========================================================
+   CLOSE PROJECT
+========================================================= */
+
+function closeProject() {
+
+    document
+        .getElementById("projectModal")
+        .classList
+        .remove("active");
+
+    document.body.classList.remove("lock");
+
+}
+
+
+/* =========================================================
+   CLOSE MODAL ON BACKDROP
+========================================================= */
+
+document
+    .getElementById("projectModal")
+    .addEventListener("click", event => {
+
+        if(event.target.id === "projectModal") {
+
+            closeProject();
+
+        }
+
+    });
+
+
+/* =========================================================
+   ESCAPE KEY
+========================================================= */
+
+document.addEventListener("keydown", event => {
+
+    if(event.key === "Escape") {
+
+        closeProject();
+
+    }
+
+});
+
+
+/* =========================================================
+   PARALLAX HERO IMAGE
+========================================================= */
+
+const heroImage =
+    document.querySelector(".hero-frame");
+
+window.addEventListener("scroll", () => {
+
+    if(window.innerWidth > 950) {
+
+        const y =
+            window.scrollY * .08;
+
+        heroImage.style.transform =
+            `translateY(${y}px)`;
+
+    }
+
+});
+
+
+/* =========================================================
+   MAGNETIC BUTTON EFFECT
+========================================================= */
+
+document
+    .querySelectorAll(".btn")
+    .forEach(button => {
+
+        button.addEventListener("mousemove", event => {
+
+            if(window.innerWidth < 950) return;
+
+            const rect =
+                button.getBoundingClientRect();
+
+            const x =
+                event.clientX - rect.left - rect.width / 2;
+
+            const y =
+                event.clientY - rect.top - rect.height / 2;
+
+            button.style.transform =
+                `translate(${x * .12}px, ${y * .12}px)`;
+
+        });
+
+
+        button.addEventListener("mouseleave", () => {
+
+            button.style.transform = "";
+
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>
+```

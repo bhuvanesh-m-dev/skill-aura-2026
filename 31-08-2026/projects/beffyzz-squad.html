@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beffyzz Squad · Interactive Portfolio & App Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c0b0e; color: #fff; }
+        .font-display { font-family: 'Space Grotesk', sans-serif; }
+    </style>
+</head>
+<body class="bg-[#0c0b0e] text-white min-h-screen">
+    <!-- Navbar -->
+    <nav class="fixed top-0 w-full z-50 bg-[#0c0b0e]/80 backdrop-blur-md border-b border-white/10 px-8 py-4 flex justify-between items-center">
+        <div class="font-display text-xl font-bold tracking-wider text-purple-400">BEFFYZZ<span class="text-white">.SQUAD</span></div>
+        <div class="flex gap-6 text-sm text-gray-300 font-medium">
+            <a href="#about" class="hover:text-purple-400 transition">About</a>
+            <a href="#projects" class="hover:text-purple-400 transition">Projects</a>
+            <a href="#skills" class="hover:text-purple-400 transition">Skills</a>
+            <a href="#team" class="hover:text-purple-400 transition">Team</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
+        <div class="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-widest mb-6">
+            SkillAura 2026 • Interactive Orbit
+        </div>
+        <h1 class="font-display text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white via-purple-200 to-purple-500 bg-clip-text text-transparent">
+            BEFFYZZ SQUAD
+        </h1>
+        <p class="max-w-2xl text-gray-400 text-lg md:text-xl mb-10 leading-relaxed">
+            Building next-generation digital experiences, interactive web applications, and intelligent student software solutions.
+        </p>
+        <div class="flex gap-4">
+            <a href="#projects" class="px-8 py-3.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold transition shadow-lg shadow-purple-600/30">
+                Explore Projects
+            </a>
+            <a href="#team" class="px-8 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold border border-white/10 transition">
+                Meet Team
+            </a>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team" class="py-20 px-8 max-w-6xl mx-auto">
+        <h2 class="font-display text-3xl font-bold text-center mb-12 text-purple-300">Team Members</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-purple-500/50 transition">
+                <h3 class="font-display text-2xl font-bold text-purple-400 mb-2">Ezhil Oviya</h3>
+                <p class="text-sm text-gray-400">B.E. Computer Science & Engineering</p>
+            </div>
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-purple-500/50 transition">
+                <h3 class="font-display text-2xl font-bold text-purple-400 mb-2">Abishiya</h3>
+                <p class="text-sm text-gray-400">B.E. Computer Science & Engineering</p>
+            </div>
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-purple-500/50 transition">
+                <h3 class="font-display text-2xl font-bold text-purple-400 mb-2">Janani</h3>
+                <p class="text-sm text-gray-400">B.E. Computer Science & Engineering</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-20 px-8 max-w-6xl mx-auto">
+        <h2 class="font-display text-3xl font-bold text-center mb-12 text-purple-300">Featured Applications</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/50 transition">
+                <div class="text-purple-400 text-sm font-semibold mb-2">01 / Orbit</div>
+                <h3 class="font-display text-2xl font-bold mb-4">CampusConnect</h3>
+                <p class="text-gray-400 text-sm mb-6">Student event orbit bringing discovery, registration, and announcements into a focused hub.</p>
+                <div class="flex gap-2 text-xs font-mono text-purple-300">
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20">React</span>
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20">Tailwind</span>
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20">TypeScript</span>
+                </div>
+            </div>
+            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/50 transition">
+                <div class="text-purple-400 text-sm font-semibold mb-2">02 / Finance</div>
+                <h3 class="font-display text-2xl font-bold mb-4">Smart Expense Tracker</h3>
+                <p class="text-gray-400 text-sm mb-6">Real-time daily budget monitor for students with analytics and spending insights.</p>
+                <div class="flex gap-2 text-xs font-mono text-purple-300">
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20">JS</span>
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20">HTML5</span>
+                    <span class="px-3 py-1 rounded-full bg-purple-500/20">CSS3</span>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html>

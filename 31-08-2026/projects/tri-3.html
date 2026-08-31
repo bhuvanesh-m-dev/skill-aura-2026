@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saran Krishnan — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+  /* ============ TOKENS ============ */
+  :root {
+    --purple-900: #2a1250;
+    --purple-700: #5b21b6;
+    --purple-500: #7c3aed;
+    --purple-300: #c4b5fd;
+    --pink-600: #db2777;
+    --pink-500: #ec4899;
+    --pink-300: #f9a8d4;
+
+    --font-display: 'Unbounded', sans-serif;
+    --font-body: 'Inter', sans-serif;
+
+    --radius-sm: 10px;
+    --radius-md: 18px;
+    --radius-lg: 28px;
+  }
+
+  html[data-theme="dark"] {
+    --bg: #0e0a1a;
+    --bg-raised: #171029;
+    --bg-card: #1c1430;
+    --text-primary: #f4f1fb;
+    --text-secondary: #b7abd6;
+    --text-muted: #7c72a0;
+    --border: rgba(196, 181, 253, 0.14);
+    --grad-accent: linear-gradient(135deg, var(--purple-500), var(--pink-500));
+    --shadow-glow: 0 30px 80px -30px rgba(124, 58, 237, 0.45);
+  }
+
+  html[data-theme="light"] {
+    --bg: #faf7ff;
+    --bg-raised: #ffffff;
+    --bg-card: #ffffff;
+    --text-primary: #221a3a;
+    --text-secondary: #5c5178;
+    --text-muted: #948aad;
+    --border: rgba(124, 58, 237, 0.14);
+    --grad-accent: linear-gradient(135deg, var(--purple-500), var(--pink-500));
+    --shadow-glow: 0 30px 80px -30px rgba(124, 58, 237, 0.25);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    transition: background 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  a { color: inherit; text-decoration: none; }
+
+  section {
+    padding: clamp(64px, 10vw, 120px) clamp(20px, 6vw, 80px);
+    max-width: 1240px;
+    margin: 0 auto;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  .section-head {
+    max-width: 640px;
+    margin-bottom: 48px;
+  }
+
+  .section-head h2 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 600;
+    line-height: 1.15;
+  }
+
+  .section-head p {
+    color: var(--text-secondary);
+    margin-top: 12px;
+    font-size: 16px;
+    max-width: 56ch;
+  }
+
+  .kicker {
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--pink-500);
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--pink-500);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* ============ NAV ============ */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px clamp(20px, 6vw, 80px);
+    backdrop-filter: blur(14px);
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .logo-mark {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+  }
+
+  .logo-mark span { color: var(--pink-500); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 30px;
+  }
+
+  nav a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    transition: color 0.2s ease;
+  }
+
+  nav a:hover { color: var(--text-primary); }
+
+  .nav-right { display: flex; align-items: center; gap: 18px; }
+
+  .theme-toggle {
+    width: 44px; height: 24px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: var(--bg-raised);
+    position: relative;
+    cursor: pointer;
+  }
+
+  .theme-toggle::after {
+    content: "";
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    top: 2px; left: 2px;
+    background: var(--grad-accent);
+    transition: transform 0.3s ease;
+  }
+
+  html[data-theme="light"] .theme-toggle::after {
+    transform: translateX(20px);
+  }
+
+  .nav-toggle-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 820px) {
+    nav { display: none; }
+    .nav-toggle-btn { display: block; }
+    nav.open {
+      display: flex;
+      position: fixed;
+      top: 62px; left: 0; right: 0;
+      flex-direction: column;
+      background: var(--bg-raised);
+      padding: 20px clamp(20px, 6vw, 80px);
+      border-bottom: 1px solid var(--border);
+    }
+    nav.open ul { flex-direction: column; gap: 16px; }
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    min-height: 100svh;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    gap: 40px;
+    padding-top: 120px;
+    position: relative;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    top: -10%; right: -10%;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(236,72,153,0.18), transparent 70%);
+    filter: blur(10px);
+    z-index: -1;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 22px;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    width: fit-content;
+  }
+
+  .hero-eyebrow .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--grad-accent);
+  }
+
+  .hero h1 {
+    font-size: clamp(38px, 5.4vw, 64px);
+    font-weight: 700;
+    line-height: 1.08;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    background: var(--grad-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero p.lede {
+    margin-top: 22px;
+    font-size: 17px;
+    color: var(--text-secondary);
+    max-width: 46ch;
+  }
+
+  .hero-cta {
+    display: flex;
+    gap: 16px;
+    margin-top: 34px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    padding: 14px 26px;
+    border-radius: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+
+  .btn-primary {
+    background: var(--grad-accent);
+    color: #fff;
+    box-shadow: 0 14px 34px -12px rgba(219, 39, 119, 0.55);
+  }
+
+  .btn-primary:hover { transform: translateY(-2px); }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+  }
+
+  .btn-ghost:hover { border-color: var(--pink-500); }
+
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100%;
+    min-height: 460px;
+  }
+
+  .hero-standing {
+    width: min(320px, 80%);
+    filter: drop-shadow(0 30px 60px rgba(124, 58, 237, 0.35));
+    animation: hero-bob 5s ease-in-out infinite;
+  }
+
+  @keyframes hero-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+
+  /* mini laptop badge tucked beside the character */
+  .laptop-badge {
+    position: absolute;
+    left: 4%;
+    bottom: 6%;
+    width: 150px;
+    height: 150px;
+  }
+
+  /* ============ 3D LAPTOP ============ */
+  .stage {
+    perspective: 900px;
+    width: 100%;
+    height: 100%;
+  }
+
+  .laptop3d {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: rotateX(-16deg) rotateY(-26deg) scale(0.62);
+    animation: float3d 4.5s ease-in-out infinite;
+    transition: transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    cursor: pointer;
+  }
+
+  .stage:hover .laptop3d {
+    transform: rotateX(-12deg) rotateY(334deg) scale(0.68);
+    transition: transform 1.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  @keyframes float3d {
+    0%, 100% { translate: 0 0; }
+    50% { translate: 0 -10px; }
+  }
+
+  .l-base { position: absolute; width: 220px; height: 150px; left: 0; top: 90px; transform-style: preserve-3d; }
+  .l-base .face { position: absolute; inset: 0; }
+  .l-base .top { background: linear-gradient(135deg, var(--purple-300), var(--purple-500)); transform: rotateX(90deg) translateZ(6px); border-radius: 6px; }
+  .l-base .top::after { content:""; position:absolute; inset:14px 30px; background:#1c1530; border-radius:3px; }
+  .l-base .front { height:12px; top:138px; background: linear-gradient(180deg, var(--purple-500), var(--purple-700)); transform: translateZ(6px); border-radius:0 0 8px 8px; }
+  .l-base .bottom { background:#3b2166; transform: translateZ(-6px); border-radius:6px; }
+  .l-base .side-l { width:12px; height:12px; transform: rotateY(90deg) translateZ(6px); background: linear-gradient(180deg, var(--purple-500), var(--purple-700)); }
+  .l-base .side-r { width:12px; height:12px; left:208px; transform: rotateY(90deg) translateZ(-202px); background: linear-gradient(180deg, var(--purple-500), var(--purple-700)); }
+
+  .l-hinge { position:absolute; left:0; top:90px; width:220px; height:0; transform-style: preserve-3d; transform: rotateX(-100deg); }
+  .l-screen { position:absolute; width:220px; height:150px; transform-style: preserve-3d; }
+  .l-screen .panel { position:absolute; inset:0; background: linear-gradient(160deg, var(--pink-500), var(--pink-600)); border-radius:6px; transform: translateZ(4px); }
+  .l-screen .display { position:absolute; inset:8px; border-radius:3px; background: linear-gradient(150deg, #2a1140, #1c0f2e); transform: translateZ(4.5px); overflow:hidden; }
+  .l-screen .glow { position:absolute; inset:0; background: radial-gradient(circle at 30% 20%, rgba(236,72,153,0.6), transparent 60%), radial-gradient(circle at 75% 70%, rgba(124,58,237,0.55), transparent 55%); opacity:0.55; transition: opacity 0.8s ease; }
+  .stage:hover .l-screen .glow { opacity: 1; }
+  .l-screen .back { position:absolute; inset:0; border-radius:6px; background: linear-gradient(160deg, var(--pink-600), var(--purple-700)); transform: translateZ(-4px) rotateY(180deg); }
+
+  .laptop-caption {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; text-align: left; }
+    .hero-visual { min-height: 320px; margin-top: 20px; }
+  }
+
+  /* ============ ABOUT ============ */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 0.8fr 1.2fr;
+    gap: 56px;
+    align-items: center;
+  }
+
+  .portrait-wrap {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--grad-accent);
+    padding: 3px;
+  }
+
+  .portrait-wrap img {
+    border-radius: calc(var(--radius-lg) - 3px);
+    width: 100%;
+    background: var(--bg-raised);
+  }
+
+  .about-text p { color: var(--text-secondary); font-size: 16px; margin-bottom: 16px; max-width: 60ch; }
+
+  .quick-facts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 28px;
+  }
+
+  .fact {
+    padding: 16px 18px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .fact .label { font-size: 12px; color: var(--text-muted); margin-bottom: 4px; }
+  .fact .value { font-family: var(--font-display); font-size: 15px; font-weight: 500; }
+
+  @media (max-width: 760px) {
+    .about-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ============ EDUCATION ============ */
+  .edu-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    padding: 34px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    flex-wrap: wrap;
+  }
+
+  .edu-card h3 { font-size: 20px; font-weight: 600; margin-bottom: 6px; }
+  .edu-card .school { color: var(--text-secondary); font-size: 15px; }
+  .edu-card .years { color: var(--text-muted); font-size: 13px; margin-top: 6px; }
+
+  .cgpa-pill {
+    text-align: center;
+    padding: 18px 26px;
+    border-radius: 50%;
+    background: var(--grad-accent);
+    color: #fff;
+    min-width: 108px;
+  }
+
+  .cgpa-pill .num { font-family: var(--font-display); font-size: 26px; font-weight: 700; display:block; }
+  .cgpa-pill .lab { font-size: 10px; opacity: 0.85; }
+
+  /* ============ SKILLS ============ */
+  .skill-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 24px;
+  }
+
+  .skill-group {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 26px;
+  }
+
+  .skill-group h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--pink-500);
+  }
+
+  .tag-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .tag {
+    font-size: 13px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+  }
+
+  /* ============ PROJECTS ============ */
+  .project-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  .project-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transition: border-color 0.25s ease, transform 0.25s ease;
+  }
+
+  .project-card:hover {
+    border-color: var(--pink-500);
+    transform: translateY(-4px);
+  }
+
+  .project-card h3 { font-size: 19px; font-weight: 600; }
+
+  .project-card .desc { color: var(--text-secondary); font-size: 14.5px; }
+
+  .project-card .stack { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .stack span {
+    font-size: 11.5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: var(--bg-raised);
+    color: var(--purple-300);
+    border: 1px solid var(--border);
+  }
+
+  .project-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+  }
+
+  .project-card li {
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    padding-left: 16px;
+    position: relative;
+  }
+
+  .project-card li::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 8px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--grad-accent);
+  }
+
+  /* ============ CERTIFICATIONS & ACHIEVEMENTS ============ */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+  }
+
+  .list-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px;
+  }
+
+  .list-card .row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+    font-size: 14.5px;
+    color: var(--text-secondary);
+  }
+
+  .list-card .row:last-child { border-bottom: none; }
+
+  .row .mark {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--grad-accent);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 760px) {
+    .two-col { grid-template-columns: 1fr; }
+  }
+
+  /* ============ INTERESTS ============ */
+  .interests-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .interests-cloud .tag {
+    font-family: var(--font-display);
+    font-size: 13px;
+    padding: 10px 18px;
+  }
+
+  /* ============ CAREER GOAL ============ */
+  .goal-band {
+    background: var(--grad-accent);
+    border-radius: var(--radius-lg);
+    padding: clamp(40px, 7vw, 72px);
+    color: #fff;
+    text-align: left;
+  }
+
+  .goal-band .kicker { color: rgba(255,255,255,0.85); }
+
+  .goal-band blockquote {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3.4vw, 34px);
+    font-weight: 500;
+    line-height: 1.35;
+    max-width: 20ch;
+  }
+
+  /* ============ CONTACT ============ */
+  .contact-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+    flex-wrap: wrap;
+    padding: 40px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    background: var(--bg-card);
+  }
+
+  .contact-info h3 { font-size: 24px; font-weight: 600; margin-bottom: 8px; }
+  .contact-info p { color: var(--text-secondary); font-size: 15px; }
+
+  .contact-links { display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 56px clamp(20px, 6vw, 80px) 40px;
+    text-align: center;
+  }
+
+  footer .footer-logo {
+    width: 56px;
+    margin: 0 auto 22px;
+    opacity: 0.9;
+  }
+
+  footer .statement {
+    font-family: var(--font-display);
+    font-size: 16px;
+    font-weight: 500;
+    max-width: 40ch;
+    margin: 0 auto 18px;
+    line-height: 1.5;
+  }
+
+  footer .team-name {
+    background: var(--grad-accent);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    font-weight: 700;
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  footer .members {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 6px;
+  }
+
+  footer .meta {
+    color: var(--text-muted);
+    font-size: 12.5px;
+    margin-bottom: 20px;
+  }
+
+  footer .tagline {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+</style>
+</head>
+<body>
+
+  <header>
+    <div class="logo-mark">saran<span>.</span>dev</div>
+    <nav id="mainNav">
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#education">Education</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="nav-right">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode"></button>
+      <button class="nav-toggle-btn" id="navToggleBtn" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="home">
+    <div class="hero-copy">
+      <span class="hero-eyebrow"><span class="dot"></span>3rd year · Computer Science &amp; Engineering</span>
+      <h1>Building software that solves <em>real problems</em>, one project at a time.</h1>
+      <p class="lede">I'm Saran Krishnan, a CSE student who likes turning ideas into working products — from campus event platforms to AI-powered study tools.</p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View my projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img class="hero-standing" src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saran-standing.png" alt="Illustration of Saran Krishnan standing">
+      <div class="laptop-badge">
+        <div class="stage">
+          <div class="laptop3d">
+            <div class="l-base">
+              <div class="face top"></div>
+              <div class="face front"></div>
+              <div class="face bottom"></div>
+              <div class="face side-l"></div>
+              <div class="face side-r"></div>
+            </div>
+            <div class="l-hinge">
+              <div class="l-screen">
+                <div class="panel"></div>
+                <div class="display"><div class="glow"></div></div>
+                <div class="back"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <span class="laptop-caption">hover me</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about">
+    <div class="section-head">
+      <span class="kicker">About</span>
+      <h2>Curious builder, always learning something new.</h2>
+    </div>
+    <div class="about-grid">
+      <div class="portrait-wrap">
+        <img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saran.png" alt="Portrait of Saran Krishnan">
+      </div>
+      <div class="about-text">
+        <p>Saran Krishnan is a Computer Science and Engineering student with a strong interest in software development, artificial intelligence, and modern web technologies. He enjoys learning new technologies, participating in technical events, solving programming problems, and building practical projects.</p>
+        <p>He is currently developing his technical skills and working toward a strong professional profile for future internships and placements.</p>
+        <div class="quick-facts">
+          <div class="fact"><div class="label">Course</div><div class="value">B.E. Computer Science &amp; Engineering</div></div>
+          <div class="fact"><div class="label">Batch</div><div class="value">2024 – 2028</div></div>
+          <div class="fact"><div class="label">College</div><div class="value">Kings Engineering College, Chennai</div></div>
+          <div class="fact"><div class="label">Location</div><div class="value">Chennai, Tamil Nadu</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EDUCATION ============ -->
+  <section id="education">
+    <div class="section-head">
+      <span class="kicker">Education</span>
+      <h2>Academic background</h2>
+    </div>
+    <div class="edu-card">
+      <div>
+        <h3>Bachelor of Engineering — Computer Science and Engineering</h3>
+        <div class="school">Kings Engineering College, Chennai</div>
+        <div class="years">Batch 2024 – 2028 · Currently 3rd Year</div>
+      </div>
+      <div class="cgpa-pill">
+        <span class="num">8.4</span>
+        <span class="lab">CGPA / 10</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SKILLS ============ -->
+  <section id="skills">
+    <div class="section-head">
+      <span class="kicker">Skills</span>
+      <h2>Tools and technologies I work with</h2>
+    </div>
+    <div class="skill-groups">
+      <div class="skill-group">
+        <h3>Programming</h3>
+        <div class="tag-row">
+          <span class="tag">C</span><span class="tag">Python</span><span class="tag">Java</span><span class="tag">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Web Development</h3>
+        <div class="tag-row">
+          <span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">React</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Database</h3>
+        <div class="tag-row">
+          <span class="tag">MySQL</span><span class="tag">MongoDB</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Tools &amp; Technologies</h3>
+        <div class="tag-row">
+          <span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">VS Code</span><span class="tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-group">
+        <h3>Areas of Interest</h3>
+        <div class="tag-row">
+          <span class="tag">Artificial Intelligence</span><span class="tag">Web Development</span><span class="tag">Software Development</span><span class="tag">Problem Solving</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROJECTS ============ -->
+  <section id="projects">
+    <div class="section-head">
+      <span class="kicker">Projects</span>
+      <h2>A few things I've built</h2>
+      <p>Practical projects built to solve everyday problems for students, from event discovery to expense tracking.</p>
+    </div>
+    <div class="project-grid">
+
+      <div class="project-card">
+        <h3>CampusConnect</h3>
+        <p class="desc">A student-focused platform to help students discover and participate in college events.</p>
+        <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>React</span><span>Node.js</span><span>MongoDB</span></div>
+        <ul>
+          <li>Event listing</li>
+          <li>Event registration</li>
+          <li>Student dashboard</li>
+          <li>Event search</li>
+          <li>Admin event management</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <h3>Smart Expense Tracker</h3>
+        <p class="desc">A web application that helps students record and monitor their daily expenses.</p>
+        <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+        <ul>
+          <li>Add expenses</li>
+          <li>Categorize expenses</li>
+          <li>Monthly expense summary</li>
+          <li>Spending analysis</li>
+          <li>Data visualization</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <h3>AI Study Assistant</h3>
+        <p class="desc">An AI-powered study assistant designed to help students organize their learning and study more effectively.</p>
+        <div class="stack"><span>Python</span><span>AI API</span></div>
+        <ul>
+          <li>Generate topic summaries</li>
+          <li>Generate quiz questions</li>
+          <li>Study suggestions</li>
+          <li>Interactive AI assistance</li>
+        </ul>
+      </div>
+
+      <div class="project-card">
+        <h3>Personal Portfolio</h3>
+        <p class="desc">A personal portfolio project created to showcase academic information, technical skills, projects, and achievements.</p>
+        <div class="stack"><span>HTML</span><span>CSS</span><span>JavaScript</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ CERTIFICATIONS & ACHIEVEMENTS ============ -->
+  <section id="certifications">
+    <div class="section-head">
+      <span class="kicker">Certifications &amp; Achievements</span>
+      <h2>Learning that backs the work</h2>
+    </div>
+    <div class="two-col">
+      <div>
+        <h3 style="font-size:15px; margin-bottom:14px; color:var(--text-secondary);">Certifications</h3>
+        <div class="list-card">
+          <div class="row"><span class="mark"></span>Python Programming Fundamentals</div>
+          <div class="row"><span class="mark"></span>Web Development Fundamentals</div>
+          <div class="row"><span class="mark"></span>Introduction to Generative AI</div>
+          <div class="row"><span class="mark"></span>Git &amp; GitHub Fundamentals</div>
+          <div class="row"><span class="mark"></span>Introduction to Machine Learning</div>
+        </div>
+      </div>
+      <div>
+        <h3 style="font-size:15px; margin-bottom:14px; color:var(--text-secondary);">Achievements</h3>
+        <div class="list-card">
+          <div class="row"><span class="mark"></span>Participated in college-level hackathons</div>
+          <div class="row"><span class="mark"></span>Participated in inter-college technical competitions</div>
+          <div class="row"><span class="mark"></span>Participated in coding challenges</div>
+          <div class="row"><span class="mark"></span>Active participant in technical workshops</div>
+          <div class="row"><span class="mark"></span>Member of the college technical community</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ INTERESTS ============ -->
+  <section id="interests">
+    <div class="section-head">
+      <span class="kicker">Interests</span>
+      <h2>Outside the syllabus</h2>
+    </div>
+    <div class="interests-cloud">
+      <span class="tag">Coding</span>
+      <span class="tag">Artificial Intelligence</span>
+      <span class="tag">Web Development</span>
+      <span class="tag">Gaming</span>
+      <span class="tag">Technology</span>
+      <span class="tag">Open Source</span>
+      <span class="tag">Learning New Technologies</span>
+    </div>
+  </section>
+
+  <!-- ============ CAREER GOAL ============ -->
+  <section id="goal">
+    <div class="goal-band">
+      <span class="kicker">Career goal</span>
+      <blockquote>"To become a skilled software engineer and build innovative technology that solves real-world problems."</blockquote>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section id="contact">
+    <div class="section-head">
+      <span class="kicker">Contact</span>
+      <h2>Let's work together</h2>
+    </div>
+    <div class="contact-card">
+      <div class="contact-info">
+        <h3>Open to internships and collaborations</h3>
+        <p>saran.krishnan@example.com · Chennai, Tamil Nadu</p>
+      </div>
+      <div class="contact-links">
+        <a href="mailto:saran.krishnan@example.com" class="btn btn-primary">Email me</a>
+        <a href="#projects" class="btn btn-ghost">See my work</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer>
+    <img class="footer-logo" src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/footer/logo.png" alt="SkillAura 2026 logo">
+    <p class="statement">Built with creativity. Crafted with AI. Remembered as a milestone.</p>
+    <div class="team-name">tri 3</div>
+    <div class="members">Sujin Felix · Vishnu Prasath · Pravin Kumar S</div>
+    <div class="meta">2nd Year · B.E. Computer Science &amp; Engineering<br>SkillAura 2026 — Prompt2Portfolio · 31 August 2026 · Kings Engineering College</div>
+    <div class="tagline">BUILD SKILLS • IGNITE IDEAS • LEAVE YOUR AURA</div>
+    <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-devday10&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;">
+  </footer>
+
+  <script>
+    const toggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    toggle.addEventListener('click', () => {
+      root.setAttribute('data-theme', root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    });
+
+    const navBtn = document.getElementById('navToggleBtn');
+    const nav = document.getElementById('mainNav');
+    navBtn.addEventListener('click', () => nav.classList.toggle('open'));
+    nav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => nav.classList.remove('open')));
+  </script>
+
+</body>
+</html>
