@@ -1,95 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Beffyzz Squad · Interactive Portfolio & App Suite</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #0c0b0e; color: #fff; }
-        .font-display { font-family: 'Space Grotesk', sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Saranya Krishnan — AI & Technology portfolio">
+<title>Saranya Krishnan | Digital Universe</title>
+<style>
+:root{
+  --bg:#03050d; --panel:rgba(9,13,30,.72); --blue:#3b82ff; --purple:#9b5cff;
+  --cyan:#28f0ff; --text:#eef4ff; --muted:#9da9c7; --line:rgba(72,191,255,.2);
+}
+*{box-sizing:border-box;scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+#stars,#galaxy{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+#stars{z-index:-4}.nebula{position:fixed;inset:-20%;z-index:-5;background:
+radial-gradient(circle at 18% 25%,rgba(59,130,255,.16),transparent 24%),
+radial-gradient(circle at 78% 20%,rgba(155,92,255,.15),transparent 25%),
+radial-gradient(circle at 55% 80%,rgba(40,240,255,.09),transparent 28%),
+#03050d}
+#galaxy{z-index:-2;pointer-events:auto}
+body:before{content:"";position:fixed;inset:0;z-index:-3;opacity:.18;background-image:linear-gradient(rgba(40,240,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(40,240,255,.05) 1px,transparent 1px);background-size:70px 70px;mask-image:linear-gradient(to bottom,black,transparent 90%)}
+nav{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:20;width:min(92%,1000px);padding:12px 18px;border:1px solid var(--line);border-radius:20px;background:rgba(3,5,13,.66);backdrop-filter:blur(18px);display:flex;align-items:center;justify-content:space-between}
+.logo{font-weight:800;letter-spacing:.08em}.logo span{color:var(--cyan)}
+.navlinks{display:flex;gap:20px;font-size:13px;color:var(--muted)}.navlinks a:hover{color:white}
+section{width:min(1120px,92%);margin:auto;padding:100px 0;position:relative}
+.hero{min-height:100vh;display:grid;place-items:center;padding-top:130px}
+.hero-inner{text-align:center;max-width:850px}
+.eyebrow{display:inline-flex;gap:8px;align-items:center;padding:8px 14px;border:1px solid var(--line);border-radius:999px;background:rgba(10,18,40,.55);color:#b9d8ff;font-size:12px;letter-spacing:.12em;text-transform:uppercase}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 18px var(--cyan)}
+h1{font-size:clamp(52px,9vw,110px);line-height:.88;margin:25px 0 22px;letter-spacing:-.065em}
+.gradient{background:linear-gradient(100deg,#fff,var(--cyan),#8b6cff,#fff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{font-size:18px;line-height:1.7;color:var(--muted);max-width:680px;margin:0 auto}
+.cta{display:flex;justify-content:center;gap:12px;margin-top:32px;flex-wrap:wrap}
+.btn{padding:13px 20px;border-radius:12px;border:1px solid var(--line);background:rgba(13,20,42,.7);font-weight:700;font-size:14px;transition:.25s}
+.btn.primary{background:linear-gradient(100deg,var(--blue),var(--purple));border-color:transparent}
+.btn:hover{transform:translateY(-3px);box-shadow:0 0 28px rgba(40,240,255,.16)}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin-bottom:32px}
+.kicker{color:var(--cyan);font-size:12px;letter-spacing:.16em;text-transform:uppercase}
+h2{font-size:clamp(32px,5vw,56px);margin:7px 0 0;letter-spacing:-.04em}
+.lead{color:var(--muted);line-height:1.7;max-width:650px}
+.card{border:1px solid var(--line);background:var(--panel);backdrop-filter:blur(16px);border-radius:24px;padding:28px;box-shadow:0 20px 70px rgba(0,0,0,.25)}
+.about{display:grid;grid-template-columns:280px 1fr;gap:28px;align-items:stretch}
+.portrait{overflow:hidden;padding:0;min-height:360px;position:relative}
+.portrait img{width:100%;height:100%;object-fit:cover;display:block}
+.portrait:after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(3,5,13,.45),transparent 50%)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:22px}
+.stat{padding:18px;border:1px solid var(--line);border-radius:16px;background:rgba(255,255,255,.025)}
+.stat b{font-size:22px}.stat span{display:block;color:var(--muted);font-size:12px;margin-top:5px}
+.skills{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.skill{padding:20px;border:1px solid var(--line);border-radius:18px;background:rgba(7,11,25,.7)}
+.skill h3{margin:0 0 12px;font-size:15px}.chips{display:flex;flex-wrap:wrap;gap:7px}.chip{font-size:11px;color:#c8d5ef;padding:6px 9px;border-radius:999px;background:rgba(59,130,255,.09);border:1px solid rgba(59,130,255,.16)}
+.projects{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+.project{position:relative;overflow:hidden}.project:before{content:"";position:absolute;width:180px;height:180px;right:-90px;top:-90px;border-radius:50%;background:radial-gradient(circle,var(--cyan),transparent 65%);opacity:.12}
+.project-num{font-size:12px;color:var(--cyan);letter-spacing:.15em}.project h3{font-size:24px;margin:12px 0}.project p{color:var(--muted);line-height:1.65}
+.feature-list{padding-left:18px;color:#b9c5df;line-height:1.9;font-size:14px}
+.timeline{display:grid;gap:14px}.timeline-item{display:grid;grid-template-columns:130px 1fr;gap:20px;align-items:start}.year{color:var(--cyan);font-weight:700}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.list{display:grid;gap:10px}.list div{padding:13px 15px;border-left:2px solid var(--purple);background:rgba(255,255,255,.025);color:#c6d0e5}
+.goal{font-size:clamp(24px,4vw,42px);line-height:1.25;letter-spacing:-.03em}
+.galaxy-card{min-height:500px;position:relative;overflow:hidden;padding:0}.galaxy-copy{position:absolute;z-index:3;left:28px;top:28px;max-width:330px;padding:18px;border-radius:18px;background:rgba(3,5,13,.62);border:1px solid var(--line);backdrop-filter:blur(12px)}
+.galaxy-copy p{font-size:13px;color:var(--muted);line-height:1.6}.galaxy-hint{font-size:11px;color:#b9d8ff}
+.contact{display:grid;grid-template-columns:1.2fr .8fr;gap:18px}.contact a{display:block;margin:10px 0;color:#c9d9ff}.contact a:hover{color:var(--cyan)}
+footer{padding:55px 20px 70px;text-align:center;border-top:1px solid var(--line);background:rgba(2,4,10,.65)}
+.footer-logo{width:90px;max-width:25vw;margin:22px auto;opacity:.9}
+.footer-main{font-size:20px;font-weight:800}.footer-meta{color:var(--muted);font-size:12px;line-height:1.8;max-width:700px;margin:12px auto}
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s ease}.reveal.show{opacity:1;transform:none}
+@media(max-width:850px){.skills{grid-template-columns:repeat(2,1fr)}.about,.two,.contact{grid-template-columns:1fr}.portrait{min-height:300px}.projects{grid-template-columns:1fr}.navlinks{display:none}.section-head{display:block}.galaxy-card{min-height:440px}}
+@media(max-width:520px){section{padding:75px 0}.skills{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}.card{padding:21px}.timeline-item{grid-template-columns:1fr;gap:5px}}
+</style>
 </head>
-<body class="bg-[#0c0b0e] text-white min-h-screen">
-    <!-- Navbar -->
-    <nav class="fixed top-0 w-full z-50 bg-[#0c0b0e]/80 backdrop-blur-md border-b border-white/10 px-8 py-4 flex justify-between items-center">
-        <div class="font-display text-xl font-bold tracking-wider text-purple-400">BEFFYZZ<span class="text-white">.SQUAD</span></div>
-        <div class="flex gap-6 text-sm text-gray-300 font-medium">
-            <a href="#about" class="hover:text-purple-400 transition">About</a>
-            <a href="#projects" class="hover:text-purple-400 transition">Projects</a>
-            <a href="#skills" class="hover:text-purple-400 transition">Skills</a>
-            <a href="#team" class="hover:text-purple-400 transition">Team</a>
-        </div>
-    </nav>
+<body>
+<div class="nebula"></div><canvas id="stars"></canvas><canvas id="galaxy"></canvas>
 
-    <!-- Hero -->
-    <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 pt-20">
-        <div class="inline-block px-4 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300 text-xs font-semibold uppercase tracking-widest mb-6">
-            SkillAura 2026 • Interactive Orbit
-        </div>
-        <h1 class="font-display text-5xl md:text-7xl font-extrabold tracking-tight mb-6 bg-gradient-to-r from-white via-purple-200 to-purple-500 bg-clip-text text-transparent">
-            BEFFYZZ SQUAD
-        </h1>
-        <p class="max-w-2xl text-gray-400 text-lg md:text-xl mb-10 leading-relaxed">
-            Building next-generation digital experiences, interactive web applications, and intelligent student software solutions.
-        </p>
-        <div class="flex gap-4">
-            <a href="#projects" class="px-8 py-3.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-semibold transition shadow-lg shadow-purple-600/30">
-                Explore Projects
-            </a>
-            <a href="#team" class="px-8 py-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-white font-semibold border border-white/10 transition">
-                Meet Team
-            </a>
-        </div>
-    </section>
+<nav>
+  <a class="logo" href="#home">SARANYA<span> // </span>KRISHNAN</a>
+  <div class="navlinks">
+    <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#journey">Journey</a><a href="#contact">Contact</a>
+  </div>
+</nav>
 
-    <!-- Team Section -->
-    <section id="team" class="py-20 px-8 max-w-6xl mx-auto">
-        <h2 class="font-display text-3xl font-bold text-center mb-12 text-purple-300">Team Members</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-purple-500/50 transition">
-                <h3 class="font-display text-2xl font-bold text-purple-400 mb-2">Ezhil Oviya</h3>
-                <p class="text-sm text-gray-400">B.E. Computer Science & Engineering</p>
-            </div>
-            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-purple-500/50 transition">
-                <h3 class="font-display text-2xl font-bold text-purple-400 mb-2">Abishiya</h3>
-                <p class="text-sm text-gray-400">B.E. Computer Science & Engineering</p>
-            </div>
-            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:border-purple-500/50 transition">
-                <h3 class="font-display text-2xl font-bold text-purple-400 mb-2">Janani</h3>
-                <p class="text-sm text-gray-400">B.E. Computer Science & Engineering</p>
-            </div>
-        </div>
-    </section>
+<main>
+<section id="home" class="hero">
+  <div class="hero-inner reveal">
+    <div class="eyebrow"><i class="dot"></i> AI & Technology • Digital Universe</div>
+    <h1>Building ideas<br><span class="gradient">beyond the ordinary.</span></h1>
+    <p>I'm Saranya Krishnan, a Computer Science & Engineering student exploring software development, artificial intelligence and modern web technologies.</p>
+    <div class="cta"><a class="btn primary" href="#projects">Explore My Work ↗</a><a class="btn" href="#contact">Connect With Me</a></div>
+  </div>
+</section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="py-20 px-8 max-w-6xl mx-auto">
-        <h2 class="font-display text-3xl font-bold text-center mb-12 text-purple-300">Featured Applications</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/50 transition">
-                <div class="text-purple-400 text-sm font-semibold mb-2">01 / Orbit</div>
-                <h3 class="font-display text-2xl font-bold mb-4">CampusConnect</h3>
-                <p class="text-gray-400 text-sm mb-6">Student event orbit bringing discovery, registration, and announcements into a focused hub.</p>
-                <div class="flex gap-2 text-xs font-mono text-purple-300">
-                    <span class="px-3 py-1 rounded-full bg-purple-500/20">React</span>
-                    <span class="px-3 py-1 rounded-full bg-purple-500/20">Tailwind</span>
-                    <span class="px-3 py-1 rounded-full bg-purple-500/20">TypeScript</span>
-                </div>
-            </div>
-            <div class="p-8 rounded-2xl bg-white/5 border border-white/10 hover:border-purple-500/50 transition">
-                <div class="text-purple-400 text-sm font-semibold mb-2">02 / Finance</div>
-                <h3 class="font-display text-2xl font-bold mb-4">Smart Expense Tracker</h3>
-                <p class="text-gray-400 text-sm mb-6">Real-time daily budget monitor for students with analytics and spending insights.</p>
-                <div class="flex gap-2 text-xs font-mono text-purple-300">
-                    <span class="px-3 py-1 rounded-full bg-purple-500/20">JS</span>
-                    <span class="px-3 py-1 rounded-full bg-purple-500/20">HTML5</span>
-                    <span class="px-3 py-1 rounded-full bg-purple-500/20">CSS3</span>
-                </div>
-            </div>
-        </div>
-    </section>
+<section id="about">
+  <div class="section-head reveal"><div><div class="kicker">01 / Profile</div><h2>Meet Saranya.</h2></div></div>
+  <div class="about">
+    <div class="card portrait reveal"><img src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/img/Saranya.png" alt="Saranya Krishnan portrait"></div>
+    <div class="card reveal">
+      <div class="kicker">About me</div>
+      <p class="lead">Saranya Krishnan is a Computer Science and Engineering student with a strong interest in software development, artificial intelligence, and modern web technologies. She enjoys learning new technologies, participating in technical events, solving programming problems, and building practical projects.</p>
+      <p class="lead">She is currently developing her technical skills and wants to build a strong professional profile for future internships and placements.</p>
+      <div class="stats">
+        <div class="stat"><b>8.4</b><span>CGPA / 10</span></div>
+        <div class="stat"><b>2024–28</b><span>B.E. CSE</span></div>
+        <div class="stat"><b>Chennai</b><span>Kings Engineering College</span></div>
+        <div class="stat"><b>AI + Web</b><span>Core interests</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-head reveal"><div><div class="kicker">02 / Skill Matrix</div><h2>My tech universe.</h2></div></div>
+  <div class="skills">
+    <div class="skill reveal"><h3>Programming</h3><div class="chips"><span class="chip">C</span><span class="chip">Python</span><span class="chip">Java</span><span class="chip">JavaScript</span></div></div>
+    <div class="skill reveal"><h3>Web Development</h3><div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span><span class="chip">React</span></div></div>
+    <div class="skill reveal"><h3>Database</h3><div class="chips"><span class="chip">MySQL</span><span class="chip">MongoDB</span></div></div>
+    <div class="skill reveal"><h3>Tools & Tech</h3><div class="chips"><span class="chip">Git</span><span class="chip">GitHub</span><span class="chip">VS Code</span><span class="chip">REST APIs</span></div></div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-head reveal"><div><div class="kicker">03 / Projects</div><h2>Signals from the lab.</h2></div></div>
+  <div class="projects">
+    <article class="card project reveal"><div class="project-num">PROJECT 01</div><h3>CampusConnect</h3><p>A student-focused platform designed to help students discover and participate in college events.</p><div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span><span class="chip">React</span><span class="chip">Node.js</span><span class="chip">MongoDB</span></div><ul class="feature-list"><li>Event listing</li><li>Event registration</li><li>Student dashboard</li><li>Event search</li><li>Admin event management</li></ul></article>
+    <article class="card project reveal"><div class="project-num">PROJECT 02</div><h3>Smart Expense Tracker</h3><p>A web application that helps students record and monitor their daily expenses.</p><div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span></div><ul class="feature-list"><li>Add and categorize expenses</li><li>Monthly expense summary</li><li>Spending analysis</li><li>Data visualization</li></ul></article>
+    <article class="card project reveal"><div class="project-num">PROJECT 03</div><h3>AI Study Assistant</h3><p>An AI-powered study assistant designed to help students organize their learning and study more effectively.</p><div class="chips"><span class="chip">Python</span><span class="chip">AI API</span></div><ul class="feature-list"><li>Generate topic summaries</li><li>Generate quiz questions</li><li>Study suggestions</li><li>Interactive AI assistance</li></ul></article>
+    <article class="card project reveal"><div class="project-num">PROJECT 04</div><h3>Personal Portfolio</h3><p>A personal portfolio project created to showcase academic information, technical skills, projects, and achievements.</p><div class="chips"><span class="chip">HTML</span><span class="chip">CSS</span><span class="chip">JavaScript</span></div></article>
+  </div>
+</section>
+
+<section id="galaxy-nav">
+  <div class="section-head reveal"><div><div class="kicker">04 / Interactive Dimension</div><h2>Navigate the galaxy.</h2></div></div>
+  <div class="card galaxy-card reveal">
+    <div class="galaxy-copy"><div class="kicker">3D Galaxy Navigation</div><p>Drag to rotate the universe. Click a glowing planet to jump to a portfolio dimension.</p><div class="galaxy-hint">CORE = HOME • CYAN = PROJECTS • PURPLE = SKILLS • BLUE = ABOUT</div></div>
+  </div>
+</section>
+
+<section id="journey">
+  <div class="section-head reveal"><div><div class="kicker">05 / Journey</div><h2>Growing with every orbit.</h2></div></div>
+  <div class="two">
+    <div class="card reveal"><div class="kicker">Education</div><div class="timeline" style="margin-top:20px"><div class="timeline-item"><div class="year">2024–2028</div><div><b>Bachelor of Engineering</b><br><span class="lead">Computer Science and Engineering<br>Kings Engineering College, Chennai<br>CGPA: 8.4 / 10</span></div></div></div></div>
+    <div class="card reveal"><div class="kicker">Certifications</div><div class="list" style="margin-top:18px"><div>Python Programming Fundamentals</div><div>Web Development Fundamentals</div><div>Introduction to Generative AI</div><div>Git & GitHub Fundamentals</div><div>Introduction to Machine Learning</div></div></div>
+  </div>
+  <div class="two" style="margin-top:18px">
+    <div class="card reveal"><div class="kicker">Achievements</div><div class="list" style="margin-top:18px"><div>Participated in college-level hackathons</div><div>Participated in inter-college technical competitions</div><div>Participated in coding challenges</div><div>Active participant in technical workshops</div><div>Member of the college technical community</div></div></div>
+    <div class="card reveal"><div class="kicker">Interests</div><div class="chips" style="margin-top:20px"><span class="chip">Coding</span><span class="chip">Artificial Intelligence</span><span class="chip">Web Development</span><span class="chip">Gaming</span><span class="chip">Technology</span><span class="chip">Open Source</span><span class="chip">Learning New Technologies</span></div></div>
+  </div>
+</section>
+
+<section id="goal">
+  <div class="card reveal"><div class="kicker">06 / Mission</div><p class="goal">“To become a skilled software engineer and build innovative technology that solves real-world problems.”</p></div>
+</section>
+
+<section id="contact">
+  <div class="section-head reveal"><div><div class="kicker">07 / Contact</div><h2>Open a channel.</h2></div></div>
+  <div class="contact">
+    <div class="card reveal"><div class="kicker">Let's connect</div><p class="lead">Interested in technology, ideas and future opportunities.</p><a href="mailto:saranya.krishnan@example.com">✉ saranya.krishnan@example.com</a><a href="#home">⌖ Chennai, Tamil Nadu</a></div>
+    <div class="card reveal"><div class="kicker">Direction</div><h3>AI / Technology</h3><p class="lead">Software development • Artificial intelligence • Web development • Problem solving</p></div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="footer-main">Built with creativity. Crafted with AI. Remembered as a milestone.</div>
+  <div style="font-size:25px;margin-top:12px">BEFFYZ SQUAD</div>
+  <div class="footer-meta">Ezhil Oviya · Abishiya · Janani<br>2nd Year · B.E. Computer Science & Engineering<br>A portfolio created during SkillAura 2026 — Prompt2Portfolio, 31 August 2026, Kings Engineering College.<br><b>BUILD SKILLS • IGNITE IDEAS • LEAVE YOUR AURA</b></div>
+  <img class="footer-logo" src="https://raw.githubusercontent.com/bhuvanesh-m-dev/skill-aura-2026/refs/heads/main/31-08-2026/footer/logo.png" alt="SkillAura logo">
+  <img src="https://count.getloli.com/@bhuvanesh-m-dev?name=bhuvanesh-m-dev-day10&theme=ai-1&padding=0&offset=0&align=top&scale=0.1&pixelated=1&darkmode=auto" width="1" height="1" alt="" style="position:absolute;visibility:hidden;">
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script>
+const star=document.getElementById('stars'), sc=star.getContext('2d');
+function resizeStars(){star.width=innerWidth*devicePixelRatio;star.height=innerHeight*devicePixelRatio;sc.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)}
+resizeStars(); addEventListener('resize',resizeStars);
+const stars=Array.from({length:170},()=>({x:Math.random()*innerWidth,y:Math.random()*innerHeight,r:Math.random()*1.4+.2,a:Math.random()*.8+.1,s:Math.random()*.6+.2}));
+function drawStars(t){sc.clearRect(0,0,innerWidth,innerHeight);stars.forEach((p,i)=>{p.y+=p.s;if(p.y>innerHeight)p.y=0;sc.globalAlpha=p.a*(.65+.35*Math.sin(t/800+i));sc.beginPath();sc.arc(p.x,p.y,p.r,0,Math.PI*2);sc.fillStyle='#b9d8ff';sc.fill()});requestAnimationFrame(drawStars)}requestAnimationFrame(drawStars);
+
+const g=document.getElementById('galaxy');
+const renderer=new THREE.WebGLRenderer({canvas:g,alpha:true,antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.setSize(innerWidth,innerHeight);
+const scene=new THREE.Scene(), camera=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,.1,1000);camera.position.z=18;
+const group=new THREE.Group();scene.add(group);
+const pts=[];
+const geo=new THREE.BufferGeometry();const pos=[];
+for(let i=0;i<1200;i++){let r=Math.pow(Math.random(),.65)*13, a=Math.random()*Math.PI*2 + r*.55;let y=(Math.random()-.5)*(.8+r*.08);pos.push(Math.cos(a)*r,y,Math.sin(a)*r)}
+geo.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));
+const mat=new THREE.PointsMaterial({color:0x8acbff,size:.045,transparent:true,opacity:.75});
+group.add(new THREE.Points(geo,mat));
+function planet(color,r,position,label,target){const m=new THREE.Mesh(new THREE.SphereGeometry(r,24,24),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.92}));m.position.set(...position);m.userData={target,label};group.add(m);pts.push(m);return m}
+planet(0x28f0ff,.48,[0,0,0],'HOME','#home');
+planet(0x3b82ff,.32,[-5,.7,1],'ABOUT','#about');
+planet(0x9b5cff,.38,[4,-.7,-1],'SKILLS','#skills');
+planet(0x28f0ff,.42,[1.5,1.4,2],'PROJECTS','#projects');
+planet(0x6f7cff,.28,[-2,-1.8,-1],'JOURNEY','#journey');
+planet(0xffffff,.25,[6,1.7,-2],'CONTACT','#contact');
+const ray=new THREE.Raycaster(), mouse=new THREE.Vector2();
+let dragging=false,lastX=0,lastY=0;
+g.addEventListener('pointerdown',e=>{dragging=true;lastX=e.clientX;lastY=e.clientY});
+addEventListener('pointerup',()=>dragging=false);
+addEventListener('pointermove',e=>{if(dragging){group.rotation.y+=(e.clientX-lastX)*.006;group.rotation.x+=(e.clientY-lastY)*.003;lastX=e.clientX;lastY=e.clientY}});
+g.addEventListener('click',e=>{mouse.x=e.clientX/innerWidth*2-1;mouse.y=-(e.clientY/innerHeight)*2+1;ray.setFromCamera(mouse,camera);let hit=ray.intersectObjects(pts)[0];if(hit&&hit.object.userData.target)document.querySelector(hit.object.userData.target)?.scrollIntoView({behavior:'smooth'})});
+function animate(){requestAnimationFrame(animate);group.rotation.y+=.0008;group.rotation.z+=.00015;renderer.render(scene,camera)}animate();
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight)});
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show')}),{threshold:.12});document.querySelectorAll('.reveal').forEach(e=>io.observe(e));
+</script>
 </body>
 </html>
